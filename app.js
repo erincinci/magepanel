@@ -55,7 +55,7 @@ if (app.get('env') == 'development') {
  * Routes
  */
 app.get('/', routes.index); // Index
-app.get('/version', mage.version); // Mage version
+app.get('/mage', mage.version); // Mage version
 app.get('/log', scribe.express.controlPanel()); // Log control panel
 
 /**
