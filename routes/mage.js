@@ -7,10 +7,17 @@ var os = require('os').platform();
 var convert = new Convert();
 var cygwin = "chdir C:\\cygwin64\\bin\\ & bash --login -c ";
 
-/*
+/**
+ * Get mage index
+ */
+exports.version = function(req, res) {
+    res.render('mage', { menu: 'mage', title: 'MagePHP Version', content: '>>' });
+};
+
+/**
  * GET mage version
  */
-exports.version = function(req, res){
+exports.version = function(req, res) {
     function puts(error, stdout, stderr) {
         var output;
 
