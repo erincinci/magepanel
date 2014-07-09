@@ -7,6 +7,7 @@ var routes = require('./routes');
 var mage = require('./routes/mage');
 var http = require('http');
 var path = require('path');
+var username = require('username').sync();
 var config = require('./config');
 
 var app = express();
@@ -21,7 +22,7 @@ scribe.configure(function(){
     scribe.set('divider', config.logger.divider);
     scribe.set('identation', 5);
     scribe.set('maxTagLength', 30);
-    scribe.set('mainUser', config.logger.user);
+    scribe.set('mainUser', username);
 });
 // Create loggers (name, save to file, print to console, tag color)
 scribe.addLogger('debug', true , true, 'grey');

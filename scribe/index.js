@@ -31,6 +31,8 @@ var moment = require('moment');
 var fs = require('fs');
 var stack = require('callsite');
 var colors = require('colors');
+var username = require('username').sync();
+var config = require('../config');
 
 var self = module.exports;
 self.express = {};
@@ -41,7 +43,7 @@ self.express = {};
 var $ = {
     app : "scribe.js",
     logPath : "./../logs",
-    mainUser : "murat",
+    mainUser : username,
     maxTagLength : 50,
     indentation : 2,
     divider : ':::',

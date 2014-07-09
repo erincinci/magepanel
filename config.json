@@ -4,8 +4,7 @@
     "logger": {
         "directory": "./logs",
         "divider": ":::",
-        "defaultTag": "MagePanel",
-        "user": "murat"
+        "defaultTag": "MagePanel"
     },
 
     "server": {
