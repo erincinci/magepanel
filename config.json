@@ -1,0 +1,15 @@
+{
+    "version": "v0.6.6",
+
+    "logger": {
+        "directory": "./logs",
+        "divider": ":::",
+        "defaultTag": "MagePanel",
+        "user": "erinci"
+    },
+
+    "server": {
+        "name": "MagePanel",
+        "port": 4624
+    }
+}
