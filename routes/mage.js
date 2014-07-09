@@ -5,21 +5,27 @@ var Convert = require('ansi-to-html');
 var exec = require('child_process').exec;
 var os = require('os').platform();
 var convert = new Convert();
+var config = require('../config');
 var username = require('username').sync();
+var title = "Mage Console";
 var cygwin_pre = "chdir C:\\cygwin64\\bin\\ & bash --login -c '";
 var cygwin_post = "'";
 
 /**
  * Get mage index
  */
-exports.version = function(req, res) {
-    res.render('mage', { menu: 'mage', title: 'MagePHP Console', content: ">>" });
+exports.index = function(req, res) {
+    res.render('mage', {
+        menu: 'mage',
+        title: title,
+        content: config.html.consolePointer + "Operating System: <b>" + os + "</b> | User: <b>" + username + "</b>"
+    });
 };
 
 /**
- * GET mage version
+ * GET mage command output
  */
-exports.version = function(req, res) {
+exports.command = function(req, res) {
     function puts(error, stdout, stderr) {
         var output;
 
@@ -36,12 +42,17 @@ exports.version = function(req, res) {
             output = convert.toHtml(stdout);
         }
 
-        // Write output
-        console.t().info("OS: %s | User: %s", os, username);
-        res.render('mage', { menu: 'mage', title: 'MagePHP Console', content: output });
+        // Send output
+        res.send(config.html.consolePointer + output);
     }
 
-    var cmd = "mage version";
-    if (os == 'win32') cmd = cygwin_pre + cmd + cygwin_post;
-    exec(cmd, puts);
+    var mageCommand = "mage " + req.query.cmd; // prepare mage command
+    console.debug("Command: %s", req.query.cmd);
+
+    // Check OS
+    if (os == 'win32')
+        mageCommand = cygwin_pre + mageCommand + cygwin_post;
+
+    // Execute command
+    exec(mageCommand, puts);
 };

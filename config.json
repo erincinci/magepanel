@@ -7,6 +7,10 @@
         "defaultTag": "MagePanel"
     },
 
+    "html": {
+        "consolePointer": "<font size='1'><b>>> </b></font>"
+    },
+
     "server": {
         "name": "MagePanel",
         "port": 4624
