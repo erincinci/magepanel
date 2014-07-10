@@ -47,7 +47,6 @@ exports.command = function(req, res) {
     }
 
     var mageCommand = "mage " + req.query.cmd; // prepare mage command
-    console.debug("Command: %s", req.query.cmd);
 
     // Check OS
     if (os == 'win32')

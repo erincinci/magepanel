@@ -11,6 +11,10 @@
         "consolePointer": "<font size='1'><b>>> </b></font>"
     },
 
+    "setup": {
+        "completed": "setupCompleted"
+    },
+
     "server": {
         "name": "MagePanel",
         "port": 4624

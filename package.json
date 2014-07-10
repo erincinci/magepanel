@@ -8,6 +8,8 @@
   "dependencies": {
     "express": "3.13.0",
     "jade": "*",
+    "nedb": "0.10.6",
+    "user-settings": "*",
     "stylus": "*",
     "colors": "0.6.2",
     "ansi-to-html": "0.2.0",
