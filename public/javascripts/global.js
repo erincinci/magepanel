@@ -8,9 +8,11 @@ $(document).ready(function() {
 
     // Ajax Loading Panel
     $(document).ajaxStart(function(){
+        $("#overlay").show();
         $("#wait").css("display","block");
     });
     $(document).ajaxComplete(function(){
+        $("#overlay").hide();
         $("#wait").css("display","none");
     });
 
