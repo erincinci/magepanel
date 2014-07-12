@@ -7,7 +7,7 @@ var os = require('os').platform();
 var convert = new Convert();
 var config = require('../config');
 var username = require('username').sync();
-var title = "Mage Console";
+var title = "Console";
 var cygwin_pre = "chdir C:\\cygwin64\\bin\\ & bash --login -c '";
 var cygwin_post = "'";
 

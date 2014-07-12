@@ -40,7 +40,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 //app.use(express.favicon());
 app.use(express.favicon(path.join(__dirname, 'public','images','favicon.ico')));
-app.use(express.logger('dev'));
+//app.use(express.logger('dev')); // Open for express js logging
 app.use(express.json());
 app.use(express.urlencoded());
 //app.use(express.methodOverride()); //deprecated
