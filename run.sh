@@ -1,20 +1,81 @@
 #!/bin/bash
 set -e
 
+# Options
+host="localhost"
+port=4624
+url="http://${host}:${port}/"
+
+# Console colors
+default="\e[39m\e[24m"
+light_red="\e[91m"
+red="\e[31m"
+green="\e[32m"
+light_green="\e[92m"
+yellow="\e[33m"
+light_yellow="\e[93m"
+blue="\e[34m"
+light_blue="\e[94m"
+magenta="\e[35m"
+light_magenta="\e[95m"
+cyan="\e[36m"
+light_cyan="\e[96m"
+clear_screen="\033c"
+underlined="\e[4m"
+
+printTitle() {
+    echo -e "          _____                   _____                   _____                   _____                   _____                   _____                   _____                   _____                   _____  "
+    echo -e "         /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\ "
+    echo -e "        /::\\____\\               /::\\    \\               /::\\    \\               /::\\    \\               /::\\    \\               /::\\    \\               /::\\____\\               /::\\    \\               /::\\____\\"
+    echo -e "       /::::|   |              /::::\\    \\             /::::\\    \\             /::::\\    \\             /::::\\    \\             /::::\\    \\             /::::|   |              /::::\\    \\             /:::/    /"
+    echo -e "      /:::::|   |             /::::::\\    \\           /::::::\\    \\           /::::::\\    \\           /::::::\\    \\           /::::::\\    \\           /:::::|   |             /::::::\\    \\           /:::/    / "
+    echo -e "     /::::::|   |            /:::/\\:::\\    \\         /:::/\\:::\\    \\         /:::/\\:::\\    \\         /:::/\\:::\\    \\         /:::/\\:::\\    \\         /::::::|   |            /:::/\\:::\\    \\         /:::/    /  "
+    echo -e "    /:::/|::|   |           /:::/__\\:::\\    \\       /:::/  \\:::\\    \\       /:::/__\\:::\\    \\       /:::/__\\:::\\    \\       /:::/__\\:::\\    \\       /:::/|::|   |           /:::/__\\:::\\    \\       /:::/    /   "
+    echo -e "   /:::/ |::|   |          /::::\\   \\:::\\    \\     /:::/    \\:::\\    \\     /::::\\   \\:::\\    \\     /::::\\   \\:::\\    \\     /::::\\   \\:::\\    \\     /:::/ |::|   |          /::::\\   \\:::\\    \\     /:::/    /    "
+    echo -e "  /:::/  |::|___|______   /::::::\\   \\:::\\    \\   /:::/    / \\:::\\    \\   /::::::\\   \\:::\\    \\   /::::::\\   \\:::\\    \\   /::::::\\   \\:::\\    \\   /:::/  |::|   | _____   /::::::\\   \\:::\\    \\   /:::/    /     "
+    echo -e " /:::/   |::::::::\\    \\ /:::/\\:::\\   \\:::\\    \\ /:::/    /   \\:::\\ ___\\ /:::/\\:::\\   \\:::\\    \\ /:::/\\:::\\   \\:::\\____\\ /:::/\\:::\\   \\:::\\    \\ /:::/   |::|   |/\\    \\ /:::/\\:::\\   \\:::\\    \\ /:::/    /      "
+    echo -e "/:::/    |:::::::::\\____/:::/  \\:::\\   \\:::\\____/:::/____/  ___\\:::|    /:::/__\\:::\\   \\:::\\____/:::/  \\:::\\   \\:::|    /:::/  \\:::\\   \\:::\\____/:: /    |::|   /::\\____/:::/__\\:::\\   \\:::\\____/:::/____/       "
+    echo -e "\\::/    / ~~~~~/:::/    \\::/    \\:::\\  /:::/    \\:::\\    \\ /\\  /:::|____\\:::\\   \\:::\\   \\::/    \\::/    \\:::\\  /:::|____\\::/    \\:::\\  /:::/    \\::/    /|::|  /:::/    \\:::\\   \\:::\\   \\::/    \\:::\\    \\       "
+    echo -e " \\/____/      /:::/    / \\/____/ \\:::\\/:::/    / \\:::\\    /::\\ \\::/    / \\:::\\   \\:::\\   \\/____/ \\/_____/\\:::\\/:::/    / \\/____/ \\:::\\/:::/    / \\/____/ |::| /:::/    / \\:::\\   \\:::\\   \\/____/ \\:::\\    \\      "
+    echo -e "             /:::/    /           \\::::::/    /   \\:::\\   \\:::\\ \\/____/   \\:::\\   \\:::\\    \\              \\::::::/    /           \\::::::/    /          |::|/:::/    /   \\:::\\   \\:::\\    \\      \\:::\\    \\     "
+    echo -e "            /:::/    /             \\::::/    /     \\:::\\   \\:::\\____\\      \\:::\\   \\:::\\____\\              \\::::/    /             \\::::/    /           |::::::/    /     \\:::\\   \\:::\\____\\      \\:::\\    \\    "
+    echo -e "           /:::/    /              /:::/    /       \\:::\\  /:::/    /       \\:::\\   \\::/    /               \\::/____/              /:::/    /            |:::::/    /       \\:::\\   \\::/    /       \\:::\\    \\   "
+    echo -e "          /:::/    /              /:::/    /         \\:::\\/:::/    /         \\:::\\   \\/____/                 ~~                   /:::/    /             |::::/    /         \\:::\\   \\/____/         \\:::\\    \\  "
+    echo -e "         /:::/    /              /:::/    /           \\::::::/    /           \\:::\\    \\                                         /:::/    /              /:::/    /           \\:::\\    \\              \\:::\\    \\ "
+    echo -e "        /:::/    /              /:::/    /             \\::::/    /             \\:::\\____\\                                       /:::/    /              /:::/    /             \\:::\\____\\              \\:::\\____\\"
+    echo -e "        \\::/    /               \\::/    /               \\::/____/               \\::/    /                                       \\::/    /               \\::/    /               \\::/    /               \\::/    /"
+    echo -e "         \\/____/                 \\/____/                                         \\/____/                                         \\/____/                 \\/____/                 \\/____/                 \\/____/ "
+    echo -e "                                                                                                                                                                                                                 "
+}
+
+openUrlInBrowser() {
+    URL=$1
+    [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
+    path=$(which xdg-open || which gnome-open) && exec "$path" "$URL"
+    echo -e >&2 `date +"%d %b %T"`" - ${light_red}[runner] Can't find browser${default}\n"
+}
+
+# Print title
+echo -e "${clear_screen}"
+printTitle
+
 # Check if NodeJS is installed in system
 command -v node >/dev/null 2>&1 || {
-    echo >&2 "This application requires NodeJS, please install it using your package manager first.";
+    echo -e >&2 `date +"%d %b %T"`" - ${light_red}[runner] This application requires NodeJS, please install it using your package manager first.${default}";
     exit 1;
 }
 
-echo -e "Installing node dependencies if necessary..\n"
+# Install node package dependencies
+echo -e `date +"%d %b %T"`" - ${magenta}[runner] Installing node dependencies if necessary..${default}\n"
 npm install
 
 # Check if nodemon command exists in system
 command -v nodemon >/dev/null 2>&1 || {
-    echo >&2 "\nThis script requires nodemon, installing..";
+    echo >&2 "\n"`date +"%d %b %T"`" - ${magenta}[runner] This script requires nodemon, installing..${default}";
     sudo npm install nodemon -g;
 }
 
-echo -e "\nStarting MagePanel using nodemon..\n"
-nodemon ./app.js localhost 4624
+# Start app
+echo -e "\n"`date +"%d %b %T"`" - ${cyan}[runner] Starting MagePanel using nodemon & Launching browser..${default}\n"
+openUrlInBrowser ${url}
+nodemon ./app.js ${host} ${port}
