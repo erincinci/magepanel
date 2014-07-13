@@ -7,6 +7,7 @@ html
         link(rel='stylesheet', href='/stylesheets/bootstrap-theme.min.css')
         link(rel='stylesheet', href='/stylesheets/magepanel.css')
         link(rel='stylesheet', href='/stylesheets/ionicons.css')
+        link(rel='stylesheet', href='/stylesheets/toastr.min.css')
 
     body(role='document')
         // App Menu
@@ -19,7 +20,7 @@ html
                         span.icon-bar
                         span.icon-bar
                     a.navbar-brand(href='/')
-                        b MagePanel
+                        b.glyphicon.glyphicon-dashboard MagePanel
                 .navbar-collapse.collapse
                     ul.nav.navbar-nav
                         li(class=(menu === 'home' ? 'active' : ''))
@@ -35,6 +36,9 @@ html
                                     a.icon.ion-document-text(href='/log', target='_blank') Logs
                                 li
                                     a.icon.ion-settings(href='/setup') Application Setup
+                    ul.nav.navbar-nav(style='float:right;')
+                        li
+                            a.icon.ion-person(href='#')= username
 
         // Main div
         .container.theme-showcase(role='main')
@@ -52,9 +56,8 @@ html
                     td(align='center')
                         font(color='#97e1f6') Loading...
 
-        // Import JQuery Script
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
-        // Import Bootstrap Script
+        // Import Scripts
+        script(src='/javascripts/jquery.min.js')
         script(src='/javascripts/bootstrap.min.js')
-        // Import our global javascript
+        script(src='/javascripts/toastr.min.js')
         script(src='/javascripts/global.js')

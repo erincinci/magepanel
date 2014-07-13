@@ -12,6 +12,7 @@
     },
 
     "setup": {
+        "file": ".magePanelSettings",
         "completed": "setupCompleted"
     },
 

@@ -3,5 +3,25 @@ extends layout
 block content
     .page-header
         h1= title
-    .well
-        p Todo..
+
+    form#saveSettings(method='POST', action='/setup/save')
+        if winEnv
+            .panel.panel-default
+                .panel-heading
+                    h3.panel-title Windows Environment Setup
+                .panel-body
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-social-windows
+                        input.form-control(name='cygwinBin', type='text', placeholder='cygwin bin folder')
+
+        .panel.panel-default
+            .panel-heading
+                h3.panel-title Sample Mac OS Environment Setup
+            .panel-body
+                .input-group
+                    span.input-group-addon
+                        i.icon.ion-social-apple
+                    input.form-control(name='sampleInput', type='text', placeholder='bla bla')
+
+        button.btn.btn-default.btn-success.glyphicon.glyphicon-save(type='submit', style='float:right;') Save

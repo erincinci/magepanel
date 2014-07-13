@@ -58,6 +58,7 @@ if (app.get('env') == 'development') {
  */
 app.get('/', routes.index); // Index
 app.get('/setup', setup.index); // App setup
+app.post('/setup/save', setup.save); // Setup save
 app.get('/mage', mage.index); // Mage console
 app.get('/mage/command', mage.command); // Execute mage command
 app.get('/log', scribe.express.controlPanel()); // Log control panel

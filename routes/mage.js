@@ -16,6 +16,7 @@ var cygwin_post = "'";
  */
 exports.index = function(req, res) {
     res.render('mage', {
+        username: username,
         menu: 'mage',
         title: title,
         content: config.html.consolePointer + "Operating System: <b>" + os + "</b> | User: <b>" + username + "</b>"

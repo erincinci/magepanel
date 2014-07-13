@@ -16,7 +16,7 @@ $(document).ready(function() {
         $("#wait").css("display","none");
     });
 
-    // Button click events
+    // Console Button click events
     $("#mageinfo").click(function() {
         appendToConsole('version');
     });
@@ -24,6 +24,17 @@ $(document).ready(function() {
         appendToConsole('error');
     });
 
+    // Submit setup form
+    $('#saveSettings').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+
+        $.post( '/setup/save', formData, function(status) {
+            toastr.success(status, 'MagePanel Setup')
+        }).error(function() {
+            toastr.error('Something went wrong', 'MagePanel Setup');
+        });
+    });
 });
 
 // Functions =============================================================
