@@ -2,7 +2,7 @@ var username = require('username').sync();
 var config = require('../config');
 var settings = require('user-settings').file(config.setup.file);
 
-/*
+/**
  * GET home page.
  */
 exports.index = function(req, res) {
@@ -17,6 +17,6 @@ exports.index = function(req, res) {
         });
     } else {
         console.warn("Application is need to be setup..");
-        res.redirect("/setup");
+        res.redirect("/setup?status=incomplete");
     }
 };

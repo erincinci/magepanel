@@ -1,4 +1,4 @@
-/*
+/**
  * GET setup page
  */
 var os = require('os').platform();

@@ -24,6 +24,12 @@ $(document).ready(function() {
         appendToConsole('error');
     });
 
+    // Check if notification needs to be shown
+    var setupStatus = getParameterByName('status');
+    if(typeof setupStatus !== 'undefined' & setupStatus == 'incomplete') {
+        toastr.warning('Application is need to be setup..', 'MagePanel');
+    };
+
     // Submit setup form
     $('#saveSettings').submit(function(event) {
         event.preventDefault();
@@ -45,4 +51,10 @@ function appendToConsole(cmd) {
     $.get( '/mage/command?cmd=' + cmd, function(output) {
         $('#console').html($('#console').html() + "<br>" + output);
     });
+};
+
+// Get URL query parameter by name
+function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 };

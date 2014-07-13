@@ -2,7 +2,7 @@ extends layout
 
 block content
     .page-header
-        h1= title
+        h1.icon.ion-settings= title
 
     form#saveSettings(method='POST', action='/setup/save')
         if winEnv
@@ -13,7 +13,7 @@ block content
                     .input-group
                         span.input-group-addon
                             i.icon.ion-social-windows
-                        input.form-control(name='cygwinBin', type='text', placeholder='cygwin bin folder')
+                        input.form-control(name='cygwinBin', type='text', value='C:\cygwin64\bin', placeholder='cygwin bin folder')
 
         .panel.panel-default
             .panel-heading
@@ -22,6 +22,6 @@ block content
                 .input-group
                     span.input-group-addon
                         i.icon.ion-social-apple
-                    input.form-control(name='sampleInput', type='text', placeholder='bla bla')
+                    input.form-control(name='sampleInput', type='text', value='test', placeholder='bla bla')
 
         button.btn.btn-default.btn-success.glyphicon.glyphicon-save(type='submit', style='float:right;') Save
