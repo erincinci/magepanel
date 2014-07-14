@@ -51,6 +51,7 @@ app.use(function(req, res, next) {
     console.warn("404: %s", req.url);
     res.status(404);
     res.render('404', {
+        username: Common.username,
         title: 'Not Found'
     });
 });
