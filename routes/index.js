@@ -2,9 +2,6 @@
  * Module dependencies.
  */
 var Common = require('../common');
-var username = require('username').sync();
-var config = require('../config');
-var settings = require('user-settings').file(config.setup.file);
 
 /**
  * GET home page.
@@ -13,7 +10,7 @@ exports.index = function(req, res) {
     // Check if application setup completed
     var setupCompleted = Common.settings.get(Common.config.setup.completed);
 
-    if(setupCompleted !== undefined) {
+    if(setupCompleted !== undefined && setupCompleted == true) {
         res.render('index', {
             username: Common.username,
             menu: 'home',

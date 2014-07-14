@@ -95,10 +95,11 @@ printTitle() {
 openUrlInBrowser() {
     if [[ $platform == 'cygwin' ]]; then
         cygstart ${url}
+    elif [[ $platform == 'macos' ]]; then
+        open ${url}
     else
-        URL=$1
-        [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
-        path=$(which xdg-open || which gnome-open) && exec "$path" "$URL"
+        [[ -x $BROWSER ]] && exec "$BROWSER" "$url"
+        path=$(which xdg-open || which gnome-open) && exec "$path" "$url"
         echo -e >&2 `date +"%d %b %T"`" - ${light_red}[runner] Can't find browser${default}\n"
     fi
 }
