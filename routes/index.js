@@ -1,3 +1,7 @@
+/**
+ * Module dependencies.
+ */
+var Common = require('../common');
 var username = require('username').sync();
 var config = require('../config');
 var settings = require('user-settings').file(config.setup.file);
@@ -7,11 +11,11 @@ var settings = require('user-settings').file(config.setup.file);
  */
 exports.index = function(req, res) {
     // Check if application setup completed
-    var setupCompleted = settings.get(config.setup.completed);
+    var setupCompleted = Common.settings.get(Common.config.setup.completed);
 
     if(setupCompleted !== undefined) {
         res.render('index', {
-            username: username,
+            username: Common.username,
             menu: 'home',
             title: 'MagePanel'
         });

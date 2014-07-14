@@ -1,41 +1,39 @@
 /**
  * Module dependencies.
  */
-var scribe = require('./scribe');
+var Common = require('./common');
 var express = require('express');
 var routes = require('./routes');
 var mage = require('./routes/mage');
 var setup = require('./routes/setup');
 var http = require('http');
 var path = require('path');
-var username = require('username').sync();
-var config = require('./config');
 
 var app = express();
 
 /**
  * Logger Configuration
  */
-scribe.configure(function(){
-    scribe.set('app', config.server.name);
-    scribe.set('logPath', config.logger.directory);
-    scribe.set('defaultTag', config.logger.defaultTag);
-    scribe.set('divider', config.logger.divider);
-    scribe.set('identation', 5);
-    scribe.set('maxTagLength', 30);
-    scribe.set('mainUser', username);
+Common.scribe.configure(function(){
+    Common.scribe.set('app', Common.config.server.name);
+    Common.scribe.set('logPath', Common.config.logger.directory);
+    Common.scribe.set('defaultTag', Common.config.logger.defaultTag);
+    Common.scribe.set('divider', Common.config.logger.divider);
+    Common.scribe.set('identation', 5);
+    Common.scribe.set('maxTagLength', 30);
+    Common.scribe.set('mainUser', Common.username);
 });
 // Create loggers (name, save to file, print to console, tag color)
-scribe.addLogger('debug', true , true, 'grey');
-scribe.addLogger('log', true , true, 'white');
-scribe.addLogger('info', true , true, 'green');
-scribe.addLogger('error', true , true, 'red');
-scribe.addLogger('warn', true , true, 'yellow');
+Common.scribe.addLogger('debug', true , true, 'grey');
+Common.scribe.addLogger('log', true , true, 'white');
+Common.scribe.addLogger('info', true , true, 'green');
+Common.scribe.addLogger('error', true , true, 'red');
+Common.scribe.addLogger('warn', true , true, 'yellow');
 
 /**
  * Express Server Configuration
  */
-app.set('port', process.env.PORT || config.server.port);
+app.set('port', process.env.PORT || Common.config.server.port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 //app.use(express.favicon());
@@ -70,7 +68,7 @@ app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
 app.get('/mage', mage.index); // Mage console
 app.get('/mage/command', mage.command); // Execute mage command
-app.get('/log', scribe.express.controlPanel()); // Log control panel
+app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 
 /**
  * Start Server

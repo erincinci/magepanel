@@ -1,8 +1,7 @@
 /**
  * GET setup page
  */
-var os = require('os').platform();
-var username = require('username').sync();
+var Common = require('../common');
 
 /**
  * Index
@@ -11,10 +10,10 @@ var username = require('username').sync();
  */
 exports.index = function(req, res) {
     res.render('setup', {
-        username: username,
+        username: Common.username,
         menu: 'setup',
         title: 'Application Setup',
-        winEnv: (os == 'win32')
+        winEnv: (Common.os == 'win32')
     });
 };
 
@@ -27,6 +26,8 @@ exports.save = function(req, res) {
     // Get form data
     var data = req.body;
     // TODO: Implement settings saver
+    console.debug("cygwinBin: %s", data.cygwinBin);
+    console.debug("mageDeployStrategy: %s", data.mageDeployStrategy);
 
     res.send("Settings saved");
 };

@@ -1,12 +1,12 @@
 /**
  * Module dependencies.
  */
+var Common = require('../common');
 var Convert = require('ansi-to-html');
 var exec = require('child_process').exec;
-var os = require('os').platform();
 var convert = new Convert();
-var config = require('../config');
-var username = require('username').sync();
+
+// Vars
 var title = "Console";
 var cygwin_pre = "chdir C:\\cygwin64\\bin\\ & bash --login -c '";
 var cygwin_post = "'";
@@ -16,10 +16,10 @@ var cygwin_post = "'";
  */
 exports.index = function(req, res) {
     res.render('mage', {
-        username: username,
+        username: Common.username,
         menu: 'mage',
         title: title,
-        content: config.html.consolePointer + "Operating System: <b>" + os + "</b> | User: <b>" + username + "</b>"
+        content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b> | User: <b>" + Common.username + "</b>"
     });
 };
 
@@ -44,13 +44,13 @@ exports.command = function(req, res) {
         }
 
         // Send output
-        res.send(config.html.consolePointer + output);
+        res.send(Common.config.html.consolePointer + output);
     }
 
     var mageCommand = "mage " + req.query.cmd; // prepare mage command
 
     // Check OS
-    if (os == 'win32')
+    if (Common.os == 'win32')
         mageCommand = cygwin_pre + mageCommand + cygwin_post;
 
     // Execute command
