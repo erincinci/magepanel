@@ -6,23 +6,64 @@ host="localhost"
 port=4624
 url="http://${host}:${port}/"
 
-# Console colors
-default="\e[39m\e[24m"
-light_red="\e[91m"
-red="\e[31m"
-green="\e[32m"
-light_green="\e[92m"
-yellow="\e[33m"
-light_yellow="\e[93m"
-blue="\e[34m"
-light_blue="\e[94m"
-magenta="\e[35m"
-light_magenta="\e[95m"
-cyan="\e[36m"
-light_cyan="\e[96m"
-clear_screen="\033c"
-underlined="\e[4m"
+# -------------------------
+# Detect OS Function
+# -------------------------
+detectOS() {
+	unamestr=`uname`
+	if [[ "$unamestr" == CYGWIN_NT* ]]; then
+	    platform='cygwin'
+	elif [[ "$unamestr" == 'Linux' ]]; then
+	    platform='linux'
+	elif [[ "$unamestr" == 'Darwin' ]]; then
+	    platform='macos'
+	elif [[ "$unamestr" == 'Win32' ]]; then
+        platform='windows'
+	fi
+}
 
+# Detect platform
+platform='unknown'
+detectOS
+
+# Console colors
+if [ $platform = "macos" ]; then
+    default="\033[39m\033[24m"
+	light_red="\033[91m"
+	red="\033[31m"
+	green="\033[32m"
+	light_green="\033[92m"
+	yellow="\033[33m"
+	light_yellow="\033[93m"
+	blue="\033[34m"
+	light_blue="\033[94m"
+	magenta="\033[35m"
+	light_magenta="\033[95m"
+	cyan="\033[36m"
+	light_cyan="\033[96m"
+	clear_screen="\033c"
+	underlined="\033[4m"
+else
+    default="\e[39m\e[24m"
+    light_red="\e[91m"
+    red="\e[31m"
+    green="\e[32m"
+    light_green="\e[92m"
+    yellow="\e[33m"
+    light_yellow="\e[93m"
+    blue="\e[34m"
+    light_blue="\e[94m"
+    magenta="\e[35m"
+    light_magenta="\e[95m"
+    cyan="\e[36m"
+    light_cyan="\e[96m"
+    clear_screen="\033c"
+    underlined="\e[4m"
+fi
+
+# -------------------------
+# Print Title
+# -------------------------
 printTitle() {
     echo -e "          _____                   _____                   _____                   _____                   _____                   _____                   _____                   _____                   _____  "
     echo -e "         /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\                 /\\    \\ "
@@ -48,11 +89,18 @@ printTitle() {
     echo -e "                                                                                                                                                                                                                 "
 }
 
+# -------------------------
+# Open URL in browser
+# -------------------------
 openUrlInBrowser() {
-    URL=$1
-    [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
-    path=$(which xdg-open || which gnome-open) && exec "$path" "$URL"
-    echo -e >&2 `date +"%d %b %T"`" - ${light_red}[runner] Can't find browser${default}\n"
+    if [[ $platform == 'cygwin' ]]; then
+        cygstart ${url}
+    else
+        URL=$1
+        [[ -x $BROWSER ]] && exec "$BROWSER" "$URL"
+        path=$(which xdg-open || which gnome-open) && exec "$path" "$URL"
+        echo -e >&2 `date +"%d %b %T"`" - ${light_red}[runner] Can't find browser${default}\n"
+    fi
 }
 
 # Print title
@@ -78,4 +126,4 @@ command -v nodemon >/dev/null 2>&1 || {
 # Start app
 echo -e "\n"`date +"%d %b %T"`" - ${cyan}[runner] Starting MagePanel using nodemon & Launching browser..${default}\n"
 openUrlInBrowser ${url}
-nodemon ./app.js ${host} ${port}
+nodemon -i logs/ ./app.js ${port}
