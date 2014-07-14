@@ -5,6 +5,7 @@ html
         meta(charset='utf-8')
         link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-theme.min.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap-select.min.css')
         link(rel='stylesheet', href='/stylesheets/magepanel.css')
         link(rel='stylesheet', href='/stylesheets/ionicons.css')
         link(rel='stylesheet', href='/stylesheets/toastr.min.css')
@@ -27,6 +28,8 @@ html
                             a.icon.ion-home(href='/') Home
                         li(class=(menu === 'mage' ? 'active' : ''))
                             a.icon.ion-code(href='/mage') Console
+                        li(class=(menu === 'projects' ? 'active' : ''))
+                            a.icon.ion-briefcase(href='/projects') Projects
                         li.dropdown
                             a.icon.ion-wrench.dropdown-toggle(href='#', data-toggle='dropdown')
                                 | Tools
@@ -59,5 +62,6 @@ html
         // Import Scripts
         script(src='/javascripts/jquery.min.js')
         script(src='/javascripts/bootstrap.min.js')
+        script(src='/javascripts/bootstrap-select.min.js')
         script(src='/javascripts/toastr.min.js')
         script(src='/javascripts/global.js')

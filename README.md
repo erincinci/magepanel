@@ -9,4 +9,4 @@ Start App
 		
 		git clone ADDRESS/MagePanel.git MagePanel
 		cd MagePanel
-		./run.sh
+		./run.sh OR run.bat

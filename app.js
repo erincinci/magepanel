@@ -48,6 +48,15 @@ app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 404
+app.use(function(req, res, next) {
+    console.warn("404: %s", req.url);
+    res.status(404);
+    res.render('404', {
+        title: 'Not Found'
+    });
+});
+
 // development only
 if (app.get('env') == 'development') {
   app.use(express.errorHandler());

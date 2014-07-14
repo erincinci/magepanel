@@ -6,6 +6,11 @@
 // DOM Ready =============================================================
 $(document).ready(function() {
 
+    // Render select picker components
+    $('.selectpicker').selectpicker({
+        'selectedText': 'cat'
+    });
+
     // Ajax Loading Panel
     $(document).ajaxStart(function(){
         $("#overlay").show();

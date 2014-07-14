@@ -12,16 +12,20 @@ block content
                 .panel-body
                     .input-group
                         span.input-group-addon
-                            i.icon.ion-social-windows
-                        input.form-control(name='cygwinBin', type='text', value='C:\cygwin64\bin', placeholder='cygwin bin folder')
+                            i.icon.ion-social-windows  Cygwin bin directory
+                        input.form-control(name='cygwinBin', type='text', value='C:\\cygwin\\bin', placeholder='cygwin bin folder')
 
         .panel.panel-default
             .panel-heading
-                h3.panel-title Sample Mac OS Environment Setup
+                h3.panel-title Magallanes Setup
             .panel-body
                 .input-group
                     span.input-group-addon
-                        i.icon.ion-social-apple
-                    input.form-control(name='sampleInput', type='text', value='test', placeholder='bla bla')
+                        i.icon.ion-android-send  Default deploy method
+                    select.selectpicker(name='mageDeployStrategy', data-width='auto')
+                        option(value='rsync') RSync
+                        option(value='targz') TarGZ
+                        option(value='git-rebase') GIT Rebase
+                        option(value='disabled') None
 
         button.btn.btn-default.btn-success.glyphicon.glyphicon-save(type='submit', style='float:right;') Save
