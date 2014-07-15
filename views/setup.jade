@@ -13,7 +13,7 @@ block content
                     .input-group
                         span.input-group-addon
                             i.icon.ion-social-windows  Cygwin bin directory
-                        input.form-control(name='cygwinBin', type='text', value=formData['cygwinBin'], placeholder='cygwin bin folder')
+                        input.form-control(name='cygwinBin', type='text', value=settings.cygwinBin(), placeholder='cygwin bin folder')
 
         .panel.panel-default
             .panel-heading
@@ -24,7 +24,7 @@ block content
                         i.icon.ion-android-send  Default deploy method
                     select.selectpicker(name='mageDeployStrategy', data-width='auto')
                         for title, value in {'rsync':'RSync', 'targz':'TarGZ', 'git-rebase':'GIT Rebase', 'disabled':'None'}
-                            if value == formData['mageDeployStrategy']
+                            if value == settings.mageDeployStrategy()
                                 option(value= value, selected)= title
                             else
                                 option(value= value)= title

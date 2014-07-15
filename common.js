@@ -8,7 +8,8 @@ Common = {
     scribe: require('./scribe'),
     username: require('username').sync(),
     os: require('os').platform(),
-    settings: require('user-settings').file(appConfig.setup.file)
+    settings: require('user-settings').file(appConfig.setup.file),
+    SettingsModel: require('./models/settingsModel')
 };
 
 module.exports = Common;

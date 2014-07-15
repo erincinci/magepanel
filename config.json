@@ -13,7 +13,9 @@
 
     "setup": {
         "file": ".magePanelSettings",
-        "completed": "setupCompleted"
+        "completed": "setupCompleted",
+        "defaultCygwinBin": "C:\\cygwin\\bin",
+        "defaultMageDeployStrategy": "rsync"
     },
 
     "server": {

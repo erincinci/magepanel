@@ -10,26 +10,22 @@ var Common = require('../common');
  */
 exports.index = function(req, res) {
     // Get settings from file
-    var setupCompleted = Common.settings.get(Common.config.setup.completed);
-    console.debug("Setup completed: ", setupCompleted);
+    var settings = Common.SettingsModel.create();
+    settings.setupCompleted(Common.settings.get(Common.config.setup.completed));
 
-    var cygwinBin = Common.settings.get("cygwinBin");
-    if(typeof(cygwinBin) === 'undefined')
-        cygwinBin = "C:\\cygwin\\bin";
-    var mageDeployStrategy = Common.settings.get("mageDeployStrategy");
-    if(typeof(mageDeployStrategy) === 'undefined')
-        mageDeployStrategy = 'rsync';
-    var formData = {
-        'cygwinBin' : cygwinBin,
-        'mageDeployStrategy' : mageDeployStrategy
-    };
-    console.debug("Current Settings: ", formData);
+    settings.cygwinBin(Common.settings.get("cygwinBin"));
+    if(typeof(settings.cygwinBin()) === 'undefined')
+        settings.cygwinBin(Common.config.setup.defaulCygwinBin);
+    settings.mageDeployStrategy(Common.settings.get("mageDeployStrategy"));
+    if(typeof(settings.mageDeployStrategy()) === 'undefined')
+        settings.mageDeployStrategy(Common.config.setup.defaultMageDeployStrategy);
+    console.debug("Current Settings: ", settings.toJSON());
 
     res.render('setup', {
         username: Common.username,
         menu: 'setup',
         title: 'Application Setup',
-        formData: formData,
+        settings: settings,
         winEnv: (Common.os == 'win32')
     });
 };
