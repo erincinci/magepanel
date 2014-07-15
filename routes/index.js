@@ -8,13 +8,12 @@ var Common = require('../common');
  */
 exports.index = function(req, res) {
     // Check if application setup completed
-    var setupCompleted = Common.settings.get(Common.config.setup.completed);
-
-    if(setupCompleted !== undefined && setupCompleted == true) {
+    if(Common.setupCompleted !== undefined && Common.setupCompleted == true) {
         res.render('index', {
             username: Common.username,
             menu: 'home',
-            title: 'MagePanel'
+            title: 'Home',
+            setupCompleted: Common.setupCompleted
         });
     } else {
         console.warn("Application is need to be setup..");

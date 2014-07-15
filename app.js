@@ -52,7 +52,8 @@ app.use(function(req, res, next) {
     res.status(404);
     res.render('404', {
         username: Common.username,
-        title: 'Not Found'
+        title: 'Not Found',
+        setupCompleted: Common.setupCompleted
     });
 });
 

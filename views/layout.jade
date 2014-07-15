@@ -23,22 +23,23 @@ html
                     a.navbar-brand(href='/')
                         b.icon.ion-magepanel  MagePanel
                 .navbar-collapse.collapse
-                    ul.nav.navbar-nav
-                        li(class=(menu === 'home' ? 'active' : ''))
-                            a.icon.ion-home(href='/')  Home
-                        li(class=(menu === 'mage' ? 'active' : ''))
-                            a.icon.ion-code(href='/mage')  Console
-                        li(class=(menu === 'projects' ? 'active' : ''))
-                            a.icon.ion-briefcase(href='/projects')  Projects
-                        li.dropdown
-                            a.icon.ion-wrench.dropdown-toggle(href='#', data-toggle='dropdown')
-                                |  Tools
-                                span.caret
-                            ul.dropdown-menu(role='menu')
-                                li
-                                    a.icon.ion-document-text(href='/log', target='_blank')  Logs
-                                li
-                                    a.icon.ion-settings(href='/setup')  Application Setup
+                    if setupCompleted
+                        ul.nav.navbar-nav
+                            li(class=(menu === 'home' ? 'active' : ''))
+                                a.icon.ion-home(href='/')  Home
+                            li(class=(menu === 'mage' ? 'active' : ''))
+                                a.icon.ion-code(href='/mage')  Console
+                            li(class=(menu === 'projects' ? 'active' : ''))
+                                a.icon.ion-briefcase(href='/projects')  Projects
+                            li.dropdown
+                                a.icon.ion-wrench.dropdown-toggle(href='#', data-toggle='dropdown')
+                                    |  Tools
+                                    span.caret
+                                ul.dropdown-menu(role='menu')
+                                    li
+                                        a.icon.ion-document-text(href='/log', target='_blank')  Logs
+                                    li
+                                        a.icon.ion-settings(href='/setup')  Application Setup
                     ul.nav.navbar-nav(style='float:right;')
                         li
                             a.icon.ion-person(href='#')= username

@@ -19,6 +19,7 @@ exports.index = function(req, res) {
         username: Common.username,
         menu: 'mage',
         title: title,
+        setupCompleted: Common.setupCompleted,
         content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b> | User: <b>" + Common.username + "</b>"
     });
 };

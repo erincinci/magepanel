@@ -11,7 +11,7 @@ var Common = require('../common');
 exports.index = function(req, res) {
     // Get settings from file
     var settings = Common.SettingsModel.create();
-    settings.setupCompleted(Common.settings.get(Common.config.setup.completed));
+    settings.setupCompleted(Common.setupCompleted);
 
     settings.cygwinBin(Common.settings.get("cygwinBin"));
     if(typeof(settings.cygwinBin()) === 'undefined')
@@ -26,6 +26,7 @@ exports.index = function(req, res) {
         menu: 'setup',
         title: 'Application Setup',
         settings: settings,
+        setupCompleted: Common.setupCompleted,
         winEnv: (Common.os == 'win32')
     });
 };
@@ -45,7 +46,10 @@ exports.save = function(req, res) {
         console.log("Setting set: %s = %s", input, value);
         Common.settings.set(input, value);
     }
+
+    // Set setup as completed
     Common.settings.set(Common.config.setup.completed, true);
+    Common.setupCompleted = true;
 
     res.send("Settings successfully saved");
 };

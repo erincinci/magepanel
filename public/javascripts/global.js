@@ -41,7 +41,9 @@ $(document).ready(function() {
         var formData = $(this).serialize();
 
         $.post( '/setup/save', formData, function(status) {
-            toastr.success(status, 'MagePanel Setup')
+            //$('#content').load(document.URL + '#content');
+            location.reload();
+            toastr.success(status, 'MagePanel Setup');
         }).error(function() {
             toastr.error('Something went wrong', 'MagePanel Setup');
         });
