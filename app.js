@@ -4,6 +4,7 @@
 var Common = require('./common');
 var express = require('express');
 var routes = require('./routes');
+var projects = require('./routes/projects');
 var mage = require('./routes/mage');
 var setup = require('./routes/setup');
 var http = require('http');
@@ -68,6 +69,7 @@ if (app.get('env') == 'development') {
 app.get('/', routes.index); // Index
 app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
+app.get('/projects', projects.index); // Projects page
 app.get('/mage', mage.index); // Mage console
 app.get('/mage/command', mage.command); // Execute mage command
 app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
