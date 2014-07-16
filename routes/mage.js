@@ -15,6 +15,15 @@ var cygwin_post = "'";
  * Get mage index
  */
 exports.index = function(req, res) {
+    // Check cygwin bin directory to show warning if necessary (TODO)
+    var settings = Common.SettingsModel.create();
+    settings.cygwinBin(Common.settings.get("cygwinBin"));
+    /*if(typeof(settings.cygwinBin()) === 'undefined')
+    var fs = require('fs');
+    if (fs.existsSync(path)) {
+        // Do something
+    }*/
+
     res.render('mage', {
         username: Common.username,
         menu: 'mage',
