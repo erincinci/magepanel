@@ -7,28 +7,31 @@ var exec = require('child_process').exec;
 var convert = new Convert();
 
 // Vars
+var settings = Common.SettingsModel.create();
 var title = "Console";
-var cygwin_pre = "chdir C:\\cygwin64\\bin\\ & bash --login -c '";
-var cygwin_post = "'";
 
 /**
  * Get mage index
  */
 exports.index = function(req, res) {
-    // Check cygwin bin directory to show warning if necessary (TODO)
-    var settings = Common.SettingsModel.create();
+    // Check cygwin bin directory to show warning if necessary
     settings.cygwinBin(Common.settings.get("cygwinBin"));
-    /*if(typeof(settings.cygwinBin()) === 'undefined')
-    var fs = require('fs');
-    if (fs.existsSync(path)) {
-        // Do something
-    }*/
+    var pathWarning = false;
+
+    if(Common.os == 'win32') {
+        var fs = require('fs');
+        if (! fs.existsSync(settings.cygwinBin())) {
+            console.warn("Folder '%s' doesn't exists!", settings.cygwinBin());
+            pathWarning = true;
+        }
+    }
 
     res.render('mage', {
         username: Common.username,
         menu: 'mage',
         title: title,
         setupCompleted: Common.setupCompleted,
+        pathWarning: pathWarning,
         content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b> | User: <b>" + Common.username + "</b>"
     });
 };
@@ -37,6 +40,9 @@ exports.index = function(req, res) {
  * GET mage command output
  */
 exports.command = function(req, res) {
+    var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
+    var cygwin_post = "'";
+
     function puts(error, stdout, stderr) {
         var output;
 
