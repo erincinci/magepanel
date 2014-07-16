@@ -33,7 +33,9 @@ $(document).ready(function() {
     var setupStatus = getParameterByName('status');
     if(typeof setupStatus !== 'undefined' & setupStatus == 'incomplete') {
         toastr.warning('Application is need to be setup..', 'MagePanel');
-    };
+    } else if(typeof setupStatus !== 'undefined' & setupStatus == 'complete') {
+        toastr.success('Settings saved', 'MagePanel Setup');
+    }
 
     // Submit setup form
     $('#saveSettings').submit(function(event) {
@@ -42,8 +44,8 @@ $(document).ready(function() {
 
         $.post( '/setup/save', formData, function(status) {
             //$('#content').load(document.URL + '#content');
-            location.reload();
-            toastr.success(status, 'MagePanel Setup');
+            window.location = "/setup?status=complete";
+            //toastr.success(status, 'MagePanel Setup');
         }).error(function() {
             toastr.error('Something went wrong', 'MagePanel Setup');
         });

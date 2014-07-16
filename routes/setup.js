@@ -15,7 +15,7 @@ exports.index = function(req, res) {
 
     settings.cygwinBin(Common.settings.get("cygwinBin"));
     if(typeof(settings.cygwinBin()) === 'undefined')
-        settings.cygwinBin(Common.config.setup.defaulCygwinBin);
+        settings.cygwinBin(Common.config.setup.defaultCygwinBin);
     settings.mageDeployStrategy(Common.settings.get("mageDeployStrategy"));
     if(typeof(settings.mageDeployStrategy()) === 'undefined')
         settings.mageDeployStrategy(Common.config.setup.defaultMageDeployStrategy);
