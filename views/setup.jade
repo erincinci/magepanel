@@ -6,7 +6,7 @@ block content
 
     form#saveSettings(method='POST', action='/setup/save')
         if winEnv
-            .panel.panel-default
+            .panel.panel-info
                 .panel-heading
                     h3.panel-title Windows Environment Setup
                 .panel-body
@@ -15,7 +15,7 @@ block content
                             i.icon.ion-social-windows  Cygwin bin directory
                         input.form-control(name='cygwinBin', type='text', value=settings.cygwinBin(), placeholder='cygwin bin folder')
 
-        .panel.panel-default
+        .panel.panel-info
             .panel-heading
                 h3.panel-title Magallanes Setup
             .panel-body

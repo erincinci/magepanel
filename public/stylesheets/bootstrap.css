@@ -4548,7 +4548,7 @@ a.list-group-item.active > .badge,
   padding: 30px;
   margin-bottom: 30px;
   color: inherit;
-  background-color:rgba(0,0,0,0.2);
+  background-color:rgba(0,0,0,0.1);
 }
 .jumbotron h1,
 .jumbotron .h1 {
@@ -5329,7 +5329,7 @@ a.list-group-item-danger.active:focus {
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.1);
   border: 1px solid #e3e3e3;
   border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
@@ -6200,4 +6200,42 @@ button.close {
     display: none !important;
   }
 }
+
+/* BS Callouts */
+/* Side notes for calling out things
+-------------------------------------------------- */
+
+/* Base styles (regardless of theme) */
+.bs-callout {
+    border-radius: 6px;
+    background-color: rgba(0,0,0,0.1);
+    margin: 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid #eee;
+}
+.bs-callout h4 {
+    margin-top: 0;
+}
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+.bs-callout code,
+.bs-callout .highlight {
+    background-color: #fff;
+}
+
+/* Themes for different contexts */
+.bs-callout-danger {
+    background-color: rgba(0,0,0,0.1);
+    border-color: #dFb5b4;
+}
+.bs-callout-warning {
+    background-color: rgba(0,0,0,0.1);
+    border-color: #f1e7bc;
+}
+.bs-callout-info {
+    background-color: rgba(0,0,0,0.1);
+    border-color: #28a4c9;
+}
+
 /*# sourceMappingURL=bootstrap.css.map */
