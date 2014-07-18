@@ -3,8 +3,8 @@
  */
 var model = require('nodejs-model');
 
-// Create web service call model definition
-module.exports = SettingsModel = model("Wscall")
+// Create settings model definition
+module.exports = SettingsModel = model("SettingsModel")
     .attr('setupCompleted')
     .attr('cygwinBin')
     .attr('mageDeployStrategy');

@@ -23,7 +23,7 @@ html
                         span.icon-bar
                         span.icon-bar
                         span.icon-bar
-                    a.navbar-brand(href='/')
+                    a.navbar-brand(href='#')
                         b.icon.ion-magepanel  MagePanel
                 .navbar-collapse.collapse
                     if setupCompleted
@@ -48,7 +48,7 @@ html
                             a.icon.ion-person(href='#')= username
 
         // Main div
-        .container.theme-showcase(role='main')
+        .container.main-container(role='main')
             // Page Content
             block content
 
@@ -62,6 +62,10 @@ html
                 tr
                     td(align='center')
                         font(color='#97e1f6') Loading...
+
+        // Footer
+        #footer.container
+            p.text-muted Open source project
 
         // Import Scripts
         script(src='/javascripts/jquery.min.js')

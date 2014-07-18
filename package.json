@@ -18,7 +18,8 @@
     "stylus": "*",
     "user-settings": "*",
     "username": "0.1.1",
-    "nodejs-model": "~0.1.6"
+    "nodejs-model": "~0.1.6",
+    "guid": "0.0.12"
   },
   "devDependencies": {
     "colors.css": "1.0.0"

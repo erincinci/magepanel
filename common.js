@@ -9,6 +9,7 @@ Common = {
     scribe: require('./scribe'),
     username: require('username').sync(),
     os: require('os').platform(),
+    Guid: require('guid'),
     settings: require('user-settings').file(appConfig.setup.file),
     SettingsModel: require('./models/settingsModel'),
     setupCompleted: appSettings.get(appConfig.setup.completed)
