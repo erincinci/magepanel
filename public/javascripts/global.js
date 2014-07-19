@@ -38,7 +38,21 @@ $(document).ready(function() {
     }
 
     // Submit setup form
-    $('#saveSettings').submit(function(event) {
+    $('#saveSettingsForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+
+        $.post( '/setup/save', formData, function(status) {
+            //$('#content').load(document.URL + '#content');
+            window.location = "/setup?status=complete";
+            //toastr.success(status, 'MagePanel Setup');
+        }).error(function() {
+            toastr.error('Something went wrong', 'MagePanel Setup');
+        });
+    });
+
+    // Submit add project form
+    $('#addProjectForm').submit(function(event) {
         event.preventDefault();
         var formData = $(this).serialize();
 
@@ -52,8 +66,21 @@ $(document).ready(function() {
     });
 });
 
-// Functions =============================================================
+// Modal Functions =======================================================
+$('.modal').on('hidden.bs.modal', function(){
+    $(this).find('form')[0].reset();
+});
 
+// DOM Change ============================================================
+// Browse file Input JS
+$(document).on('change', '.btn-file :file', function() {
+    var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val();//.replace(/\\/g, '/').replace(/.*\//, '');
+    $('#projectDir').val(label);
+});
+
+// Functions =============================================================
 // Append output to console
 function appendToConsole(cmd) {
     // jQuery AJAX call for output data

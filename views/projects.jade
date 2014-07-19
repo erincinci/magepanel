@@ -23,8 +23,11 @@ block content
                     h4.list-group-item-heading Project Name 3
                     p.list-group-item-text Project Description 3
         .col-lg-6
-            .bs-callout.bs-callout-info
-                p Project details..
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title Project Details
+                .panel-body
+                    p ...
 
     // Modal Windows
     #addProject.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
@@ -36,7 +39,18 @@ block content
                         span.sr-only Close
                     h4#modalLabel.modal-title Add New Project
                 .modal-body
-                    | <strong>TODO</strong>: Add project form..
+                    // Add project form
+                    form
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-folder
+                            //span.btn.btn-primary.btn-file Browse // Disabled because of security reasons
+                                //input(type='file')
+                            input.form-control#projectDir(name='projectDir', type='text', placeholder='Select project directory')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-android-information
+                            input.form-control#projectName(name='projectName', type='text', placeholder='Enter project name')
                 .modal-footer
                     button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                    button.btn.btn-primary.glyphicon.glyphicon-save(type='button') Save
+                    button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save

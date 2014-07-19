@@ -4,7 +4,7 @@ block content
     .page-header
         h1.icon.ion-settings= title
 
-    form#saveSettings(method='POST', action='/setup/save')
+    form#saveSettingsForm(method='POST', action='/setup/save')
         if winEnv
             .panel.panel-info
                 .panel-heading

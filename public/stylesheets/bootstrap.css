@@ -4548,7 +4548,7 @@ a.list-group-item.active > .badge,
   padding: 30px;
   margin-bottom: 30px;
   color: inherit;
-  background-color:rgba(0,0,0,0.1);
+  background-color:rgba(0, 0, 0, 0.06);
 }
 .jumbotron h1,
 .jumbotron .h1 {
@@ -4994,7 +4994,7 @@ a.list-group-item-danger.active:focus {
 }
 .panel {
   margin-bottom: 20px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.4);
   border: 1px solid transparent;
   border-radius: 4px;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
@@ -5411,7 +5411,7 @@ button.close {
 }
 .modal-content {
   position: relative;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.85);
   -webkit-background-clip: padding-box;
           background-clip: padding-box;
   border: 1px solid #999;
