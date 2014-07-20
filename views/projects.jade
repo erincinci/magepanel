@@ -6,7 +6,7 @@ block content
 
     // Buttons
     p
-        button.btn.btn-default.btn-info.icon.ion-android-add(data-toggle='modal', data-target='#addProject', type='button', style='margin-right:10px')
+        button.btn.btn-default.btn-info.icon.ion-android-add(data-toggle='modal', data-target='#addProjectModal', type='button', style='margin-right:10px')
         button#delproject.btn.btn-default.btn-danger.icon.ion-android-remove(type='button')
 
     // Columns
@@ -30,27 +30,27 @@ block content
                     p ...
 
     // Modal Windows
-    #addProject.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+    #addProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
         .modal-dialog
             .modal-content
-                .modal-header
-                    button.close(type='button', data-dismiss='modal')
-                        span(aria-hidden='true') ×
-                        span.sr-only Close
-                    h4#modalLabel.modal-title Add New Project
-                .modal-body
-                    // Add project form
-                    form
+                form#addProjectForm(method='POST', action='/projects/add')
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') ×
+                            span.sr-only Close
+                        h4#modalLabel.modal-title Add Project
+                    .modal-body
+                        // Add project form contents
                         p.input-group
                             span.input-group-addon
                                 i.icon.ion-folder
                             //span.btn.btn-primary.btn-file Browse // Disabled because of security reasons
                                 //input(type='file')
-                            input.form-control#projectDir(name='projectDir', type='text', placeholder='Select project directory')
+                            input.form-control#projectDir(name='projectDir', type='text', placeholder='Enter project directory')
                         p.input-group
                             span.input-group-addon
                                 i.icon.ion-android-information
                             input.form-control#projectName(name='projectName', type='text', placeholder='Enter project name')
-                .modal-footer
-                    button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                    button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save
+                    .modal-footer
+                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
+                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save

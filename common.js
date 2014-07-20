@@ -3,16 +3,19 @@
  */
 var appConfig = require('./config');
 var appSettings = require('user-settings').file(appConfig.setup.file);
+var Datastore = require('nedb');
 
 Common = {
     config: require('./config'),
     scribe: require('./scribe'),
     username: require('username').sync(),
     os: require('os').platform(),
-    Guid: require('guid'),
+    uuid: require('node-uuid'),
     settings: require('user-settings').file(appConfig.setup.file),
     SettingsModel: require('./models/settingsModel'),
-    setupCompleted: appSettings.get(appConfig.setup.completed)
+    ProjectModel: require('./models/projectModel'),
+    setupCompleted: appSettings.get(appConfig.setup.completed),
+    projectsDB: new Datastore({ filename: 'dbs/projects.db', autoload: true })
 };
 
 module.exports = Common;

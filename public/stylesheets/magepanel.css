@@ -8,7 +8,7 @@ body {
 
 .main-container {
     height: 100%;
-    padding-bottom: 2em;
+    padding-bottom: 30px;
 }
 
 /* File Selection */
@@ -38,11 +38,18 @@ input[readonly] {
 
 /* Footer */
 #footer {
-    clear: both;
+    /*clear: both;
     position: relative;
     z-index: 10;
     height: 2em;
-    margin-top: -2em;
+    margin-top: -2em;*/
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 30px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid transparent;
 }
 
 /* Background Image */

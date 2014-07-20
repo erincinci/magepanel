@@ -14,6 +14,5 @@ module.exports = ProjectModel = model("Project")
 
 // Initialize object attributes
 ProjectModel.init = function(instance) {
-    instance.id(Common.Guid.create());
     instance.name("Default Project");
 };

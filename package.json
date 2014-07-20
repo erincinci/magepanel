@@ -15,11 +15,11 @@
     "mkdirp": "0.5.0",
     "moment": "2.7.0",
     "nedb": "0.10.6",
+    "node-uuid": "^1.4.1",
+    "nodejs-model": "~0.1.6",
     "stylus": "*",
     "user-settings": "*",
-    "username": "0.1.1",
-    "nodejs-model": "~0.1.6",
-    "guid": "0.0.12"
+    "username": "0.1.1"
   },
   "devDependencies": {
     "colors.css": "1.0.0"

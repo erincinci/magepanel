@@ -56,12 +56,16 @@ $(document).ready(function() {
         event.preventDefault();
         var formData = $(this).serialize();
 
-        $.post( '/setup/save', formData, function(status) {
-            //$('#content').load(document.URL + '#content');
-            window.location = "/setup?status=complete";
-            //toastr.success(status, 'MagePanel Setup');
+        $.post( '/projects/add', formData, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                $('#addProjectModal').modal('hide');
+                toastr.success(result["message"], 'MagePanel Projects');
+            }
         }).error(function() {
-            toastr.error('Something went wrong', 'MagePanel Setup');
+            toastr.error('Something went wrong ', 'MagePanel Projects');
         });
     });
 });
