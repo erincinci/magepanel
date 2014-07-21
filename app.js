@@ -81,29 +81,3 @@ app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 http.createServer(app).listen(app.get('port'), function(){
   console.t().info('MagePanel started on port ' + app.get('port'));
 });
-
-// -------------------------------------------------------------------------
-// TODO: DBs
-// Persistent datastore with automatic loading
-/*var Datastore = require('nedb')
-    , db = new Datastore({ filename: 'dbs/settings.db', autoload: true });
-
-var doc = { hello: 'world'
-    , n: 5
-    , today: new Date()
-    , nedbIsAwesome: true
-    , notthere: null
-    , notToBeSaved: undefined  // Will not be saved
-    , fruits: [ 'apple', 'orange', 'pear' ]
-    , infos: { name: 'nedb' }
-};
-db.insert(doc, function (err, newDoc) {   // Callback is optional
-    if (err) console.error(err);
-});
-// Finding all planets in the solar system
-db.find({ hello: 'world' }, function (err, docs) {
-    if (err) console.error(err);
-    for (var i=0; i < docs.length; i++) {
-        console.debug("Found doc: ", docs[i]);
-    }
-});*/

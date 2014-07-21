@@ -30,33 +30,36 @@ exports.add = function(req, res) {
     // Check if project dir contains .mage directory
     if (! fs.existsSync(data['projectDir']+'/.mage')) {
         console.warn("Mage directory not found in the path!");
-        // TODO: Gives "Can't set headers after they are sent" exception
-        res.send({"warn": true, "message": "Mage directory not found in the path!"});
+        res.send({"warn": true, "message": "Mage directory not found in the path! Please init project first"});
+        return;
     }
-
-    // TODO: Check if projects already exists in DB
 
     // Create project object
     var project = Common.ProjectModel.create();
-    project.id(Common.uuid.v1());
-    project.dir(data['projectDir']);
+    project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
 
-    // Add project to DB
-    Common.projectsDB.insert(project, function (err, newDoc) {
+    // TODO: Check if projects already exists in DB
+    /*Common.projectsDB.find({dir: project.dir()}, function(err, result) {
         if (err) {
             console.error(err);
-            res.send({"warn": true, "message": "Internal error while creating project!"});
+            res.send({"warn": true, "message": "Internal error while adding project!"});
+            return;
         }
-    });
 
-    // TODO: DEBUG
-    Common.projectsDB.find({}, function (err, projects) {
-        if (err)
-        console.error(err);
+        if (Object.keys(result).length > 0) {
+            console.warn("Project already in DB");
+            res.send({"warn": true, "message": "Project exists in DB"});
+            return;
+        }
+    });*/
 
-        for (var i=0; i < projects.length; i++) {
-            console.debug("Found project: ", projects[i]);
+    // Add project to DB
+    Common.projectsDB.save(Common.uuid.v1(), project, function(err) {
+        if (err) {
+            console.error(err);
+            res.send({"warn": true, "message": "Internal error while adding project!"});
+            return;
         }
     });
 
