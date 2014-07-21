@@ -13,21 +13,26 @@ block content
     .row
         .col-lg-6
             .list-group
-                a.list-group-item.active(href='#')
-                    h4.list-group-item-heading Project Name 1
-                    p.list-group-item-text Project Description 1
-                a.list-group-item(href='#')
-                    h4.list-group-item-heading Project Name 2
-                    p.list-group-item-text Project Description 2
-                a.list-group-item(href='#')
-                    h4.list-group-item-heading Project Name 3
-                    p.list-group-item-text Project Description 3
+                if projects.length == 0
+                    .panel.panel-primary
+                        .panel-heading
+                            h3.panel-title Projects
+                        .panel-body
+                            p No projects added yet..
+                else
+                    for project in projects
+                        a.list-group-item(href='#', id= project.id)
+                            h4.list-group-item-heading= project.name
+                            p.list-group-item-text= project.dir
+                //a.list-group-item.active(href='#')
+                    //h4.list-group-item-heading Project Name 1
+                    //p.list-group-item-text Project Description 1
         .col-lg-6
             .panel.panel-primary
                 .panel-heading
                     h3.panel-title Project Details
                 .panel-body
-                    p ...
+                    p#projectDetail.icon.ion-arrow-left-a  Select a project..
 
     // Modal Windows
     #addProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')

@@ -6,6 +6,7 @@ var model = require('nodejs-model');
 
 // Create project model definition
 module.exports = ProjectModel = model("Project")
+    .attr('id')
     .attr('name')
     .attr('dir')
     .attr('environments')

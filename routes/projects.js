@@ -12,11 +12,18 @@ var title = "Projects";
  * Get projects index
  */
 exports.index = function(req, res) {
-    res.render('projects', {
-        username: Common.username,
-        menu: 'projects',
-        title: title,
-        setupCompleted: Common.setupCompleted
+    // Get all projects from DB
+    Common.projectsDB.all(function(err, projects) {
+        if (err)
+            console.error(err);
+
+        res.render('projects', {
+            username: Common.username,
+            menu: 'projects',
+            title: title,
+            setupCompleted: Common.setupCompleted,
+            projects: projects
+        });
     });
 };
 
@@ -35,7 +42,9 @@ exports.add = function(req, res) {
     }
 
     // Create project object
+    var id = Common.uuid.v1();
     var project = Common.ProjectModel.create();
+    project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
 
@@ -55,7 +64,7 @@ exports.add = function(req, res) {
     });*/
 
     // Add project to DB
-    Common.projectsDB.save(Common.uuid.v1(), project, function(err) {
+    Common.projectsDB.save(id, project, function(err) {
         if (err) {
             console.error(err);
             res.send({"warn": true, "message": "Internal error while adding project!"});
@@ -65,3 +74,21 @@ exports.add = function(req, res) {
 
     res.send({"warn": false, "message": "Project successfully added"});
 };
+
+/**
+ * Delete project
+ */
+exports.delete = function(req, res) {
+    // TODO: Implement
+}
+
+/**
+ * Get project detail
+ */
+exports.detail = function(req, res) {
+    // TODO: Implement
+    if(req.query.id === 'undefined')
+        res.send("ID not found!");
+    else
+        res.send(req.query.id);
+}

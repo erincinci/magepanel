@@ -79,9 +79,20 @@ $('.modal').on('hidden.bs.modal', function(){
 // Browse file Input JS
 $(document).on('change', '.btn-file :file', function() {
     var input = $(this),
-        numFiles = input.get(0).files ? input.get(0).files.length : 1,
         label = input.val();//.replace(/\\/g, '/').replace(/.*\//, '');
     $('#projectDir').val(label);
+});
+
+// Project list group item on select action
+$('.list-group-item').on('click',function(e){
+    var previous = $(this).closest(".list-group").children(".active");
+    previous.removeClass('active'); // previous list-item
+    $(e.target).addClass('active'); // activated list-item
+
+    // jQuery AJAX call for project detail
+    $.get( '/projects/detail?id=' + e.target.id, function(output) {
+        $('#projectDetail').html(output);
+    });
 });
 
 // Functions =============================================================

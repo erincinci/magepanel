@@ -71,6 +71,7 @@ app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
 app.get('/projects', projects.index); // Projects page
 app.post('/projects/add', projects.add); // Add new project
+app.get('/projects/detail', projects.detail) // Get project detail
 app.get('/mage', mage.index); // Mage console
 app.get('/mage/command', mage.command); // Execute mage command
 app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
