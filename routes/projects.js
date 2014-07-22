@@ -48,6 +48,8 @@ exports.add = function(req, res) {
     project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
 
+    // TODO: Save project details like environments, etc..
+
     // TODO: Check if projects already exists in DB
     /*Common.projectsDB.find({dir: project.dir()}, function(err, result) {
         if (err) {
@@ -84,7 +86,9 @@ exports.delete = function(req, res) {
     // Delete from DB
     Common.projectsDB.remove(selectedId, function (err) {
         if (err) {
+            console.error(err);
             res.send({ "warn": true, "message": "ID: " + selectedId + " not found in DB!" });
+            return;
         }
 
         res.send({ "warn": false, "message": "Removed from DB" });
@@ -100,13 +104,20 @@ exports.detail = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send("ID not found!");
+        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
-            if (err)
+            if (err) {
+                console.error(err);
                 res.send("There was an error getting project details!");
+                return;
+            }
 
-            var details = "<br><b>Name:</b> " + project.name + "<br><b>Directory:</b> " + project.dir;
+            //var details = project.toString();
+            var details = "<b>Name: </b>" + project.name +
+                "<br><b>Dir: </b>" + project.dir +
+                "<br><b>Environments: </b>" + project.environments;
             res.send(details);
         });
     }

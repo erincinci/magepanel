@@ -17,7 +17,8 @@ block content
                             i.icon.ion-briefcase
                         select.selectpicker(name='activeProject', data-width='auto')
                             option(value='null', selected) Select Project
-                            option(value='projectID') Project 2
+                            for project in projects
+                                option(value= project.id)= project.name
                 td
                     button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
                     button#mageerror.btn.btn-default.btn-danger(type='button') Mage Error

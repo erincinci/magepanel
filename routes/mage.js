@@ -14,25 +14,32 @@ var title = "Console";
  * Get mage index
  */
 exports.index = function(req, res) {
-    // Check cygwin bin directory to show warning if necessary
-    settings.cygwinBin(Common.settings.get("cygwinBin"));
-    var pathWarning = false;
+    // Get all projects from DB
+    Common.projectsDB.all(function(err, projects) {
+        if (err)
+            console.error(err);
 
-    if(Common.os == 'win32') {
-        var fs = require('fs');
-        if (! fs.existsSync(settings.cygwinBin())) {
-            console.warn("Folder '%s' doesn't exists!", settings.cygwinBin());
-            pathWarning = true;
+        // Check cygwin bin directory to show warning if necessary
+        settings.cygwinBin(Common.settings.get("cygwinBin"));
+        var pathWarning = false;
+
+        if(Common.os == 'win32') {
+            var fs = require('fs');
+            if (! fs.existsSync(settings.cygwinBin())) {
+                console.warn("Folder '%s' doesn't exists!", settings.cygwinBin());
+                pathWarning = true;
+            }
         }
-    }
 
-    res.render('mage', {
-        username: Common.username,
-        menu: 'mage',
-        title: title,
-        setupCompleted: Common.setupCompleted,
-        pathWarning: pathWarning,
-        content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b>"
+        res.render('mage', {
+            username: Common.username,
+            menu: 'mage',
+            title: title,
+            setupCompleted: Common.setupCompleted,
+            pathWarning: pathWarning,
+            content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b>",
+            projects: projects
+        });
     });
 };
 

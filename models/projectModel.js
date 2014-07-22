@@ -16,3 +16,11 @@ module.exports = ProjectModel = model("Project")
 ProjectModel.init = function(instance) {
     instance.name("Default Project");
 };
+
+// Object to string
+exports.toString = toString = function(project) {
+    var str = "<b>Name: </b>" + project.name +
+        "<br><b>Dir: </b>" + project.dir +
+        "<br><b>Environments: </b>" + project.environments;
+    return str;
+};

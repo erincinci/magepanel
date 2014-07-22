@@ -63,6 +63,7 @@ $(document).ready(function() {
             } else {
                 $('#addProjectModal').modal('hide');
                 $('#projectsList').load(document.URL +  ' #projectsList');
+                $('#projectDetail').html("Select a project..");
                 toastr.success(result["message"], 'MagePanel Projects');
             }
         }).error(function() {
@@ -97,7 +98,7 @@ $(document).on('change', '.btn-file :file', function() {
 });
 
 // Delete project button onClick
-$('#delProjectBtn').on('click', function(e) {
+$('#delProjectBtn').on('click', function() {
     var selectedItem = $('.list-group-item.active')[0];
 
     // Cancel if selection is not valid
@@ -111,7 +112,7 @@ $('#delProjectBtn').on('click', function(e) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
             $('#projectsList').load(document.URL +  ' #projectsList');
-            // TODO: Reset project details div
+            $('#projectDetail').html("Select a project..");
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
