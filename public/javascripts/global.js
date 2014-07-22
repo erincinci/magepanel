@@ -71,8 +71,7 @@ $(document).ready(function() {
     });
 
     // Project list group item on select action
-    // TODO: action now working after div reloaded
-    $('.list-group-item').on('click', function(e) {
+    $(document).delegate('.list-group-item', 'click', function(e) {
         var previous = $(this).closest(".list-group").children(".active");
         previous.removeClass('active'); // previous list-item
         $(e.target).addClass('active'); // activated list-item

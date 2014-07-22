@@ -70,9 +70,9 @@ exports.add = function(req, res) {
             res.send({"warn": true, "message": "Internal error while adding project!"});
             return;
         }
-    });
 
-    res.send({"warn": false, "message": "Project successfully added"});
+        res.send({"warn": false, "message": "Project successfully added"});
+    });
 };
 
 /**
@@ -81,17 +81,33 @@ exports.add = function(req, res) {
 exports.delete = function(req, res) {
     var selectedId = req.query.id;
 
-    // TODO: Implement
-    res.send({ "warn": false, "message": selectedId });
+    // Delete from DB
+    Common.projectsDB.remove(selectedId, function (err) {
+        if (err) {
+            res.send({ "warn": true, "message": "ID: " + selectedId + " not found in DB!" });
+        }
+
+        res.send({ "warn": false, "message": "Removed from DB" });
+    });
+
 }
 
 /**
  * Get project detail
  */
 exports.detail = function(req, res) {
-    // TODO: Implement
-    if(req.query.id === 'undefined')
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
         res.send("ID not found!");
-    else
-        res.send(req.query.id);
+    } else {
+        // Get project from DB
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err)
+                res.send("There was an error getting project details!");
+
+            var details = "<br><b>Name:</b> " + project.name + "<br><b>Directory:</b> " + project.dir;
+            res.send(details);
+        });
+    }
 }
