@@ -7,26 +7,24 @@ block content
     // Buttons
     p
         button.btn.btn-default.btn-info.icon.ion-android-add(data-toggle='modal', data-target='#addProjectModal', type='button', style='margin-right:10px')
-        button#delproject.btn.btn-default.btn-danger.icon.ion-android-remove(type='button')
+        button#delProjectBtn.btn.btn-default.btn-danger.icon.ion-android-remove(type='button')
 
     // Columns
     .row
+        // Available projects
         .col-lg-6
-            .list-group
-                if projects.length == 0
-                    .panel.panel-primary
-                        .panel-heading
-                            h3.panel-title Projects
-                        .panel-body
-                            p No projects added yet..
-                else
+            if projects.length == 0
+                .panel.panel-primary
+                    .panel-heading
+                        h3.panel-title Projects
+                    .panel-body
+                        p No projects added yet..
+            else
+                ul.list-group#projectsList
                     for project in projects
-                        a.list-group-item(href='#', id= project.id)
-                            h4.list-group-item-heading= project.name
-                            p.list-group-item-text= project.dir
-                //a.list-group-item.active(href='#')
-                    //h4.list-group-item-heading Project Name 1
-                    //p.list-group-item-text Project Description 1
+                        - var projectBadge = project.name + ' [' + project.dir + ']'
+                        li.list-group-item(id= project.id)= projectBadge
+        // Selected project details
         .col-lg-6
             .panel.panel-primary
                 .panel-heading
@@ -34,6 +32,7 @@ block content
                 .panel-body
                     p#projectDetail.icon.ion-arrow-left-a  Select a project..
 
+    // -------------
     // Modal Windows
     #addProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
         .modal-dialog

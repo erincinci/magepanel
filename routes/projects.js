@@ -79,7 +79,10 @@ exports.add = function(req, res) {
  * Delete project
  */
 exports.delete = function(req, res) {
+    var selectedId = req.query.id;
+
     // TODO: Implement
+    res.send({ "warn": false, "message": selectedId });
 }
 
 /**

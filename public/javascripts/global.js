@@ -62,10 +62,24 @@ $(document).ready(function() {
                 toastr.warning(result["message"], 'MagePanel Projects');
             } else {
                 $('#addProjectModal').modal('hide');
+                $('#projectsList').load(document.URL +  ' #projectsList');
                 toastr.success(result["message"], 'MagePanel Projects');
             }
         }).error(function() {
             toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    });
+
+    // Project list group item on select action
+    // TODO: action now working after div reloaded
+    $('.list-group-item').on('click', function(e) {
+        var previous = $(this).closest(".list-group").children(".active");
+        previous.removeClass('active'); // previous list-item
+        $(e.target).addClass('active'); // activated list-item
+
+        // jQuery AJAX call for project detail
+        $.get( '/projects/detail?id=' + e.target.id, function(output) {
+            $('#projectDetail').html(output);
         });
     });
 });
@@ -83,15 +97,26 @@ $(document).on('change', '.btn-file :file', function() {
     $('#projectDir').val(label);
 });
 
-// Project list group item on select action
-$('.list-group-item').on('click',function(e){
-    var previous = $(this).closest(".list-group").children(".active");
-    previous.removeClass('active'); // previous list-item
-    $(e.target).addClass('active'); // activated list-item
+// Delete project button onClick
+$('#delProjectBtn').on('click', function(e) {
+    var selectedItem = $('.list-group-item.active')[0];
 
-    // jQuery AJAX call for project detail
-    $.get( '/projects/detail?id=' + e.target.id, function(output) {
-        $('#projectDetail').html(output);
+    // Cancel if selection is not valid
+    if (selectedItem == null)
+        return
+
+    // jQuery AJAX call for project deletion
+    $.post( '/projects/delete?id=' + selectedItem.id, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            $('#projectsList').load(document.URL +  ' #projectsList');
+            // TODO: Reset project details div
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
     });
 });
 
