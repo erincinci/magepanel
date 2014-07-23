@@ -19,7 +19,6 @@ exports.index = function(req, res) {
     settings.mageDeployStrategy(Common.settings.get("mageDeployStrategy"));
     if(typeof(settings.mageDeployStrategy()) === 'undefined')
         settings.mageDeployStrategy(Common.config.setup.defaultMageDeployStrategy);
-    console.debug("Current Settings: ", settings.toJSON());
 
     res.render('setup', {
         username: Common.username,

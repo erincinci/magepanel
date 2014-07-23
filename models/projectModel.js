@@ -9,8 +9,7 @@ module.exports = ProjectModel = model("Project")
     .attr('id')
     .attr('name')
     .attr('dir')
-    .attr('environments')
-    .attr('envConfigs');
+    .attr('environments');
 
 // Initialize object attributes
 ProjectModel.init = function(instance) {

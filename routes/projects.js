@@ -47,8 +47,7 @@ exports.add = function(req, res) {
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
-
-    // TODO: Save project details like environments, etc..
+    project.environments = {};
 
     // TODO: Check if projects already exists in DB
     /*Common.projectsDB.find({dir: project.dir()}, function(err, result) {
@@ -64,6 +63,16 @@ exports.add = function(req, res) {
             return;
         }
     });*/
+
+    // TODO: Save project details like environments, etc..
+    var configFiles = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/config/environment'));
+    for (var i in configFiles) {
+        console.debug("Config file: " + configFiles[i]);
+        if (Common.path.extname(configFiles[i]) == ".yml") {
+            project.environments += configFiles[i];
+        }
+        console.debug(project.toJSON());
+    }
 
     // Add project to DB
     Common.projectsDB.save(id, project, function(err) {
