@@ -38,7 +38,7 @@ exports.index = function(req, res) {
             setupCompleted: Common.setupCompleted,
             pathWarning: pathWarning,
             content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b>",
-            projects: projects
+            projects: Common.dbUtils.cleanResults(projects)
         });
     });
 };
@@ -64,6 +64,7 @@ exports.command = function(req, res) {
         if (stdout) {
             console.debug(stdout);
             convert.newline = true;
+            // TODO: newline option not working for ansi-to-html
             output = convert.toHtml(stdout);
         }
 

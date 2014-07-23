@@ -13,6 +13,7 @@ Common = {
     uuid: require('node-uuid'),
     path: require('path'),
     _: require('underscore'),
+    dbUtils: require('./util/dbUtils'),
     settings: require('user-settings').file(appConfig.setup.file),
     SettingsModel: require('./models/settingsModel'),
     ProjectModel: require('./models/projectModel'),

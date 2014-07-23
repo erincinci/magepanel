@@ -17,13 +17,12 @@ exports.index = function(req, res) {
         if (err)
             console.error(err);
 
-        // TODO: After new insertion, newly created project returns an invalid string in HTML component
         res.render('projects', {
             username: Common.username,
             menu: 'projects',
             title: title,
             setupCompleted: Common.setupCompleted,
-            projects: Common._.values(projects)
+            projects: Common.dbUtils.cleanResults(projects)
         });
     });
 };
@@ -123,6 +122,9 @@ exports.detail = function(req, res) {
                 res.send("There was an error getting project details!");
                 return;
             }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
 
             //var details = project.toString();
             var details = "<b>Name: </b>" + project.name +
