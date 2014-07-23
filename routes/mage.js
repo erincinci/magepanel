@@ -63,6 +63,7 @@ exports.command = function(req, res) {
         }
         if (stdout) {
             console.debug(stdout);
+            convert.newline = true;
             output = convert.toHtml(stdout);
         }
 
