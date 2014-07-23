@@ -12,6 +12,7 @@ Common = {
     os: require('os').platform(),
     uuid: require('node-uuid'),
     path: require('path'),
+    _: require('underscore'),
     settings: require('user-settings').file(appConfig.setup.file),
     SettingsModel: require('./models/settingsModel'),
     ProjectModel: require('./models/projectModel'),

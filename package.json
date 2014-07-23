@@ -20,7 +20,8 @@
     "user-settings": "*",
     "username": "0.1.1",
     "path": "~0.4.9",
-    "nstore": "~0.5.2"
+    "nstore": "~0.5.2",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "colors.css": "1.0.0"

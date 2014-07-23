@@ -17,12 +17,13 @@ exports.index = function(req, res) {
         if (err)
             console.error(err);
 
+        // TODO: After new insertion, newly created project returns an invalid string in HTML component
         res.render('projects', {
             username: Common.username,
             menu: 'projects',
             title: title,
             setupCompleted: Common.setupCompleted,
-            projects: projects
+            projects: Common._.values(projects)
         });
     });
 };
@@ -47,7 +48,7 @@ exports.add = function(req, res) {
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
-    project.environments = {};
+    project.environments = [];
 
     // TODO: Check if projects already exists in DB
     /*Common.projectsDB.find({dir: project.dir()}, function(err, result) {
@@ -65,14 +66,14 @@ exports.add = function(req, res) {
     });*/
 
     // TODO: Save project details like environments, etc..
-    var configFiles = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/config/environment'));
+    /*var configFiles = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/config/environment'));
     for (var i in configFiles) {
         console.debug("Config file: " + configFiles[i]);
         if (Common.path.extname(configFiles[i]) == ".yml") {
-            project.environments += configFiles[i];
+            project.environments.push({file: configFiles[i]});
         }
         console.debug(project.toJSON());
-    }
+    }*/
 
     // Add project to DB
     Common.projectsDB.save(id, project, function(err) {

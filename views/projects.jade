@@ -13,17 +13,15 @@ block content
     .row
         // Available projects
         .col-lg-6
-            if projects.length == 0
-                .panel.panel-primary
-                    .panel-heading
-                        h3.panel-title Projects
-                    .panel-body
-                        p No projects added yet..
-            else
-                ul.list-group#projectsList
-                    for project in projects
-                        - var projectBadge = project.name + ' [' + project.dir + ']'
-                        li.list-group-item(id= project.id)= projectBadge
+            ul.list-group#projectsList
+                for project in projects
+                    li.list-group-item(id= project.id)= project.name
+                else
+                    .panel.panel-primary
+                        .panel-heading
+                            h3.panel-title Projects
+                        .panel-body
+                            p No projects added yet..
         // Selected project details
         .col-lg-6
             .panel.panel-primary
