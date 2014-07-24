@@ -25,8 +25,8 @@ $(document).ready(function() {
     $("#mageinfo").click(function() {
         appendToConsole('version');
     });
-    $("#mageerror").click(function() {
-        appendToConsole('error');
+    $("#mageEnvs").click(function() {
+        appendToConsole('list environments');
     });
 
     // Check if notification needs to be shown
@@ -123,8 +123,15 @@ $('#delProjectBtn').on('click', function() {
 // Functions =============================================================
 // Append output to console
 function appendToConsole(cmd) {
+    var selectedItem = $('#activeProject').find(":selected").val();
+    // Cancel if selection is not valid
+    if (selectedItem == 'null') {
+        toastr.warning("Please select an active project", 'MagePanel Console');
+        return;
+    }
+
     // jQuery AJAX call for output data
-    $.get( '/mage/command?cmd=' + cmd, function(output) {
+    $.get( '/mage/command?cmd=' + cmd + '&id=' + selectedItem, function(output) {
         $('#console').html($('#console').html() + "<br>" + output);
     });
 };

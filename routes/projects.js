@@ -10,6 +10,8 @@ var title = "Projects";
 
 /**
  * Get projects index
+ * @param req
+ * @param res
  */
 exports.index = function(req, res) {
     // Get all projects from DB
@@ -29,6 +31,8 @@ exports.index = function(req, res) {
 
 /**
  * Add project
+ * @param req
+ * @param res
  */
 exports.add = function(req, res) {
     // Get form data
@@ -88,6 +92,8 @@ exports.add = function(req, res) {
 
 /**
  * Delete project
+ * @param req
+ * @param res
  */
 exports.delete = function(req, res) {
     var selectedId = req.query.id;
@@ -107,6 +113,8 @@ exports.delete = function(req, res) {
 
 /**
  * Get project detail
+ * @param req
+ * @param res
  */
 exports.detail = function(req, res) {
     var selectedId = req.query.id;
@@ -133,4 +141,13 @@ exports.detail = function(req, res) {
             res.send(details);
         });
     }
+}
+
+/**
+ * Edit project
+ * @param req
+ * @param res
+ */
+exports.edit = function(req, res) {
+    // TODO: Implement
 }
