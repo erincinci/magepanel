@@ -2,11 +2,11 @@ MagePanel
 ==========================
 ![Alt text](http://s27.postimg.org/k2ek5zrjn/magepanel.png)
 
-This project is only a web-based user interface for [Magallanes Project](https://github.com/andres-montanez/Magallanes).
+This project is only a web-based user interface for [Magallanes Project](http://magephp.com/).
 
 Enjoy!
 
-*(Requires Node v0.10.2 or newer)*
+*(Requires [Node](http://nodejs.org/) v0.10.2 or newer)*
 
 Starting Application
 =======================
