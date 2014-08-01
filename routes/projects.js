@@ -51,7 +51,7 @@ exports.add = function(req, res) {
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
-    project.environments = [];
+    //project.envs = [];
 
     // TODO: Check if projects already exists in DB
     /*Common.projectsDB.find({dir: project.dir()}, function(err, result) {
@@ -68,15 +68,16 @@ exports.add = function(req, res) {
         }
     });*/
 
-    // TODO: Save project details like environments, etc..
-    /*var configFiles = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/config/environment'));
+    // Save project details like environments, etc..
+    var projectEnvs = [];
+    var configFiles = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/config/environment'));
     for (var i in configFiles) {
-        console.debug("Config file: " + configFiles[i]);
         if (Common.path.extname(configFiles[i]) == ".yml") {
-            project.environments.push({file: configFiles[i]});
+            console.debug("Config file: " + configFiles[i]);
+            projectEnvs.push(Common.path.basename(configFiles[i], ".yml"));
         }
-        console.debug(project.toJSON());
-    }*/
+    }
+    project.envs(projectEnvs);
 
     // Add project to DB
     Common.projectsDB.save(id, project, function(err) {
@@ -137,7 +138,7 @@ exports.detail = function(req, res) {
             //var details = project.toString();
             var details = "<b>Name: </b>" + project.name +
                 "<br><b>Dir: </b>" + project.dir +
-                "<br><b>Environments: </b>" + project.environments;
+                "<br><b>Environments: </b>" + project.envs;
             res.send(details);
         });
     }
