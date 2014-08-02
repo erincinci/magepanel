@@ -134,11 +134,14 @@ exports.detail = function(req, res) {
 
             // Clean result object
             project = Common.dbUtils.cleanResult(project);
+            var projectEnvSize = Common._.size(project.envs);
 
             //var details = project.toString();
-            var details = "<b>Name: </b>" + project.name +
-                "<br><b>Dir: </b>" + project.dir +
-                "<br><b>Environments: </b>" + project.envs;
+            var details =
+                "<i class='icon ion-android-information' /> <b>Name: </b>" + project.name +
+                "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
+                "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
+                    + Common.stringUtils.arrayToList(project.envs);
             res.send(details);
         });
     }

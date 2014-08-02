@@ -14,6 +14,7 @@ Common = {
     path: require('path'),
     _: require('underscore'),
     dbUtils: require('./util/dbUtils'),
+    stringUtils: require('./util/stringUtils'),
     settings: require('user-settings').file(appConfig.setup.file),
     SettingsModel: require('./models/settingsModel'),
     ProjectModel: require('./models/projectModel'),
