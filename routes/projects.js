@@ -3,6 +3,7 @@
  */
 var Common = require('../common');
 var fs = require('fs');
+var tempWrite = require('../util/temp-write');
 
 // Vars
 var settings = Common.SettingsModel.create();
@@ -27,6 +28,9 @@ exports.index = function(req, res) {
             projects: Common.dbUtils.cleanResults(projects)
         });
     });
+
+    // Clean temp folder
+    tempWrite.cleanTmp();
 };
 
 /**
@@ -51,7 +55,6 @@ exports.add = function(req, res) {
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
-    //project.envs = [];
 
     // TODO: Check if projects already exists in DB
     /*Common.projectsDB.find({dir: project.dir()}, function(err, result) {
@@ -141,7 +144,7 @@ exports.detail = function(req, res) {
                 "<i class='icon ion-android-information' /> <b>Name: </b>" + project.name +
                 "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
                 "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
-                    + Common.stringUtils.arrayToList(project.envs);
+                    + Common.stringUtils.envArrayToList(project.envs, project.dir);
             res.send(details);
         });
     }

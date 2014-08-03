@@ -11,17 +11,20 @@
     "callsite": "1.0.0",
     "colors": "0.6.2",
     "express": "3.13.0",
+    "graceful-fs": "^3.0.2",
     "jade": "*",
     "mkdirp": "0.5.0",
     "moment": "2.7.0",
     "node-uuid": "^1.4.1",
     "nodejs-model": "~0.1.6",
-    "stylus": "*",
-    "user-settings": "*",
-    "username": "0.1.1",
-    "path": "~0.4.9",
     "nstore": "~0.5.2",
-    "underscore": "~1.6.0"
+    "path": "~0.4.9",
+    "rimraf": "^2.2.8",
+    "stylus": "*",
+    "temp-write": "^0.3.1",
+    "underscore": "~1.6.0",
+    "user-settings": "*",
+    "username": "0.1.1"
   },
   "devDependencies": {
     "colors.css": "1.0.0"

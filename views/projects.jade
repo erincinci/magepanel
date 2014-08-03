@@ -32,6 +32,8 @@ block content
 
     // -------------
     // Modal Windows
+
+    // Add Project Modal
     #addProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
         .modal-dialog
             .modal-content
@@ -56,3 +58,20 @@ block content
                     .modal-footer
                         button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
                         button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save
+
+    // Edit Environment Modal
+    #editEnvModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span(aria-hidden='true') ×
+                        span.sr-only Close
+                    h4#modalLabel.modal-title Edit Environment
+                .modal-body
+                    // WYSIWYG Editor
+                    form#editEnvForm
+                        #envStr.summernote
+                .modal-footer
+                    button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
+                    button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save

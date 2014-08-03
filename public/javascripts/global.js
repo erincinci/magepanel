@@ -87,6 +87,7 @@ $(document).ready(function() {
 // Modal Functions =======================================================
 $('.modal').on('hidden.bs.modal', function(){
     $(this).find('form')[0].reset();
+    $('.summernote').destroy();
 });
 
 // DOM Change ============================================================
@@ -140,4 +141,25 @@ function appendToConsole(cmd) {
 function getParameterByName(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+};
+
+// Environments list item onClick event
+function envListItemOnClick(ymlFile) {
+    $('#editEnvModal').modal('show');
+
+    $.ajax({
+        url : ymlFile.replace('public',''),
+        dataType: "text",
+        success : function (data) {
+            $('#envStr').summernote({
+                height: 280,
+                minHeight: null,
+                maxHeight: null,
+                focus: true,
+                toolbar: [
+                    ['misc', ['codeview']]
+                ]
+            }).code(data);
+        }
+    });
 };
