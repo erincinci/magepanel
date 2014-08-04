@@ -90,7 +90,6 @@ $('.modal').on('hidden.bs.modal', function(){
     $(this).find('form')[0].reset();
 
     // Destroy CodeMirror if it exists
-    //codeMirror = document.getElementById('code');
     if (codeMirror != null) {
         codeMirror.toTextArea();
         codeMirror = null;

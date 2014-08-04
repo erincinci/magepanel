@@ -31,8 +31,7 @@ exports.envArrayToList = function(envArray, projectDir) {
         var tmpPath = tempWrite.sync(ymlData, ymlFile);
 
         // Path fix
-        tmpPath = tmpPath.replace(/\\/g, "/"); //Common.path.join(tmpPath, '.');
-        console.debug("Resolved path: " + tmpPath);
+        tmpPath = tmpPath.replace(/\\/g, "/");
 
         // Create list item
         result += "<li><a href='javascript:void(0);' onclick='envListItemOnClick(\"" + tmpPath + "\");'>" + value + "</a></li>";
