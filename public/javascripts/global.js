@@ -7,12 +7,16 @@ var codeMirror = null;
 // DOM Ready =============================================================
 $(document).ready(function() {
 
-    // Render select picker components
+    /**
+     * Render select picker components
+     */
     $('.selectpicker').selectpicker({
         'selectedText': 'cat'
     });
 
-    // Ajax Loading Panel
+    /**
+     * Ajax Loading Panel
+     */
     $(document).ajaxStart(function(){
         $("#overlay").show();
         $("#wait").css("display","block");
@@ -22,7 +26,9 @@ $(document).ready(function() {
         $("#wait").css("display","none");
     });
 
-    // Console Button click events
+    /**
+     * Console Button click events
+     */
     $("#mageinfo").click(function() {
         appendToConsole('version');
     });
@@ -30,7 +36,10 @@ $(document).ready(function() {
         appendToConsole('list environments');
     });
 
-    // Check if notification needs to be shown
+    /**
+     * Check if notification needs to be shown
+     * @type {*|Array|{index: number, input: string}|string}
+     */
     var setupStatus = getParameterByName('status');
     if(typeof setupStatus !== 'undefined' & setupStatus == 'incomplete') {
         toastr.warning('Application is need to be setup..', 'MagePanel');
@@ -38,7 +47,9 @@ $(document).ready(function() {
         toastr.success('Settings saved', 'MagePanel Setup');
     }
 
-    // Submit setup form
+    /**
+     * Submit setup form
+     */
     $('#saveSettingsForm').submit(function(event) {
         event.preventDefault();
         var formData = $(this).serialize();
@@ -52,7 +63,9 @@ $(document).ready(function() {
         });
     });
 
-    // Submit add project form
+    /**
+     * Submit add project form
+     */
     $('#addProjectForm').submit(function(event) {
         event.preventDefault();
         var formData = $(this).serialize();
@@ -72,7 +85,33 @@ $(document).ready(function() {
         });
     });
 
-    // Project list group item on select action
+    /**
+     * Submit edit project environment form
+     */
+    $('#editEnvForm').submit(function(event) {
+        event.preventDefault();
+        codeMirror.toTextArea();
+        codeMirror = null;
+        var formData = $(this).serialize();
+
+        $.post( '/projects/saveEnvFile', formData, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                $('#editEnvModal').modal('hide');
+                $('#projectsList').load(document.URL +  ' #projectsList');
+                $('#projectDetail').html("Select a project..");
+                toastr.success(result["message"], 'MagePanel Projects');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    });
+
+    /**
+     * Project list group item on select action
+     */
     $(document).delegate('.list-group-item', 'click', function(e) {
         var previous = $(this).closest(".list-group").children(".active");
         previous.removeClass('active'); // previous list-item
@@ -95,16 +134,24 @@ $('.modal').on('hidden.bs.modal', function(){
         codeMirror = null;
     }
 });
+$('#editEnvModal').on('show.bs.modal', function () {
+    $('.modal .modal-body').css('overflow-y', 'auto');
+    $('.modal .modal-body').css('max-height', $(window).height() * 0.9);
+});
 
 // DOM Change ============================================================
-// Browse file Input JS
+/**
+ * Browse file Input JS
+ */
 $(document).on('change', '.btn-file :file', function() {
     var input = $(this),
         label = input.val();//.replace(/\\/g, '/').replace(/.*\//, '');
     $('#projectDir').val(label);
 });
 
-// Delete project button onClick
+/**
+ * Delete project button onClick
+ */
 $('#delProjectBtn').on('click', function() {
     var selectedItem = $('.list-group-item.active')[0];
 
@@ -128,7 +175,10 @@ $('#delProjectBtn').on('click', function() {
 });
 
 // Functions =============================================================
-// Append output to console
+/**
+ * Append output to console
+ * @param cmd
+ */
 function appendToConsole(cmd) {
     var selectedItem = $('#activeProject').find(":selected").val();
     // Cancel if selection is not valid
@@ -143,20 +193,28 @@ function appendToConsole(cmd) {
     });
 };
 
-// Get URL query parameter by name
+/**
+ * Get URL query parameter by name
+ * @param name
+ * @returns {*|Array|{index: number, input: string}|string}
+ */
 function getParameterByName(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 };
 
-// Environments list item onClick event
-function envListItemOnClick(ymlFile) {
-    $('#editEnvModal').modal('show');
-
+/**
+ * Environments list item onClick event
+ * @param ymlFile
+ */
+function envListItemOnClick(ymlFile, orgFile) {
     $.ajax({
         url : ymlFile.replace('public',''),
         dataType: "text",
         success : function (data) {
+            // Set hidden input value
+            $("#orgFile").val(orgFile);
+
             // Set code to textarea
             $("textarea#code").val(data);
 
@@ -164,8 +222,18 @@ function envListItemOnClick(ymlFile) {
             codeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true,
                 styleActiveLine: true,
+                tabMode: 'spaces',
                 theme: 'mdn-like'
             });
+
+            // Show modal window
+            $('#editEnvModal').modal('show');
+            // TODO: CodeMirror instance not drawn correctly until focused (Problematic together with jQuery)
+            codeMirror.refresh();
+            codeMirror.focus();
+        },
+        error : function () {
+            toastr.error("There was an error while opening environment file", 'MagePanel Projects');
         }
     });
 };

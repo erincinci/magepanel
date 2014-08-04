@@ -32,9 +32,10 @@ exports.envArrayToList = function(envArray, projectDir) {
 
         // Path fix
         tmpPath = tmpPath.replace(/\\/g, "/");
+        var orgFile = ymlFile.replace(/\\/g, "/");
 
         // Create list item
-        result += "<li><a href='javascript:void(0);' onclick='envListItemOnClick(\"" + tmpPath + "\");'>" + value + "</a></li>";
+        result += "<li><a href='javascript:void(0);' onclick='envListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\");'>" + value + "</a></li>";
 
     });
 

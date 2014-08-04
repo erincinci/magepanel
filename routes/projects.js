@@ -151,6 +151,23 @@ exports.detail = function(req, res) {
 }
 
 /**
+ * Save Environment File
+ * @param req
+ * @param res
+ */
+exports.saveEnvFile = function(req, res) {
+    // Get form data
+    var data = req.body;
+    var orgFile = data['orgFile'];
+    var code = data['code'];
+
+    // Overwrite environment YAML file
+    fs.writeFileSync(orgFile, code);
+
+    res.send({"warn": false, "message": "Environment file successfully saved"});
+}
+
+/**
  * Edit project
  * @param req
  * @param res
