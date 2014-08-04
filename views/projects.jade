@@ -68,8 +68,9 @@ block content
                         button.close(type='button', data-dismiss='modal')
                             span(aria-hidden='true') ×
                             span.sr-only Close
-                        h4#modalLabel.modal-title Edit Environment
+                        h4#envModalLabel.modal-title Edit Environment
                     .modal-body
+                        .alert.alert-warning(role='alert') Known bug: Click editor to activate..
                         // WYSIWYG Editor
                         input#orgFile(type='hidden', name='orgFile', value='')
                         textarea#code(name='code')

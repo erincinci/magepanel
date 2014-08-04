@@ -160,11 +160,12 @@ exports.saveEnvFile = function(req, res) {
     var data = req.body;
     var orgFile = data['orgFile'];
     var code = data['code'];
+    var envName = Common.path.basename(orgFile);
 
     // Overwrite environment YAML file
     fs.writeFileSync(orgFile, code);
 
-    res.send({"warn": false, "message": "Environment file successfully saved"});
+    res.send({"warn": false, "message": "<strong>" + envName + "</strong> environment file successfully saved"});
 }
 
 /**
