@@ -30,6 +30,10 @@ exports.envArrayToList = function(envArray, projectDir) {
         // Create temp file for javascript to read file contents from
         var tmpPath = tempWrite.sync(ymlData, ymlFile);
 
+        // Path fix
+        tmpPath = tmpPath.replace(/\\/g, "/"); //Common.path.join(tmpPath, '.');
+        console.debug("Resolved path: " + tmpPath);
+
         // Create list item
         result += "<li><a href='javascript:void(0);' onclick='envListItemOnClick(\"" + tmpPath + "\");'>" + value + "</a></li>";
 

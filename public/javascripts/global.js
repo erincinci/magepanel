@@ -2,6 +2,7 @@
  * Created by erincinci on 7/9/14.
  */
 // Data
+var codeMirror = null;
 
 // DOM Ready =============================================================
 $(document).ready(function() {
@@ -87,7 +88,13 @@ $(document).ready(function() {
 // Modal Functions =======================================================
 $('.modal').on('hidden.bs.modal', function(){
     $(this).find('form')[0].reset();
-    $('.summernote').destroy();
+
+    // Destroy CodeMirror if it exists
+    //codeMirror = document.getElementById('code');
+    if (codeMirror != null) {
+        codeMirror.toTextArea();
+        codeMirror = null;
+    }
 });
 
 // DOM Change ============================================================
@@ -155,7 +162,7 @@ function envListItemOnClick(ymlFile) {
             $("textarea#code").val(data);
 
             // Convert textarea to CodeMirror editor
-            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            codeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true,
                 styleActiveLine: true,
                 theme: 'mdn-like'
