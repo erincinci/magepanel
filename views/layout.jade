@@ -3,14 +3,19 @@ html
     head
         title MagePanel | #{title}
         meta(charset='utf-8')
+        // Twitter Bootstrap
         link(rel='stylesheet', href='/stylesheets/bootstrap.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-theme.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-select.css')
+        // MagePanel Styles
         link(rel='stylesheet', href='/stylesheets/magepanel.css')
+        // IonIcons
         link(rel='stylesheet', href='/stylesheets/ionicons.css')
-        link(rel='stylesheet', href='/stylesheets/summernote.css')
-        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')
+        // Toastr Notifications
         link(rel='stylesheet', href='/stylesheets/toastr.min.css')
+        // CodeMirror Editor
+        link(rel='stylesheet', href='/codemirror-4.4/lib/codemirror.css')
+        link(rel='stylesheet', href='/codemirror-4.4/theme/mdn-like.css')
 
     body(role='document')
         // Background image
@@ -71,10 +76,16 @@ html
             //.container
                 //p.text-muted MagePanel Projects
 
-        // Import Scripts
+        // jQuery
         script(src='/javascripts/jquery.min.js')
+        // Twitter Bootstrap
         script(src='/javascripts/bootstrap.min.js')
         script(src='/javascripts/bootstrap-select.min.js')
+        // Toastr Notifications
         script(src='/javascripts/toastr.min.js')
-        script(src='/javascripts/summernote.js')
+        // CodeMirror Editor
+        script(src='/codemirror-4.4/lib/codemirror.js')
+        script(src='/codemirror-4.4/mode/yaml/yaml.js')
+        script(src='/codemirror-4.4/addon/selection/active-line.js')
+        // MagePanel Scripts
         script(src='/javascripts/global.js')

@@ -151,15 +151,15 @@ function envListItemOnClick(ymlFile) {
         url : ymlFile.replace('public',''),
         dataType: "text",
         success : function (data) {
-            $('#envStr').summernote({
-                height: 280,
-                minHeight: null,
-                maxHeight: null,
-                focus: true,
-                toolbar: [
-                    ['misc', ['codeview']]
-                ]
-            }).code(data);
+            // Set code to textarea
+            $("textarea#code").val(data);
+
+            // Convert textarea to CodeMirror editor
+            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                styleActiveLine: true,
+                theme: 'mdn-like'
+            });
         }
     });
 };

@@ -21,7 +21,6 @@
     "path": "~0.4.9",
     "rimraf": "^2.2.8",
     "stylus": "*",
-    "temp-write": "^0.3.1",
     "underscore": "~1.6.0",
     "user-settings": "*",
     "username": "0.1.1"
