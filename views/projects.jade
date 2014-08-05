@@ -6,8 +6,17 @@ block content
 
     // Buttons
     p
-        button.btn.btn-default.btn-info.icon.ion-android-add(data-toggle='modal', data-target='#addProjectModal', type='button', style='margin-right:10px')
-        button#delProjectBtn.btn.btn-default.btn-danger.icon.ion-android-remove(type='button')
+        button.btn.btn-default.btn-info.icon.ion-android-add(
+                rel='tooltip',
+                data-original-title='Add project',
+                data-toggle='modal',
+                data-target='#addProjectModal',
+                type='button',
+                style='margin-right:10px')
+        button#delProjectBtn.btn.btn-default.btn-danger.icon.ion-android-remove(
+                rel='tooltip',
+                data-original-title='Remove project',
+                type='button')
 
     // Columns
     .row

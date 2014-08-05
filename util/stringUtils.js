@@ -35,9 +35,13 @@ exports.envArrayToList = function(envArray, projectDir) {
         var orgFile = ymlFile.replace(/\\/g, "/");
 
         // Create list item
-        result += "<li><a href='javascript:void(0);' onclick='envListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'>" + value + "</a>";
-        result += " <a href='javascript:void(0);' class='glyphicon glyphicon-remove' onclick='alert(\"Are you sure?\")'></a>";
-        result += " <a href='javascript:void(0);' class='glyphicon glyphicon-edit' onclick='alert(\"Are you sure?\")'></a></li>";
+        result += "<li>" + value;
+        result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
+            "rel='tooltip' class='glyphicon glyphicon-edit' data-original-title='Edit environment' " +
+            "onclick='envListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";
+        result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
+            "rel='tooltip' class='glyphicon glyphicon-remove' data-original-title='Delete environment' " +
+            "onclick='alert(\"Are you sure?\")'></a></li>";
 
     });
 

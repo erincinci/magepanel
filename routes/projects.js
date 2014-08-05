@@ -144,6 +144,7 @@ exports.detail = function(req, res) {
                 "<i class='icon ion-android-information' /> <b>Name: </b>" + project.name +
                 "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
                 "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
+                    + " <a href='javascript:void(0);' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
                     + Common.stringUtils.envArrayToList(project.envs, project.dir);
             res.send(details);
         });

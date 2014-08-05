@@ -6,6 +6,7 @@ var codeMirror = null;
 
 // DOM Ready =============================================================
 $(document).ready(function() {
+    $('[rel=tooltip]').tooltip();
 
     /**
      * Render select picker components
@@ -26,6 +27,7 @@ $(document).ready(function() {
         $("#overlay").hide();
         $("#ajaxloader").hide();
         $("#wait").css("display","none");
+        $('[rel=tooltip]').tooltip();
     });
 
     /**
@@ -145,7 +147,7 @@ $('#editEnvModal').on('shown.bs.modal', function () {
     $('#editEnvModal .modal-body').css('height', $(window).height() * 0.7);
 
     // Resize & Refresh & Focus CodeMirror Editor
-    codeMirror.setSize(null, $(window).height() * 0.65);
+    codeMirror.setSize(null, $(window).height() * 0.63);
     codeMirror.refresh();
     codeMirror.focus();
 });
