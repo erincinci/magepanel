@@ -31,11 +31,14 @@ $(document).ready(function() {
     /**
      * Console Button click events
      */
+    $("#clearConsole").click(function() {
+        $('#console').html("<font size='1'><b>>> </b></font><i>Ready..</i>");
+    });
     $("#mageinfo").click(function() {
         appendToConsole('version');
     });
-    $("#mageEnvs").click(function() {
-        appendToConsole('list environments');
+    $("#mageReleases").click(function() {
+        appendToConsole('releases list to:staging'); //TODO
     });
 
     /**

@@ -20,8 +20,9 @@ block content
                             for project in projects
                                 option(value= project.id)= project.name
                 td
+                    button#clearConsole.btn.btn-default.btn-warning(type='button', style='margin-right:10px') Clear
                     button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
-                    button#mageEnvs.btn.btn-default.btn-info(type='button') Environments
+                    button#mageReleases.btn.btn-default.btn-info(type='button') Releases List
     //.well
     .bs-callout.bs-callout-info
         p#console!= content
