@@ -19,10 +19,12 @@ $(document).ready(function() {
      */
     $(document).ajaxStart(function(){
         $("#overlay").show();
+        $("#ajaxloader").show();
         $("#wait").css("display","block");
     });
     $(document).ajaxComplete(function(){
         $("#overlay").hide();
+        $("#ajaxloader").hide();
         $("#wait").css("display","none");
     });
 
