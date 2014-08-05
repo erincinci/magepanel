@@ -182,6 +182,14 @@ $('#delProjectBtn').on('click', function() {
 
 // Functions =============================================================
 /**
+ * Capitalize String
+ * @returns {string}
+ */
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+/**
  * Append output to console
  * @param cmd
  */
@@ -213,13 +221,14 @@ function getParameterByName(name) {
  * Environments list item onClick event
  * @param ymlFile
  */
-function envListItemOnClick(ymlFile, orgFile) {
+function envListItemOnClick(ymlFile, orgFile, envName) {
     $.ajax({
         url : ymlFile.replace('public',''),
         dataType: "text",
         success : function (data) {
-            // Set hidden input value
+            // Set hidden input value & Change modal title
             $("#orgFile").val(orgFile);
+            $("#envModalLabel").html("Edit '<strong>" + envName.capitalize() + "</strong>' Environment");
 
             // Set code to textarea
             $("textarea#code").val(data);
