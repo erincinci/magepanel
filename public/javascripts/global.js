@@ -134,9 +134,15 @@ $('.modal').on('hidden.bs.modal', function(){
         codeMirror = null;
     }
 });
-$('#editEnvModal').on('show.bs.modal', function () {
-    $('.modal .modal-body').css('overflow-y', 'auto');
-    $('.modal .modal-body').css('max-height', $(window).height() * 0.9);
+$('#editEnvModal').on('shown.bs.modal', function () {
+    // Adjust EditEnv Modal Size
+    $('#editEnvModal .modal-body').css('overflow-y', 'auto');
+    $('#editEnvModal .modal-body').css('height', $(window).height() * 0.7);
+
+    // Resize & Refresh & Focus CodeMirror Editor
+    codeMirror.setSize(null, $(window).height() * 0.65);
+    codeMirror.refresh();
+    codeMirror.focus();
 });
 
 // DOM Change ============================================================
@@ -228,9 +234,6 @@ function envListItemOnClick(ymlFile, orgFile) {
 
             // Show modal window
             $('#editEnvModal').modal('show');
-            // TODO: CodeMirror instance not drawn correctly until focused (Problematic together with jQuery)
-            codeMirror.refresh();
-            codeMirror.focus();
         },
         error : function () {
             toastr.error("There was an error while opening environment file", 'MagePanel Projects');
