@@ -93,20 +93,20 @@ $(document).ready(function() {
     });
 
     /**
-     * Submit edit project environment form
+     * Submit edited project file form
      */
-    $('#editEnvForm').submit(function(event) {
+    $('#editFileForm').submit(function(event) {
         event.preventDefault();
         codeMirror.toTextArea();
         codeMirror = null;
         var formData = $(this).serialize();
 
-        $.post( '/projects/saveEnvFile', formData, function(result) {
+        $.post( '/projects/saveFile', formData, function(result) {
             // Check if we have warning
             if(result["warn"]) {
                 toastr.warning(result["message"], 'MagePanel Projects');
             } else {
-                $('#editEnvModal').modal('hide');
+                $('#editFileModal').modal('hide');
                 $('#projectsList').load(document.URL +  ' #projectsList');
                 $('#projectDetail').html("Select a project..");
                 toastr.success(result["message"], 'MagePanel Projects');
@@ -141,13 +141,13 @@ $('.modal').on('hidden.bs.modal', function(){
         codeMirror = null;
     }
 });
-$('#editEnvModal').on('shown.bs.modal', function () {
+$('#editFileModal').on('shown.bs.modal', function () {
     // Adjust EditEnv Modal Size
-    $('#editEnvModal .modal-body').css('overflow-y', 'auto');
-    $('#editEnvModal .modal-body').css('height', $(window).height() * 0.7);
+    $('#editFileModal .modal-body').css('overflow-y', 'auto');
+    $('#editFileModal .modal-body').css('height', $(window).height() * 0.7);
 
     // Resize & Refresh & Focus CodeMirror Editor
-    codeMirror.setSize(null, $(window).height() * 0.63);
+    codeMirror.setSize('100%', '100%');
     codeMirror.refresh();
     codeMirror.focus();
 });
@@ -227,6 +227,8 @@ function getParameterByName(name) {
 /**
  * Environments list item onClick event
  * @param ymlFile
+ * @param orgFile
+ * @param envName
  */
 function envListItemOnClick(ymlFile, orgFile, envName) {
     $.ajax({
@@ -235,7 +237,7 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
         success : function (data) {
             // Set hidden input value & Change modal title
             $("#orgFile").val(orgFile);
-            $("#envModalLabel").html("Edit '<strong>" + envName.capitalize() + "</strong>' Environment");
+            $("#editFileModalLabel").html("Edit '<strong>" + envName.capitalize() + "</strong>' Environment");
 
             // Set code to textarea
             $("textarea#code").val(data);
@@ -245,14 +247,51 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
                 lineNumbers: true,
                 styleActiveLine: true,
                 tabMode: 'spaces',
-                theme: 'mdn-like'
+                theme: 'mdn-like',
+                mode: 'yaml'
             });
 
             // Show modal window
-            $('#editEnvModal').modal('show');
+            $('#editFileModal').modal('show');
         },
         error : function () {
             toastr.error("There was an error while opening environment file", 'MagePanel Projects');
+        }
+    });
+};
+
+/**
+ * Custom Tasks list item onClick event
+ * @param phpFile
+ * @param orgFile
+ * @param taskName
+ */
+function taskListItemOnClick(phpFile, orgFile, taskName) {
+    $.ajax({
+        url : phpFile.replace('public',''),
+        dataType: "text",
+        success : function (data) {
+            // Set hidden input value & Change modal title
+            $("#orgFile").val(orgFile);
+            $("#editFileModalLabel").html("Edit '<strong>" + taskName.capitalize() + "</strong>' Task");
+
+            // Set code to textarea
+            $("textarea#code").val(data);
+
+            // Convert textarea to CodeMirror editor
+            codeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                styleActiveLine: true,
+                matchBrackets: true,
+                theme: 'mdn-like',
+                mode: 'application/x-httpd-php'
+            });
+
+            // Show modal window
+            $('#editFileModal').modal('show');
+        },
+        error : function () {
+            toastr.error("There was an error while opening task file", 'MagePanel Projects');
         }
     });
 };

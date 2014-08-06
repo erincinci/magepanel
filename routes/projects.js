@@ -71,16 +71,25 @@ exports.add = function(req, res) {
         }
     });*/
 
-    // Save project details like environments, etc..
+    // Save project environments
     var projectEnvs = [];
     var configFiles = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/config/environment'));
     for (var i in configFiles) {
         if (Common.path.extname(configFiles[i]) == ".yml") {
-            console.debug("Config file: " + configFiles[i]);
             projectEnvs.push(Common.path.basename(configFiles[i], ".yml"));
         }
     }
     project.envs(projectEnvs);
+
+    // Save project's custom tasks
+    var projectTasks = [];
+    var taskPhps = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/tasks'));
+    for (var i in taskPhps) {
+        if (Common.path.extname(taskPhps[i]) == ".php") {
+            projectTasks.push(Common.path.basename(taskPhps[i], ".php"));
+        }
+    }
+    project.tasks(projectTasks);
 
     // Add project to DB
     Common.projectsDB.save(id, project, function(err) {
@@ -138,6 +147,7 @@ exports.detail = function(req, res) {
             // Clean result object
             project = Common.dbUtils.cleanResult(project);
             var projectEnvSize = Common._.size(project.envs);
+            var projectTaskSize = Common._.size(project.tasks);
 
             //var details = project.toString();
             var details =
@@ -145,28 +155,31 @@ exports.detail = function(req, res) {
                 "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
                 "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
                     + " <a href='javascript:void(0);' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
-                    + Common.stringUtils.envArrayToList(project.envs, project.dir);
+                    + Common.stringUtils.envArrayToList(project.envs, project.dir) +
+                "<i class='icon ion-ios7-gear' /> <b>Custom Tasks</b> <span class='badge'>" + projectTaskSize + "</span>"
+                    + " <a href='javascript:void(0);' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new task' style='text-decoration: none;'></a>"
+                    + Common.stringUtils.taskArrayToList(project.tasks, project.dir);
             res.send(details);
         });
     }
 }
 
 /**
- * Save Environment File
+ * Save Edited File
  * @param req
  * @param res
  */
-exports.saveEnvFile = function(req, res) {
+exports.saveFile = function(req, res) {
     // Get form data
     var data = req.body;
     var orgFile = data['orgFile'];
     var code = data['code'];
-    var envName = Common.path.basename(orgFile);
+    var fileName = Common.path.basename(orgFile);
 
     // Overwrite environment YAML file
     fs.writeFileSync(orgFile, code);
 
-    res.send({"warn": false, "message": "<strong>" + envName + "</strong> environment file successfully saved"});
+    res.send({"warn": false, "message": "<strong>" + fileName + "</strong> file successfully saved"});
 }
 
 /**

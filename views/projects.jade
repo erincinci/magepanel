@@ -68,16 +68,16 @@ block content
                         button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
                         button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save
 
-    // Edit Environment Modal
-    #editEnvModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+    // Edit File Modal
+    #editFileModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
         .modal-dialog
             .modal-content
-                form#editEnvForm(method='POST', action='/projects/saveEnvFile')
+                form#editFileForm(method='POST')
                     .modal-header
                         button.close(type='button', data-dismiss='modal')
                             span(aria-hidden='true') ×
                             span.sr-only Close
-                        h4#envModalLabel.modal-title Edit Environment
+                        h4#editFileModalLabel.modal-title Edit File
                     .modal-body
                         // WYSIWYG Editor
                         input#orgFile(type='hidden', name='orgFile', value='')

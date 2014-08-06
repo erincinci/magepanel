@@ -9,7 +9,8 @@ module.exports = ProjectModel = model("Project")
     .attr('id')
     .attr('name')
     .attr('dir')
-    .attr('envs');
+    .attr('envs')
+    .attr('tasks');
 
 // Initialize object attributes
 ProjectModel.init = function(instance) {
@@ -20,6 +21,7 @@ ProjectModel.init = function(instance) {
 exports.toString = toString = function(project) {
     var str = "<b>Name: </b>" + project.name +
         "<br><b>Dir: </b>" + project.dir +
-        "<br><b>Environments: </b>" + project.envs;
+        "<br><b>Environments: </b>" + project.envs +
+        "<br><b>Custom Tasks: </b>" + project.tasks;
     return str;
 };
