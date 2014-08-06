@@ -245,6 +245,7 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
             // Convert textarea to CodeMirror editor
             codeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true,
+                lineWrapping: true,
                 styleActiveLine: true,
                 tabMode: 'spaces',
                 theme: 'mdn-like',
@@ -281,10 +282,11 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
             // Convert textarea to CodeMirror editor
             codeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
                 lineNumbers: true,
+                lineWrapping: true,
                 styleActiveLine: true,
                 matchBrackets: true,
                 theme: 'mdn-like',
-                mode: 'application/x-httpd-php'
+                mode: 'php'
             });
 
             // Show modal window

@@ -17,7 +17,7 @@ exports.envArrayToList = function(envArray, projectDir) {
     if (_.size(envArray) > 0) {
         var result = "<ul>";
     } else {
-        return "N/A";
+        return "";
     }
 
     // Prepare HTML list
@@ -35,7 +35,7 @@ exports.envArrayToList = function(envArray, projectDir) {
         var orgFile = ymlFile.replace(/\\/g, "/");
 
         // Create list item
-        result += "<li>" + value;
+        result += "<li><i>" + value + "</i>";
         result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
             "rel='tooltip' class='glyphicon glyphicon-edit' data-original-title='Edit environment' " +
             "onclick='envListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";
@@ -61,7 +61,7 @@ exports.taskArrayToList = function(taskArray, projectDir) {
     if (_.size(taskArray) > 0) {
         var result = "<ul>";
     } else {
-        return "N/A";
+        return "";
     }
 
     // Prepare HTML list
@@ -79,7 +79,7 @@ exports.taskArrayToList = function(taskArray, projectDir) {
         var orgFile = phpFile.replace(/\\/g, "/");
 
         // Create list item
-        result += "<li>" + value;
+        result += "<li><i>" + value + "</i>";
         result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
             "rel='tooltip' class='glyphicon glyphicon-edit' data-original-title='Edit task' " +
             "onclick='taskListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";

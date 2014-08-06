@@ -11,6 +11,16 @@ body {
     padding-bottom: 30px;
 }
 
+/* Edit File Modal Size */
+#editFileModal .modal-dialog {
+    width: 75%;
+}
+@media screen and (min-width: 768px) {
+    #editFileModal .modal-dialog  {
+        width: 900px;
+    }
+}
+
 /* Imageless Ajax Loader */
 #ajaxloader {
     display: none;
