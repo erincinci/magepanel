@@ -16,6 +16,11 @@ block content
         button#delProjectBtn.btn.btn-default.btn-danger.icon.ion-android-remove(
                 rel='tooltip',
                 data-original-title='Remove project',
+                type='button',
+                style='margin-right:10px')
+        button#refreshProjectBtn.btn.btn-default.btn-success.icon.ion-refresh(
+                rel='tooltip',
+                data-original-title='Refresh project',
                 type='button')
 
     // Columns
@@ -24,7 +29,7 @@ block content
         .col-lg-6
             ul.list-group#projectsList
                 for project in projects
-                    li.list-group-item(id= project.id)= project.name
+                    li.list-group-item(id= project.id) #{project.name}
                 else
                     .panel.panel-primary
                         .panel-heading

@@ -11,6 +11,10 @@ body {
     padding-bottom: 30px;
 }
 
+#projectDetail {
+    line-height: 2em;
+}
+
 /* Edit File Modal Size */
 #editFileModal .modal-dialog {
     width: 75%;

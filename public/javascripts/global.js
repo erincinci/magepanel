@@ -119,7 +119,7 @@ $(document).ready(function() {
     /**
      * Project list group item on select action
      */
-    $(document).delegate('.list-group-item', 'click', function(e) {
+    $(document).delegate('#projectsList .list-group-item', 'click', function(e) {
         var previous = $(this).closest(".list-group").children(".active");
         previous.removeClass('active'); // previous list-item
         $(e.target).addClass('active'); // activated list-item
@@ -169,8 +169,10 @@ $('#delProjectBtn').on('click', function() {
     var selectedItem = $('.list-group-item.active')[0];
 
     // Cancel if selection is not valid
-    if (selectedItem == null)
-        return
+    if (selectedItem == null) {
+        toastr.warning("Select a project first", 'MagePanel Projects');
+        return;
+    }
 
     // jQuery AJAX call for project deletion
     $.post( '/projects/delete?id=' + selectedItem.id, function(result) {
@@ -180,6 +182,34 @@ $('#delProjectBtn').on('click', function() {
         } else {
             $('#projectsList').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+});
+
+/**
+ * Refresh project button onClick
+ */
+$('#refreshProjectBtn').on('click', function(event) {
+    var selectedItem = $('.list-group-item.active')[0];
+
+    // Cancel if selection is not valid
+    if (selectedItem == null) {
+        toastr.warning("Select a project first", 'MagePanel Projects');
+        return;
+    }
+
+    // jQuery AJAX call for project refresh
+    $.post( '/projects/refresh?id=' + selectedItem.id, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            $('#projectsList').load(document.URL +  ' #projectsList');
+            $('#projectDetail').html("Select a project..");
+            selectedItem.addClass('active');
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {

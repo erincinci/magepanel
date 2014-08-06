@@ -71,25 +71,9 @@ exports.add = function(req, res) {
         }
     });*/
 
-    // Save project environments
-    var projectEnvs = [];
-    var configFiles = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/config/environment'));
-    for (var i in configFiles) {
-        if (Common.path.extname(configFiles[i]) == ".yml") {
-            projectEnvs.push(Common.path.basename(configFiles[i], ".yml"));
-        }
-    }
-    project.envs(projectEnvs);
-
-    // Save project's custom tasks
-    var projectTasks = [];
-    var taskPhps = fs.readdirSync(Common.path.resolve(project.dir() + '/.mage/tasks'));
-    for (var i in taskPhps) {
-        if (Common.path.extname(taskPhps[i]) == ".php") {
-            projectTasks.push(Common.path.basename(taskPhps[i], ".php"));
-        }
-    }
-    project.tasks(projectTasks);
+    // Get project environments & tasks
+    project.envs(getProjectEnvs(project.dir()));
+    project.tasks(getProjectTasks(project.dir()));
 
     // Add project to DB
     Common.projectsDB.save(id, project, function(err) {
@@ -101,6 +85,46 @@ exports.add = function(req, res) {
 
         res.send({"warn": false, "message": "Project successfully added"});
     });
+};
+
+/**
+ * Refresh Project
+ * @param req
+ * @param res
+ */
+exports.refresh = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        // Get project from DB
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+
+            // Refresh project details
+            project.envs(getProjectEnvs(project.dir()));
+            project.tasks(getProjectTasks(project.dir()));
+
+            // Refresh project at DB
+            Common.projectsDB.save(selectedId, project, function(err) {
+                if (err) {
+                    console.error(err);
+                    res.send({"warn": true, "message": "Internal error while refreshing project!"});
+                    return;
+                }
+
+                res.send({"warn": false, "message": "Project successfully refreshed"});
+            });
+        });
+    }
 };
 
 /**
@@ -122,7 +146,7 @@ exports.delete = function(req, res) {
         res.send({ "warn": false, "message": "Removed from DB" });
     });
 
-}
+};
 
 /**
  * Get project detail
@@ -162,7 +186,7 @@ exports.detail = function(req, res) {
             res.send(details);
         });
     }
-}
+};
 
 /**
  * Save Edited File
@@ -180,7 +204,7 @@ exports.saveFile = function(req, res) {
     fs.writeFileSync(orgFile, code);
 
     res.send({"warn": false, "message": "<strong>" + fileName + "</strong> file successfully saved"});
-}
+};
 
 /**
  * Edit project
@@ -190,3 +214,38 @@ exports.saveFile = function(req, res) {
 exports.edit = function(req, res) {
     // TODO: Implement
 }
+
+/**
+ * Get Project Environments as array
+ * @param projectDir
+ * @returns {Array}
+ */
+function getProjectEnvs(projectDir) {
+    var projectEnvs = [];
+    var configFiles = fs.readdirSync(Common.path.resolve(projectDir + '/.mage/config/environment'));
+    for (var i in configFiles) {
+        if (Common.path.extname(configFiles[i]) == ".yml") {
+            projectEnvs.push(Common.path.basename(configFiles[i], ".yml"));
+        }
+    }
+
+    return projectEnvs;
+};
+
+/**
+ * Get Project Tasks as array
+ * @param projectDir
+ * @returns {Array}
+ */
+function getProjectTasks(projectDir) {
+    var projectTasks = [];
+    var taskPhps = fs.readdirSync(Common.path.resolve(projectDir + '/.mage/tasks'));
+    for (var i in taskPhps) {
+        if (Common.path.extname(taskPhps[i]) == ".php") {
+            projectTasks.push(Common.path.basename(taskPhps[i], ".php"));
+        }
+    }
+
+    return projectTasks;
+};
+
