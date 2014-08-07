@@ -20,6 +20,12 @@ block content
                             for project in projects
                                 option(value= project.id)= project.name
                 td
+                    .input-group(style='margin-right:10px')
+                        span.input-group-addon
+                            i.icon.ion-briefcase
+                        select#activeEnvironment.selectpicker(name='activeEnvironment', data-width='auto', disabled)
+                            option(value='null', selected) Select Environment
+                td
                     button#clearConsole.btn.btn-default.btn-warning(type='button', style='margin-right:10px') Clear
                     button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
                     button#mageReleases.btn.btn-default.btn-info(type='button') Releases List

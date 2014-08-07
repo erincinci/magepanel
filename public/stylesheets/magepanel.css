@@ -148,3 +148,8 @@ input[readonly] {
     left: 50%;
     padding: 0px;
 }
+
+.console-pointer {
+    font-size: 10px;
+    font-weight: bold;
+}

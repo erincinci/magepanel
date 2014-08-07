@@ -32,7 +32,7 @@ $(document).ready(function() {
      * Console Button click events
      */
     $("#clearConsole").click(function() {
-        $('#console').html("<font size='1'><b>>> </b></font><i>Ready..</i>");
+        $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i>");
     });
     $("#mageinfo").click(function() {
         appendToConsole('version');
