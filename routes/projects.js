@@ -216,6 +216,33 @@ exports.edit = function(req, res) {
 }
 
 /**
+ * Get environments of selected project
+ * @param req
+ * @param res
+ */
+exports.envs = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send("ID not found!");
+        return;
+    } else {
+        // Get project from DB
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(err);
+                res.send("There was an error getting project details!");
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            res.send(project.envs);
+        });
+    }
+};
+
+/**
  * Get Project Environments as array
  * @param projectDir
  * @returns {Array}

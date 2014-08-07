@@ -77,6 +77,7 @@ app.post('/projects/refresh', projects.refresh); // Refresh project
 app.post('/projects/delete', projects.delete); // Delete projects
 app.post('/projects/saveFile', projects.saveFile); // Save project file
 app.get('/projects/detail', projects.detail); // Get project detail
+app.get('/projects/envs', projects.envs); // Get environments of selected project
 
 app.get('/mage', mage.index); // Mage console
 app.get('/mage/command', mage.command); // Execute mage command

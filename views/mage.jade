@@ -15,14 +15,14 @@ block content
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-briefcase
-                        select#activeProject.selectpicker(name='activeProject', data-width='auto')
+                        select#activeProject.selectpicker(name='activeProject', data-width='auto',onchange='loadEnvs()')
                             option(value='null', selected) Select Project
                             for project in projects
                                 option(value= project.id)= project.name
                 td
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
-                            i.icon.ion-briefcase
+                            i.icon.ion-cloud
                         select#activeEnvironment.selectpicker(name='activeEnvironment', data-width='auto', disabled)
                             option(value='null', selected) Select Environment
                 td
