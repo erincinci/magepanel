@@ -209,7 +209,7 @@ $('#refreshProjectBtn').on('click', function(event) {
         } else {
             $('#projectsList').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
-            selectedItem.addClass('active');
+            //selectedItem.addClass('active'); // TODO: Select last active project
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {

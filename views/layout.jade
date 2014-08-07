@@ -39,6 +39,8 @@ html
                                 a.icon.ion-home(href='/')  Home
                             li(class=(menu === 'mage' ? 'active' : ''))
                                 a.icon.ion-code(href='/mage')  Console
+                            li(class=(menu === 'mageLogs' ? 'active' : ''))
+                                a.icon.ion-document(href='/mageLogs')  Logs
                             li(class=(menu === 'projects' ? 'active' : ''))
                                 a.icon.ion-briefcase(href='/projects')  Projects
                             li.dropdown
@@ -47,7 +49,7 @@ html
                                     span.caret
                                 ul.dropdown-menu(role='menu')
                                     li
-                                        a.icon.ion-document-text(href='/log', target='_blank')  Logs
+                                        a.icon.ion-document-text(href='/log', target='_blank')  MagePanel Logs
                                     li
                                         a.icon.ion-settings(href='/setup')  Application Setup
                     ul.nav.navbar-nav(style='float:right;')

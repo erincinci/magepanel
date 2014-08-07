@@ -99,22 +99,27 @@ exports.refresh = function(req, res) {
         res.send({"warn": true, "message": "ID not found!"});
         return;
     } else {
-        // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
+                console.error(selectedId + ": " + err);
                 res.send({"warn": true, "message": "There was an error getting project from DB!"});
                 return;
             }
 
             // Clean result object
             project = Common.dbUtils.cleanResult(project);
+            project.dir = project.dir.replace(/\\/g, "\\\\"); // TODO: Casues multiple backslashes !!!
 
-            // Refresh project details
-            project.envs(getProjectEnvs(project.dir()));
-            project.tasks(getProjectTasks(project.dir()));
+            // Create refreshed project
+            var refreshedProject = Common.ProjectModel.create();
+            refreshedProject.id(project.id);
+            refreshedProject.dir(project.dir);
+            refreshedProject.name(project.name);
+            refreshedProject.envs(getProjectEnvs(project.dir));
+            refreshedProject.tasks(getProjectTasks(project.dir));
 
             // Refresh project at DB
-            Common.projectsDB.save(selectedId, project, function(err) {
+            Common.projectsDB.save(selectedId, refreshedProject, function(err) {
                 if (err) {
                     console.error(err);
                     res.send({"warn": true, "message": "Internal error while refreshing project!"});
@@ -212,7 +217,7 @@ exports.saveFile = function(req, res) {
  * @param res
  */
 exports.edit = function(req, res) {
-    // TODO: Implement
+    // TODO: Implement project edit functionality
 }
 
 /**

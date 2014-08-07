@@ -82,6 +82,7 @@ exports.command = function(req, res) {
 
         // Execute command
         //console.debug("Command to be executed: " + mageCommand);
+        // TODO: Use spawn instead of exec to get live stout data
         exec(mageCommand, execCommand);
     });
 
