@@ -34,7 +34,7 @@ $(document).ready(function() {
      * Console Button click events
      */
     $("#clearConsole").click(function() {
-        $('#console').html("<font size='1'><b>>> </b></font><i>Ready..</i>");
+        $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i>");
     });
     $("#mageinfo").click(function() {
         appendToConsole('version');
@@ -243,6 +243,37 @@ function appendToConsole(cmd) {
         $('#console').html($('#console').html() + "<br>" + output);
     });
 };
+
+/**
+ * load environments of selected project
+ */
+function loadEnvs() {
+    var selectedItem = $("#activeProject").val();
+    var i;
+    if (selectedItem == 'null') {
+        $('#activeEnvironment').prop('disabled',true);
+        $("#activeEnvironment option[value !='null']").remove();
+        $('#activeEnvironment').selectpicker('refresh');
+        return false;
+    }
+
+    // jQuery AJAX call to load environments
+    $.get( '/projects/envs?id=' + selectedItem, function(result) {
+        // Check if we have warning
+        if(result == null) {
+            toastr.warning("Couldn't get environments of selected project!", 'MagePanel Console');
+        } else {
+            $("#activeEnvironment option[value !='null']").remove();
+            for (i =0; i< result.length;++i) {
+                $("#activeEnvironment").append("<option>"+result[i]+"</option>");
+            }
+            $('#activeEnvironment').prop('disabled',false);
+            $('#activeEnvironment').selectpicker('refresh');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', "Couldn't get environments of selected project!");
+    });
+}
 
 /**
  * Get URL query parameter by name

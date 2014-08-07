@@ -8,7 +8,7 @@
     },
 
     "html": {
-        "consolePointer": "<font size='1'><b>>> </b></font>"
+        "consolePointer": "<span class='console-pointer'>&gt;&gt; </span>"
     },
 
     "setup": {
