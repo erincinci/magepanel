@@ -108,7 +108,6 @@ exports.refresh = function(req, res) {
 
             // Clean result object
             project = Common.dbUtils.cleanResult(project);
-            //project.dir = project.dir.replace(/\\/g, "\\\\"); // TODO: Casues multiple backslashes !!!
             project.dir = Common.path.normalize(project.dir);
 
             // Create refreshed project
