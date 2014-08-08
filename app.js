@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 var Common = require('./common');
-var express = require('express');
+var express = require('express.io');
 var routes = require('./routes');
 var projects = require('./routes/projects');
 var mage = require('./routes/mage');
@@ -10,7 +10,7 @@ var setup = require('./routes/setup');
 var http = require('http');
 var path = require('path');
 
-var app = express();
+var app = express().http().io();
 
 /**
  * Logger Configuration
@@ -80,13 +80,13 @@ app.get('/projects/detail', projects.detail); // Get project detail
 app.get('/projects/envs', projects.envs); // Get environments of selected project
 
 app.get('/mage', mage.index); // Mage console
-app.get('/mage/command', mage.command); // Execute mage command
+app.io.route('mageCommand', mage.command); // Execute mage command with Socket.IO
 
 app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 
 /**
  * Start Server
  */
-http.createServer(app).listen(app.get('port'), function(){
+app.listen(app.get('port'), function(){
   console.t().info('MagePanel started on port ' + app.get('port'));
 });

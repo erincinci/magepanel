@@ -45,10 +45,11 @@ exports.index = function(req, res) {
 };
 
 /**
- * GET mage command output
+ * IO mage command output
  */
-exports.command = function(req, res) {
-    var selectedId = req.query.id;
+exports.command = function(req) {
+    var selectedId = req.data.id;
+
     // Get project from DB
     Common.projectsDB.get(selectedId, function (err, project) {
         if (err) {
@@ -74,36 +75,37 @@ exports.command = function(req, res) {
 
         // Prepare command
         var cdCommand = "cd " + projectDir + "; "
-        var mageCommand = cdCommand + "mage " + req.query.cmd; // prepare mage command
+        var mageCommand = cdCommand + "mage " + req.data.cmd; // prepare mage command
 
         // Check OS
         if (Common.os == 'win32')
             mageCommand = cygwin_pre + mageCommand + cygwin_post;
 
-        // Execute command
         //console.debug("Command to be executed: " + mageCommand);
-        // TODO: Use spawn instead of exec to get live stout data
-        exec(mageCommand, execCommand);
+
+        // Use spawn instead of exec to get live stout data
+        req.io.emit('cmdResponse', { result: Common.config.html.consolePointer, status: 'stdout' });
+        var util  = require('util'),
+            spawn = require('child_process').spawn;
+
+        // Prepare spawn command
+        if (Common.os == 'win32')
+            var mageCmd = spawn('cmd', ['/c', mageCommand]);
+        else
+            var mageCmd = spawn(mageCommand, []);
+
+        // Execute with spawn
+        mageCmd.stdout.on('data', function (data) {
+            console.debug(data.toString());
+            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stdout' });
+        });
+        mageCmd.stderr.on('data', function (data) {
+            console.error(data.toString());
+            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stderr' });
+        });
+        mageCmd.on('exit', function (code) {
+            console.log('child process exited with code ' + code);
+            req.io.emit('cmdResponse', { result: code, status: 'exit' });
+        });
     });
-
-    // Function for executing console command
-    function execCommand(error, stdout, stderr) {
-        var output;
-
-        if (error) {
-            //console.error(error);
-            output = error;
-        }
-        if (stderr) {
-            console.warn(stderr);
-            output = stderr;
-        }
-        if (stdout) {
-            console.debug(stdout);
-            output = convert.toHtml(stdout);
-        }
-
-        // Send output
-        res.send(Common.config.html.consolePointer + output);
-    }
 };

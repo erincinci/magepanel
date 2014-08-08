@@ -19,15 +19,10 @@ $(document).ready(function() {
      * Ajax Loading Panel
      */
     $(document).ajaxStart(function(){
-        $("#overlay").show();
-        $("#ajaxloader").show();
-        $("#wait").css("display","block");
+        showAjaxLoader();
     });
     $(document).ajaxComplete(function(){
-        $("#overlay").hide();
-        $("#ajaxloader").hide();
-        $("#wait").css("display","none");
-        $('[rel=tooltip]').tooltip();
+        hideAjaxLoader();
     });
 
     /**
@@ -209,7 +204,7 @@ $('#refreshProjectBtn').on('click', function(event) {
         } else {
             $('#projectsList').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
-            //$('.list-group-item:last')[0].addClass('active'); // TODO: Select last active project
+            //$('#'+selectedItem.id).trigger('click'); // TODO: Select last active, possible bug in bootstrap
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
@@ -227,6 +222,21 @@ String.prototype.capitalize = function() {
 }
 
 /**
+ * Show & Hide Ajax Loader Panel
+ */
+function showAjaxLoader() {
+    $("#overlay").show();
+    $("#ajaxloader").show();
+    $("#wait").css("display","block");
+};
+function hideAjaxLoader() {
+    $("#overlay").hide();
+    $("#ajaxloader").hide();
+    $("#wait").css("display","none");
+    $('[rel=tooltip]').tooltip();
+};
+
+/**
  * Append output to console
  * @param cmd
  */
@@ -238,9 +248,32 @@ function appendToConsole(cmd) {
         return;
     }
 
-    // jQuery AJAX call for output data
+    /*// jQuery AJAX call for output data
     $.get( '/mage/command?cmd=' + cmd + '&id=' + selectedItem, function(output) {
         $('#console').html($('#console').html() + "<br>" + output);
+    });*/
+
+    // Use Socket.IO for getting live command response
+    var socket = io.connect();
+
+    socket.emit('mageCommand', { cmd: cmd, id: selectedItem });
+    showAjaxLoader();
+
+    // Get live response
+    socket.on('cmdResponse', function(data) {
+        switch(data.status) {
+            case "stdout":
+                // Append results to console tag
+                $('#console').append("<br>" + data.result);
+                break;
+            case "stderr":
+                // TODO: Show error in MageConsole in different style
+                break;
+            case "exit":
+                hideAjaxLoader();
+                //socket.disconnect(); // TODO: Fix multiple messages on consecutive io requests
+                break;
+        }
     });
 };
 
