@@ -3,6 +3,8 @@
  */
 // Data
 var codeMirror = null;
+var showAjaxLoaderFlag = true;
+var ajaxTimeout = 600;
 
 // DOM Ready =============================================================
 $(document).ready(function() {
@@ -18,11 +20,19 @@ $(document).ready(function() {
     /**
      * Ajax Loading Panel
      */
-    $(document).ajaxStart(function(){
-        showAjaxLoader();
+    var loadingTimeout;
+    $(document).ajaxStart(function() {
+        if(showAjaxLoaderFlag) {
+            loadingTimeout = setTimeout(function() {
+                showAjaxLoader();
+            }, ajaxTimeout);
+        }
     });
-    $(document).ajaxComplete(function(){
-        hideAjaxLoader();
+    $(document).ajaxComplete(function() {
+        if(showAjaxLoaderFlag) {
+            clearTimeout(loadingTimeout);
+            hideAjaxLoader();
+        }
     });
 
     /**
@@ -225,6 +235,7 @@ String.prototype.capitalize = function() {
  * Show & Hide Ajax Loader Panel
  */
 function showAjaxLoader() {
+    // TODO: Show loading div only on loaded part of page
     $("#overlay").show();
     $("#ajaxloader").show();
     $("#wait").css("display","block");
@@ -291,6 +302,7 @@ function loadEnvs() {
     }
 
     // jQuery AJAX call to load environments
+    showAjaxLoaderFlag = false;
     $.get( '/projects/envs?id=' + selectedItem, function(result) {
         // Check if we have warning
         if(result == null) {
