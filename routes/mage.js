@@ -57,14 +57,10 @@ exports.command = function(req) {
             return;
         }
 
-        // Vars
+        // Init variables
         var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
         var cygwin_post = "'";
-
-        // Clean result object
         project = Common.dbUtils.cleanResult(project);
-
-        // Get project dir
         var projectDir = project.dir;
 
         // Replace cygwin dir if Windows
@@ -75,26 +71,22 @@ exports.command = function(req) {
 
         // Prepare command
         var cdCommand = "cd " + projectDir + "; "
-        var mageCommand = cdCommand + "mage " + req.data.cmd; // prepare mage command
-
-        // Check OS
+        var mageCommand = cdCommand + "mage " + req.data.cmd;
         if (Common.os == 'win32')
             mageCommand = cygwin_pre + mageCommand + cygwin_post;
-
-        //console.debug("Command to be executed: " + mageCommand);
 
         // Use spawn instead of exec to get live stout data
         req.io.emit('cmdResponse', { result: Common.config.html.consolePointer, status: 'stdout' });
         var util  = require('util'),
             spawn = require('child_process').spawn;
 
-        // Prepare spawn command
+        // Spawn command
         if (Common.os == 'win32')
             var mageCmd = spawn('cmd', ['/c', mageCommand]);
         else
-            var mageCmd = spawn(mageCommand, []);
+            var mageCmd = spawn('bash', []);
 
-        // Execute with spawn
+        // Get realtime output
         mageCmd.stdout.on('data', function (data) {
             console.debug(data.toString());
             req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stdout' });
@@ -107,5 +99,13 @@ exports.command = function(req) {
             console.log('child process exited with code ' + code);
             req.io.emit('cmdResponse', { result: code, status: 'exit' });
         });
+
+        // If not on windows, wait some time and send command after connecting to bash shell
+        if (Common.os != 'win32') {
+             setTimeout(function() {
+                mageCmd.stdin.write(mageCommand + '\n');
+                mageCmd.stdin.end();
+             }, 500);
+        }
     });
 };

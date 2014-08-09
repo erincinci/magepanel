@@ -224,6 +224,17 @@ $('#refreshProjectBtn').on('click', function(event) {
 
 // Functions =============================================================
 /**
+ * Center element on screen
+ * @returns {jQuery.fn}
+ */
+jQuery.fn.center = function () {
+    //this.css("position","absolute");
+    this.css("top", Math.max(0, (($(window).height() / 2) + $(window).scrollTop()) + "px"));
+    //this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
+    return this;
+}
+
+/**
  * Capitalize String
  * @returns {string}
  */
@@ -245,6 +256,11 @@ function hideAjaxLoader() {
     $("#ajaxloader").hide();
     $("#wait").css("display","none");
     $('[rel=tooltip]').tooltip();
+};
+function updateAjaxLoader() {
+    $("html, body").animate({ scrollTop: $('#console').offset().top });
+    $("#ajaxloader").center();
+    $('#overlay').height($(document).height());
 };
 
 /**
@@ -285,6 +301,9 @@ function appendToConsole(cmd) {
                 //socket.disconnect(); // TODO: Fix multiple messages on consecutive io requests
                 break;
         }
+
+        // Readjust ajax loader div
+        //updateAjaxLoader(); // TODO: Readjust div doesn't work correctly!
     });
 };
 
