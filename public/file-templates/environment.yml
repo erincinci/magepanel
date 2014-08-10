@@ -1,0 +1,17 @@
+#REPLACETHIS
+deployment:
+  user: dummy
+  from: ./
+  to: /var/www/vhosts/example.com
+  excludes:
+releases:
+  enabled: true
+  max: 10
+  symlink: current
+  directory: releases
+hosts:
+tasks:
+  pre-deploy:
+  on-deploy:
+  post-release:
+  post-deploy:

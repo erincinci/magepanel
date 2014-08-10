@@ -166,6 +166,65 @@ exports.deleteFile = function(req, res) {
     res.send({ "warn": false, "message": "Successfully deleted project file" });
 };
 
+exports.addEnvFile = function(req, res) {
+    // Get env name from form data
+    var templateFile = "public/file-templates/environment.yml";
+    var selectedId = req.body['projectId'];
+    var newFileName = req.body['envName'];
+
+    Common.projectsDB.get(selectedId, function (err, project) {
+        if (err) {
+            res.send({"warn": true, "message": "There was an error creating environment file!"});
+            return;
+        }
+
+        // Clean result object
+        project = Common.dbUtils.cleanResult(project);
+        project.dir = Common.path.normalize(project.dir);
+
+        // Create new environment file
+        var newFilePath = Common.path.join(project.dir, "/.mage/config/environment/", newFileName + ".yml");
+        fs.openSync(newFilePath, 'w');
+
+        // Fill contents using template file
+        var fileContent = fs.readFileSync(templateFile);
+        fileContent = fileContent.replace(/REPLACETHIS/g, newFileName);
+        fs.writeFileSync(newFilePath, fileContent);
+
+        res.send({ "warn": false, "message": "New environment added: " + newFileName });
+    });
+}
+
+exports.addTaskFile = function(req, res) {
+    // Get task name from form data
+    var templateFile = "public/file-templates/Task.php";
+    var selectedId = req.body['projectId'];
+    var newFileName = req.body['taskName'];
+    console.debug(req.body);
+
+    Common.projectsDB.get(selectedId, function (err, project) {
+        if (err) {
+            res.send({"warn": true, "message": "There was an error creating custom task file!"});
+            return;
+        }
+
+        // Clean result object
+        project = Common.dbUtils.cleanResult(project);
+        project.dir = Common.path.normalize(project.dir);
+
+        // Create new task file
+        var newFilePath = Common.path.join(project.dir, "/.mage/tasks/", newFileName + ".php");
+        fs.openSync(newFilePath, 'w');
+
+        // Fill contents using template file
+        var fileContent = fs.readFileSync(templateFile);
+        fileContent = fileContent.replace(/REPLACETHIS/g, newFileName);
+        fs.writeFileSync(newFilePath, fileContent);
+
+        res.send({ "warn": false, "message": "New custom task created: " + newFileName });
+    });
+}
+
 /**
  * Get project detail
  * @param req
@@ -196,10 +255,10 @@ exports.detail = function(req, res) {
                 "<i class='icon ion-android-information' /> <b>Name: </b>" + project.name +
                 "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
                 "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
-                    + " <a href='javascript:void(0);' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
+                    + " <a href='#' data-toggle='modal' data-target='#addProjectEnvModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
                     + Common.stringUtils.envArrayToList(project.envs, project.dir) +
                 "<i class='icon ion-ios7-gear' /> <b>Custom Tasks</b> <span class='badge'>" + projectTaskSize + "</span>"
-                    + " <a href='javascript:void(0);' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new task' style='text-decoration: none;'></a>"
+                    + " <a href='#' data-toggle='modal' data-target='#addProjectTaskModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new task' style='text-decoration: none;'></a>"
                     + Common.stringUtils.taskArrayToList(project.tasks, project.dir);
             res.send(details);
         });

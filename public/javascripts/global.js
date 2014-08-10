@@ -102,6 +102,50 @@ $(document).ready(function() {
     });
 
     /**
+     * Submit add project environment form
+     */
+    $('#addProjectEnvForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+
+        $.post( '/projects/addEnvFile', formData, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                // Refresh project on success
+                $('#addProjectEnvModal').modal('hide');
+                $('#refreshProjectBtn').click();
+                toastr.success(result["message"], 'MagePanel Projects');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    });
+
+    /**
+     * Submit add project task form
+     */
+    $('#addProjectTaskForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+
+        $.post( '/projects/addTaskFile', formData, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                // Refresh project on success
+                $('#addProjectTaskModal').modal('hide');
+                $('#refreshProjectBtn').click();
+                toastr.success(result["message"], 'MagePanel Projects');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    });
+
+    /**
      * Submit edited project file form
      */
     $('#editFileForm').submit(function(event) {
@@ -159,6 +203,12 @@ $('#editFileModal').on('shown.bs.modal', function () {
     codeMirror.setSize('100%', '100%');
     codeMirror.refresh();
     codeMirror.focus();
+});
+$('#addProjectEnvModal').on('shown.bs.modal', function () {
+    $('#projectId').val($('.list-group-item.active')[0].id);
+});
+$('#addProjectTaskModal').on('shown.bs.modal', function () {
+    $('#projectId').val($('.list-group-item.active')[0].id);
 });
 
 // DOM Change ============================================================
@@ -233,7 +283,7 @@ $('#refreshProjectBtn').on('click', function(event) {
  */
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
-}
+};
 
 /**
  * Show & Hide Ajax Loader Panel
@@ -327,7 +377,7 @@ function loadEnvs() {
     }).error(function() {
         toastr.error('Something went wrong ', "Couldn't get environments of selected project!");
     });
-}
+};
 
 /**
  * Get URL query parameter by name
@@ -418,8 +468,6 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
  * @param fileToDel
  */
 function deleteProjectFile(fileToDel) {
-    var selectedItem = $("#activeProject").val();
-
     // jQuery AJAX call for project file deletion
     $.post( '/projects/deleteFile?file=' + fileToDel, function(result) {
         // Check if we have warning
