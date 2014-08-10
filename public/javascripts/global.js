@@ -272,13 +272,16 @@ function appendToConsole(cmd) {
     showAjaxLoader();
 
     // Get live response
+    var mageConsole = $('#console');
+    var mageConsoleFrame = $('#consoleFrame');
     socket.on('connect', function () {
         //console.log('Connected to backend!');
         socket.on('cmdResponse', function(data) {
             switch(data.status) {
                 case "stdout":
                     // Append results to console tag
-                    $('#console').append(data.result);
+                    mageConsole.append(data.result);
+                    mageConsoleFrame.animate({ "scrollTop": mageConsoleFrame[0].scrollHeight }, "slow");
                     break;
                 case "stderr":
                     // TODO: Show error in MageConsole in different style
@@ -290,10 +293,6 @@ function appendToConsole(cmd) {
 
             // Readjust ajax loader div
             updateAjaxLoader();
-
-            // TODO: Fix auto-scrolling inside div
-            //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
-            $('#console').animate({"scrollTop": $('#console')[0].scrollHeight}, "slow");
         });
     });
 };
