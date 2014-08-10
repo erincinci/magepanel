@@ -75,6 +75,7 @@ app.get('/projects', projects.index); // Projects page
 app.post('/projects/add', projects.add); // Add new project
 app.post('/projects/refresh', projects.refresh); // Refresh project
 app.post('/projects/delete', projects.delete); // Delete projects
+app.post('/projects/deleteFile', projects.deleteFile); // Delete project file
 app.post('/projects/saveFile', projects.saveFile); // Save project file
 app.get('/projects/detail', projects.detail); // Get project detail
 app.get('/projects/envs', projects.envs); // Get environments of selected project

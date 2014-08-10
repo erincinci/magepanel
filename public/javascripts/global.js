@@ -412,3 +412,25 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
         }
     });
 };
+
+/**
+ * Delete project file click event
+ * @param fileToDel
+ */
+function deleteProjectFile(fileToDel) {
+    var selectedItem = $("#activeProject").val();
+
+    // jQuery AJAX call for project file deletion
+    $.post( '/projects/deleteFile?file=' + fileToDel, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            // Refresh project on success
+            $('#refreshProjectBtn').click();
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+};

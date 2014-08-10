@@ -44,7 +44,7 @@ exports.envArrayToList = function(envArray, projectDir) {
             "onclick='envListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";
         result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
             "rel='tooltip' class='glyphicon glyphicon-remove' data-original-title='Delete environment' " +
-            "onclick='alert(\"Are you sure?\")'></a></li>";
+            "onclick='if(window.confirm(\"Are you sure to delete file: " + value + "?\")) deleteProjectFile(\"" + orgFile + "\");'></a></li>";
 
     });
 
@@ -91,7 +91,7 @@ exports.taskArrayToList = function(taskArray, projectDir) {
             "onclick='taskListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";
         result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
             "rel='tooltip' class='glyphicon glyphicon-remove' data-original-title='Delete task' " +
-            "onclick='alert(\"Are you sure?\")'></a></li>";
+            "onclick='if(window.confirm(\"Are you sure to delete file: " + value + "?\")) deleteProjectFile(\"" + orgFile + "\");'></a></li>";
 
     });
 

@@ -154,6 +154,19 @@ exports.delete = function(req, res) {
 };
 
 /**
+ * Delete project file
+ * @param req
+ * @param res
+ */
+exports.deleteFile = function(req, res) {
+    var fileToDel = req.query.file;
+
+    // Delete project file
+    fs.unlinkSync(fileToDel);
+    res.send({ "warn": false, "message": "Successfully deleted project file" });
+};
+
+/**
  * Get project detail
  * @param req
  * @param res
