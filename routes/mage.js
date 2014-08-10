@@ -38,7 +38,7 @@ exports.index = function(req, res) {
             title: title,
             setupCompleted: Common.setupCompleted,
             pathWarning: pathWarning,
-            content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b>",
+            content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b><br>",
             projects: Common.dbUtils.cleanResults(projects)
         });
     });

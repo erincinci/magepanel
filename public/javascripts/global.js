@@ -5,8 +5,12 @@
 var codeMirror = null;
 var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
+var socket = null;
 
 // DOM Ready =============================================================
+$(window).load(function() {
+    hideAjaxLoader();
+});
 $(document).ready(function() {
     $('[rel=tooltip]').tooltip();
 
@@ -39,7 +43,7 @@ $(document).ready(function() {
      * Console Button click events
      */
     $("#clearConsole").click(function() {
-        $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i>");
+        $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i><br>");
     });
     $("#mageinfo").click(function() {
         appendToConsole('version');
@@ -224,17 +228,6 @@ $('#refreshProjectBtn').on('click', function(event) {
 
 // Functions =============================================================
 /**
- * Center element on screen
- * @returns {jQuery.fn}
- */
-jQuery.fn.center = function () {
-    //this.css("position","absolute");
-    this.css("top", Math.max(0, (($(window).height() / 2) + $(window).scrollTop()) + "px"));
-    //this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
-    return this;
-}
-
-/**
  * Capitalize String
  * @returns {string}
  */
@@ -258,8 +251,6 @@ function hideAjaxLoader() {
     $('[rel=tooltip]').tooltip();
 };
 function updateAjaxLoader() {
-    $("html, body").animate({ scrollTop: $('#console').offset().top });
-    $("#ajaxloader").center();
     $('#overlay').height($(document).height());
 };
 
@@ -275,35 +266,35 @@ function appendToConsole(cmd) {
         return;
     }
 
-    /*// jQuery AJAX call for output data
-    $.get( '/mage/command?cmd=' + cmd + '&id=' + selectedItem, function(output) {
-        $('#console').html($('#console').html() + "<br>" + output);
-    });*/
-
     // Use Socket.IO for getting live command response
-    var socket = io.connect();
-
+    socket = io.connect();
     socket.emit('mageCommand', { cmd: cmd, id: selectedItem });
     showAjaxLoader();
 
     // Get live response
-    socket.on('cmdResponse', function(data) {
-        switch(data.status) {
-            case "stdout":
-                // Append results to console tag
-                $('#console').append("<br>" + data.result);
-                break;
-            case "stderr":
-                // TODO: Show error in MageConsole in different style
-                break;
-            case "exit":
-                hideAjaxLoader();
-                //socket.disconnect(); // TODO: Fix multiple messages on consecutive io requests
-                break;
-        }
+    socket.on('connect', function () {
+        //console.log('Connected to backend!');
+        socket.on('cmdResponse', function(data) {
+            switch(data.status) {
+                case "stdout":
+                    // Append results to console tag
+                    $('#console').append(data.result);
+                    break;
+                case "stderr":
+                    // TODO: Show error in MageConsole in different style
+                    break;
+                case "exit":
+                    hideAjaxLoader();
+                    break;
+            }
 
-        // Readjust ajax loader div
-        //updateAjaxLoader(); // TODO: Readjust div doesn't work correctly!
+            // Readjust ajax loader div
+            updateAjaxLoader();
+
+            // TODO: Fix auto-scrolling inside div
+            //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            $('#console').animate({"scrollTop": $('#console')[0].scrollHeight}, "slow");
+        });
     });
 };
 
