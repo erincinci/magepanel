@@ -126,5 +126,5 @@ command -v nodemon >/dev/null 2>&1 || {
 
 # Start app
 echo -e "\n"`date +"%d %b %T"`" - ${cyan}[runner] Starting MagePanel using nodemon & Launching browser..${default}\n"
-openUrlInBrowser ${url}
+#openUrlInBrowser ${url}
 nodemon -i logs/ ./app.js ${port}

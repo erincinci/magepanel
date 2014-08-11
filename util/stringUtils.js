@@ -25,7 +25,10 @@ exports.envArrayToList = function(envArray, projectDir) {
 
         // Read YML file content
         var ymlFile = projectDir + "/.mage/config/environment/" + value + ".yml";
-        var ymlData = fs.readFileSync(ymlFile, 'utf8');
+        if (fs.existsSync(ymlFile))
+            var ymlData = fs.readFileSync(ymlFile, 'utf8');
+        else
+            console.warn("Project file not found, maybe modified outside MagePanel?: " + ymlFile);
 
         // Create temp file for javascript to read file contents from
         var tmpPath = tempWrite.sync(ymlData, ymlFile);
@@ -41,7 +44,7 @@ exports.envArrayToList = function(envArray, projectDir) {
             "onclick='envListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";
         result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
             "rel='tooltip' class='glyphicon glyphicon-remove' data-original-title='Delete environment' " +
-            "onclick='alert(\"Are you sure?\")'></a></li>";
+            "onclick='if(window.confirm(\"Are you sure to delete environment: " + value + "?\")) deleteProjectFile(\"" + orgFile + "\");'></a></li>";
 
     });
 
@@ -69,7 +72,10 @@ exports.taskArrayToList = function(taskArray, projectDir) {
 
         // Read PHP file content
         var phpFile = projectDir + "/.mage/tasks/" + value + ".php";
-        var phpData = fs.readFileSync(phpFile, 'utf8');
+        if (fs.existsSync(phpFile))
+            var phpData = fs.readFileSync(phpFile, 'utf8');
+        else
+            console.warn("Project file not found, maybe modified outside MagePanel?: " + phpFile);
 
         // Create temp file for javascript to read file contents from
         var tmpPath = tempWrite.sync(phpData, phpFile);
@@ -85,7 +91,7 @@ exports.taskArrayToList = function(taskArray, projectDir) {
             "onclick='taskListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";
         result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
             "rel='tooltip' class='glyphicon glyphicon-remove' data-original-title='Delete task' " +
-            "onclick='alert(\"Are you sure?\")'></a></li>";
+            "onclick='if(window.confirm(\"Are you sure to delete task: " + value + "?\")) deleteProjectFile(\"" + orgFile + "\");'></a></li>";
 
     });
 

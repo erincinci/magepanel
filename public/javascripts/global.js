@@ -3,8 +3,15 @@
  */
 // Data
 var codeMirror = null;
+var showAjaxLoaderFlag = true;
+var ajaxTimeout = 600;
+var socket = null;
 
 // DOM Ready =============================================================
+$(window).load(function() {
+    // Show AJAX Loader until page fully loads
+    hideAjaxLoader();
+});
 $(document).ready(function() {
     $('[rel=tooltip]').tooltip();
 
@@ -18,23 +25,26 @@ $(document).ready(function() {
     /**
      * Ajax Loading Panel
      */
-    $(document).ajaxStart(function(){
-        $("#overlay").show();
-        $("#ajaxloader").show();
-        $("#wait").css("display","block");
+    var loadingTimeout;
+    $(document).ajaxStart(function() {
+        if(showAjaxLoaderFlag) {
+            loadingTimeout = setTimeout(function() {
+                showAjaxLoader();
+            }, ajaxTimeout);
+        }
     });
-    $(document).ajaxComplete(function(){
-        $("#overlay").hide();
-        $("#ajaxloader").hide();
-        $("#wait").css("display","none");
-        $('[rel=tooltip]').tooltip();
+    $(document).ajaxComplete(function() {
+        if(showAjaxLoaderFlag) {
+            clearTimeout(loadingTimeout);
+            hideAjaxLoader();
+        }
     });
 
     /**
      * Console Button click events
      */
     $("#clearConsole").click(function() {
-        $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i>");
+        $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i><br>");
     });
     $("#mageinfo").click(function() {
         appendToConsole('version');
@@ -55,9 +65,9 @@ $(document).ready(function() {
      * @type {*|Array|{index: number, input: string}|string}
      */
     var setupStatus = getParameterByName('status');
-    if(typeof setupStatus !== 'undefined' & setupStatus == 'incomplete') {
+    if(typeof setupStatus !== 'undefined' && setupStatus == 'incomplete') {
         toastr.warning('Application is need to be setup..', 'MagePanel');
-    } else if(typeof setupStatus !== 'undefined' & setupStatus == 'complete') {
+    } else if(typeof setupStatus !== 'undefined' && setupStatus == 'complete') {
         toastr.success('Settings saved', 'MagePanel Setup');
     }
 
@@ -92,6 +102,50 @@ $(document).ready(function() {
                 $('#addProjectModal').modal('hide');
                 $('#projectsList').load(document.URL +  ' #projectsList');
                 $('#projectDetail').html("Select a project..");
+                toastr.success(result["message"], 'MagePanel Projects');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    });
+
+    /**
+     * Submit add project environment form
+     */
+    $('#addProjectEnvForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+
+        $.post( '/projects/addEnvFile', formData, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                // Refresh project on success
+                $('#addProjectEnvModal').modal('hide');
+                $('#refreshProjectBtn').click();
+                toastr.success(result["message"], 'MagePanel Projects');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    });
+
+    /**
+     * Submit add project task form
+     */
+    $('#addProjectTaskForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+
+        $.post( '/projects/addTaskFile', formData, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                // Refresh project on success
+                $('#addProjectTaskModal').modal('hide');
+                $('#refreshProjectBtn').click();
                 toastr.success(result["message"], 'MagePanel Projects');
             }
         }).error(function() {
@@ -150,13 +204,18 @@ $('.modal').on('hidden.bs.modal', function(){
 });
 $('#editFileModal').on('shown.bs.modal', function () {
     // Adjust EditEnv Modal Size
-    $('#editFileModal .modal-body').css('overflow-y', 'auto');
-    $('#editFileModal .modal-body').css('height', $(window).height() * 0.7);
+    $('#editFileModal .modal-body').css({'overflow-y': 'auto', 'height': $(window).height() * 0.7});
 
     // Resize & Refresh & Focus CodeMirror Editor
     codeMirror.setSize('100%', '100%');
     codeMirror.refresh();
     codeMirror.focus();
+});
+$('#addProjectEnvModal').on('shown.bs.modal', function () {
+    $('#projectIdEnv').val($('.list-group-item.active')[0].id);
+});
+$('#addProjectTaskModal').on('shown.bs.modal', function () {
+    $('#projectIdTask').val($('.list-group-item.active')[0].id);
 });
 
 // DOM Change ============================================================
@@ -199,7 +258,7 @@ $('#delProjectBtn').on('click', function() {
 /**
  * Refresh project button onClick
  */
-$('#refreshProjectBtn').on('click', function(event) {
+$('#refreshProjectBtn').on('click', function() {
     var selectedItem = $('.list-group-item.active')[0];
 
     // Cancel if selection is not valid
@@ -216,7 +275,7 @@ $('#refreshProjectBtn').on('click', function(event) {
         } else {
             $('#projectsList').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
-            selectedItem.addClass('active');
+            //$('#'+selectedItem.id).trigger('click'); // TODO: Select last active, possible bug in bootstrap
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
@@ -231,6 +290,25 @@ $('#refreshProjectBtn').on('click', function(event) {
  */
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
+/**
+ * Show & Hide Ajax Loader Panel
+ */
+function showAjaxLoader() {
+    // TODO: Show loading div only on loaded part of page
+    $("#overlay").show();
+    $("#ajaxloader").show();
+    $("#wait").css("display","block");
+}
+function hideAjaxLoader() {
+    $("#overlay").hide();
+    $("#ajaxloader").hide();
+    $("#wait").css("display","none");
+    $('[rel=tooltip]').tooltip();
+}
+function updateAjaxLoader() {
+    $('#overlay').height($(document).height());
 }
 
 /**
@@ -245,11 +323,36 @@ function appendToConsole(cmd) {
         return;
     }
 
-    // jQuery AJAX call for output data
-    $.get( '/mage/command?cmd=' + cmd + '&id=' + selectedItem, function(output) {
-        $('#console').html($('#console').html() + "<br>" + output);
+    // Use Socket.IO for getting live command response
+    socket = io.connect();
+    socket.emit('mageCommand', { cmd: cmd, id: selectedItem });
+    showAjaxLoader();
+
+    // Get live response
+    var mageConsole = $('#console');
+    var mageConsoleFrame = $('#consoleFrame');
+    socket.on('connect', function () {
+        //console.log('Connected to backend!');
+        socket.on('cmdResponse', function(data) {
+            switch(data.status) {
+                case "stdout":
+                    // Append results to console tag
+                    mageConsole.append(data.result);
+                    mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
+                    break;
+                case "stderr":
+                    // TODO: Show error in MageConsole in different style
+                    break;
+                case "exit":
+                    hideAjaxLoader();
+                    break;
+            }
+
+            // Readjust ajax loader div
+            updateAjaxLoader();
+        });
     });
-};
+}
 
 /**
  * load environments of selected project
@@ -265,6 +368,7 @@ function loadEnvs() {
     }
 
     // jQuery AJAX call to load environments
+    showAjaxLoaderFlag = false;
     $.get( '/projects/envs?id=' + selectedItem, function(result) {
         // Check if we have warning
         if(result == null) {
@@ -290,7 +394,7 @@ function loadEnvs() {
 function getParameterByName(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-};
+}
 
 /**
  * Environments list item onClick event
@@ -327,7 +431,7 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
             toastr.error("There was an error while opening environment file", 'MagePanel Projects');
         }
     });
-};
+}
 
 /**
  * Custom Tasks list item onClick event
@@ -364,4 +468,24 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
             toastr.error("There was an error while opening task file", 'MagePanel Projects');
         }
     });
-};
+}
+
+/**
+ * Delete project file click event
+ * @param fileToDel
+ */
+function deleteProjectFile(fileToDel) {
+    // jQuery AJAX call for project file deletion
+    $.post( '/projects/deleteFile?file=' + fileToDel, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            // Refresh project on success
+            $('#refreshProjectBtn').click();
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+}
