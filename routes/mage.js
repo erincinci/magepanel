@@ -96,7 +96,7 @@ exports.command = function(req) {
             req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stderr' });
         });
         mageCmd.on('exit', function (code) {
-            console.log('child process exited with code ' + code);
+            console.log('Mage command exited with code ' + code);
             req.io.emit('cmdResponse', { result: code, status: 'exit' });
         });
 

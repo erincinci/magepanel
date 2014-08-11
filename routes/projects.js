@@ -166,6 +166,11 @@ exports.deleteFile = function(req, res) {
     res.send({ "warn": false, "message": "Successfully deleted project file" });
 };
 
+/**
+ * Create New Project Environment File
+ * @param req
+ * @param res
+ */
 exports.addEnvFile = function(req, res) {
     // Get env name from form data
     var templateFile = "public/file-templates/environment.yml";
@@ -187,7 +192,7 @@ exports.addEnvFile = function(req, res) {
         fs.openSync(newFilePath, 'w');
 
         // Fill contents using template file
-        var fileContent = fs.readFileSync(templateFile);
+        var fileContent = fs.readFileSync(templateFile).toString();
         fileContent = fileContent.replace(/REPLACETHIS/g, newFileName);
         fs.writeFileSync(newFilePath, fileContent);
 
@@ -195,12 +200,16 @@ exports.addEnvFile = function(req, res) {
     });
 }
 
+/**
+ * Create New Custom Project Task File
+ * @param req
+ * @param res
+ */
 exports.addTaskFile = function(req, res) {
     // Get task name from form data
     var templateFile = "public/file-templates/Task.php";
     var selectedId = req.body['projectId'];
     var newFileName = req.body['taskName'];
-    console.debug(req.body);
 
     Common.projectsDB.get(selectedId, function (err, project) {
         if (err) {
@@ -217,7 +226,7 @@ exports.addTaskFile = function(req, res) {
         fs.openSync(newFilePath, 'w');
 
         // Fill contents using template file
-        var fileContent = fs.readFileSync(templateFile);
+        var fileContent = fs.readFileSync(templateFile).toString();
         fileContent = fileContent.replace(/REPLACETHIS/g, newFileName);
         fs.writeFileSync(newFilePath, fileContent);
 

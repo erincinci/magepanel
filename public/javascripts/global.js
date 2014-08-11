@@ -9,6 +9,7 @@ var socket = null;
 
 // DOM Ready =============================================================
 $(window).load(function() {
+    // Show AJAX Loader until page fully loads
     hideAjaxLoader();
 });
 $(document).ready(function() {
@@ -57,9 +58,9 @@ $(document).ready(function() {
      * @type {*|Array|{index: number, input: string}|string}
      */
     var setupStatus = getParameterByName('status');
-    if(typeof setupStatus !== 'undefined' & setupStatus == 'incomplete') {
+    if(typeof setupStatus !== 'undefined' && setupStatus == 'incomplete') {
         toastr.warning('Application is need to be setup..', 'MagePanel');
-    } else if(typeof setupStatus !== 'undefined' & setupStatus == 'complete') {
+    } else if(typeof setupStatus !== 'undefined' && setupStatus == 'complete') {
         toastr.success('Settings saved', 'MagePanel Setup');
     }
 
@@ -196,8 +197,7 @@ $('.modal').on('hidden.bs.modal', function(){
 });
 $('#editFileModal').on('shown.bs.modal', function () {
     // Adjust EditEnv Modal Size
-    $('#editFileModal .modal-body').css('overflow-y', 'auto');
-    $('#editFileModal .modal-body').css('height', $(window).height() * 0.7);
+    $('#editFileModal .modal-body').css({'overflow-y': 'auto', 'height': $(window).height() * 0.7});
 
     // Resize & Refresh & Focus CodeMirror Editor
     codeMirror.setSize('100%', '100%');
@@ -205,10 +205,10 @@ $('#editFileModal').on('shown.bs.modal', function () {
     codeMirror.focus();
 });
 $('#addProjectEnvModal').on('shown.bs.modal', function () {
-    $('#projectId').val($('.list-group-item.active')[0].id);
+    $('#projectIdEnv').val($('.list-group-item.active')[0].id);
 });
 $('#addProjectTaskModal').on('shown.bs.modal', function () {
-    $('#projectId').val($('.list-group-item.active')[0].id);
+    $('#projectIdTask').val($('.list-group-item.active')[0].id);
 });
 
 // DOM Change ============================================================
@@ -251,7 +251,7 @@ $('#delProjectBtn').on('click', function() {
 /**
  * Refresh project button onClick
  */
-$('#refreshProjectBtn').on('click', function(event) {
+$('#refreshProjectBtn').on('click', function() {
     var selectedItem = $('.list-group-item.active')[0];
 
     // Cancel if selection is not valid
@@ -293,16 +293,16 @@ function showAjaxLoader() {
     $("#overlay").show();
     $("#ajaxloader").show();
     $("#wait").css("display","block");
-};
+}
 function hideAjaxLoader() {
     $("#overlay").hide();
     $("#ajaxloader").hide();
     $("#wait").css("display","none");
     $('[rel=tooltip]').tooltip();
-};
+}
 function updateAjaxLoader() {
     $('#overlay').height($(document).height());
-};
+}
 
 /**
  * Append output to console
@@ -345,7 +345,7 @@ function appendToConsole(cmd) {
             updateAjaxLoader();
         });
     });
-};
+}
 
 /**
  * load environments of selected project
@@ -377,7 +377,7 @@ function loadEnvs() {
     }).error(function() {
         toastr.error('Something went wrong ', "Couldn't get environments of selected project!");
     });
-};
+}
 
 /**
  * Get URL query parameter by name
@@ -387,7 +387,7 @@ function loadEnvs() {
 function getParameterByName(name) {
     var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
     return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-};
+}
 
 /**
  * Environments list item onClick event
@@ -424,7 +424,7 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
             toastr.error("There was an error while opening environment file", 'MagePanel Projects');
         }
     });
-};
+}
 
 /**
  * Custom Tasks list item onClick event
@@ -461,7 +461,7 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
             toastr.error("There was an error while opening task file", 'MagePanel Projects');
         }
     });
-};
+}
 
 /**
  * Delete project file click event
@@ -481,4 +481,4 @@ function deleteProjectFile(fileToDel) {
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
-};
+}
