@@ -162,8 +162,13 @@ exports.deleteFile = function(req, res) {
     var fileToDel = req.query.file;
 
     // Delete project file
-    fs.unlinkSync(fileToDel);
-    res.send({ "warn": false, "message": "Successfully deleted project file" });
+    if (fs.existsSync(fileToDel)) {
+        // TODO: Node process blocks deleted file until process exit on Windows!
+        fs.unlinkSync(fileToDel);
+        res.send({ "warn": false, "message": "Successfully deleted project file" });
+    } else {
+        res.send({ "warn": true, "message": "File cannot be found!" });
+    }
 };
 
 /**
@@ -299,6 +304,15 @@ exports.saveFile = function(req, res) {
  */
 exports.edit = function(req, res) {
     // TODO: Implement project edit functionality
+}
+
+/**
+ * Init new project from folder
+ * @param req
+ * @param res
+ */
+exports.init = function(req, res) {
+    // TODO: Implement init project functionality
 }
 
 /**

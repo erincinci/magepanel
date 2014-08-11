@@ -233,19 +233,22 @@ $('#delProjectBtn').on('click', function() {
         return;
     }
 
-    // jQuery AJAX call for project deletion
-    $.post( '/projects/delete?id=' + selectedItem.id, function(result) {
-        // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
-        } else {
-            $('#projectsList').load(document.URL +  ' #projectsList');
-            $('#projectDetail').html("Select a project..");
-            toastr.success(result["message"], 'MagePanel Projects');
-        }
-    }).error(function() {
-        toastr.error('Something went wrong ', 'MagePanel Projects');
-    });
+    // Confirm project deletion
+    if(confirm("Are you sure to delete project?")) {
+        // jQuery AJAX call for project deletion
+        $.post( '/projects/delete?id=' + selectedItem.id, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                $('#projectsList').load(document.URL +  ' #projectsList');
+                $('#projectDetail').html("Select a project..");
+                toastr.success(result["message"], 'MagePanel Projects');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    }
 });
 
 /**
