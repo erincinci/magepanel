@@ -203,7 +203,7 @@ exports.addEnvFile = function(req, res) {
 
         res.send({ "warn": false, "message": "New environment added: " + newFileName });
     });
-}
+};
 
 /**
  * Create New Custom Project Task File
@@ -237,7 +237,7 @@ exports.addTaskFile = function(req, res) {
 
         res.send({ "warn": false, "message": "New custom task created: " + newFileName });
     });
-}
+};
 
 /**
  * Get project detail
@@ -357,7 +357,7 @@ function getProjectEnvs(projectDir) {
     }
 
     return projectEnvs;
-};
+}
 
 /**
  * Get Project Tasks as array
@@ -374,5 +374,5 @@ function getProjectTasks(projectDir) {
     }
 
     return projectTasks;
-};
+}
 

@@ -72,6 +72,7 @@ app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
 
 app.get('/projects', projects.index); // Projects page
+app.post('/projects/init', projects.init); // Init new project
 app.post('/projects/add', projects.add); // Add new project
 app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project environment file
 app.post('/projects/addTaskFile', projects.addTaskFile); // Add new project task file

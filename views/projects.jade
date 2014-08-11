@@ -54,6 +54,34 @@ block content
     // -------------
     // Modal Windows
 
+    // Init Project Modal
+    #initProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+        .modal-dialog
+            .modal-content
+                form#initProjectForm(method='POST', action='/projects/init')
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') ×
+                            span.sr-only Close
+                        h4#modalLabel.modal-title Init Project
+                    .modal-body
+                        // Init project form contents
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-folder
+                            input.form-control#projectInitDir(name='projectDir', type='text', placeholder='Enter project directory')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-android-information
+                            input.form-control#projectInitName(name='projectName', type='text', placeholder='Enter project name')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-android-mail
+                            input.form-control#projectInitMail(name='projectName', type='text', placeholder='Enter e-mail')
+                    .modal-footer
+                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
+                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Initialize
+
     // Add Project Modal
     #addProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
         .modal-dialog
