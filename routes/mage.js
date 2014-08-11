@@ -81,7 +81,7 @@ exports.command = function(req, res) {
             mageCommand = cygwin_pre + mageCommand + cygwin_post;
 
         // Execute command
-        //console.debug("Command to be executed: " + mageCommand);
+        console.debug("Command to be executed: " + mageCommand);
         exec(mageCommand, execCommand);
     });
 
