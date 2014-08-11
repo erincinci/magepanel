@@ -50,7 +50,14 @@ $(document).ready(function() {
         appendToConsole('version');
     });
     $("#mageReleases").click(function() {
-        appendToConsole('releases list to:staging'); //TODO
+        var selectedItem = $('#activeEnvironment').val();
+        // Cancel if selection is not valid
+        if (selectedItem == 'null') {
+            toastr.warning("Please select an active environment", 'MagePanel Console');
+            return;
+        }
+
+        appendToConsole('releases list to:'+selectedItem); //TODO
     });
 
     /**
@@ -334,7 +341,7 @@ function appendToConsole(cmd) {
                 case "stdout":
                     // Append results to console tag
                     mageConsole.append(data.result);
-                    mageConsoleFrame.animate({ "scrollTop": mageConsoleFrame[0].scrollHeight }, "slow");
+                    mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
                     break;
                 case "stderr":
                     // TODO: Show error in MageConsole in different style

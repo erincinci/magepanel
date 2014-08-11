@@ -28,7 +28,8 @@ block content
                 td
                     button#clearConsole.btn.btn-default.btn-warning(type='button', style='margin-right:10px') Clear
                     button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
-                    button#mageReleases.btn.btn-default.btn-info(type='button') Releases List
+                    button#mageReleases.btn.btn-default.btn-info(type='button',style='margin-right:10px') Releases List
+                    button#mageDeploy.btn.btn-default.btn-info(type='button',title='Deploy project to selected environment') Deploy
     //.well
     .bs-callout.bs-callout-info#consoleFrame(Style='height: 65%; overflow: auto;')
         p#console!= content
