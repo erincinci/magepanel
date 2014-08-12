@@ -25,7 +25,8 @@
     "stylus": "*",
     "underscore": "~1.6.0",
     "user-settings": "*",
-    "username": "0.1.1"
+    "username": "0.1.1",
+    "cli-color": "~0.3.2"
   },
   "devDependencies": {
     "colors.css": "1.0.0"

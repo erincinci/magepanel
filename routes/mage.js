@@ -3,6 +3,7 @@
  */
 var Common = require('../common');
 var Convert = require('ansi-to-html');
+var ansiTrim = require('cli-color/trim');
 var exec = require('child_process').exec;
 var convert = new Convert();
 convert.opts.newline = true;
@@ -43,6 +44,47 @@ exports.index = function(req, res) {
         });
     });
 };
+
+/**
+ * Mage Init Project
+ * @param req
+ */
+exports.init = function(req, res) {
+    var data = req.body;
+    var projectDir = data['projectDir'];
+    var projectName = data['projectName'];
+    var projectMail = data['projectMail'];
+
+    // Init variables
+    settings.cygwinBin(Common.settings.get("cygwinBin"));
+    var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
+    var cygwin_post = "'";
+
+    // Replace cygwin dir if Windows
+    if (Common.os == 'win32') {
+        projectDir = projectDir.replace("C:", "/cygdrive/c");
+        projectDir = projectDir.replace(/\\/g, "/");
+    }
+
+    // Prepare init command
+    var cdCommand = "cd " + projectDir + "; "
+    var mageInitCommand = cdCommand + "mage init --name=\"" + projectName + "\" --email=\"" + projectMail + "\"";
+    if (Common.os == 'win32')
+        mageInitCommand = cygwin_pre + mageInitCommand + cygwin_post;
+
+    // Execute mage init command on dir
+    exec(mageInitCommand, function(err, stdout, stderr) {
+        if(err)
+            res.send({"warn": true, "message": "Got error during 'mage init' command: " + err});
+
+        if(stderr) {
+            console.error("STDERR during mage init of project: " + projectName + " - " + stderr);
+        }
+
+        console.debug("STDOUT during mage init of project: " + projectName + " - " + stdout);
+        res.send({"warn": false, "message": "Successfully initialized project '" + projectName + "', please edit environments and tasks.."});
+    });
+}
 
 /**
  * IO mage command output

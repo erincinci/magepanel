@@ -307,15 +307,6 @@ exports.edit = function(req, res) {
 }
 
 /**
- * Init new project from folder
- * @param req
- * @param res
- */
-exports.init = function(req, res) {
-    // TODO: Implement init project functionality
-}
-
-/**
  * Get environments of selected project
  * @param req
  * @param res

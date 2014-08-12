@@ -57,7 +57,7 @@ $(document).ready(function() {
             return;
         }
 
-        appendToConsole('releases list to:'+selectedItem); //TODO
+        appendToConsole('releases list to:' + selectedItem);
     });
 
     /**
@@ -94,15 +94,27 @@ $(document).ready(function() {
         event.preventDefault();
         var formData = $(this).serialize();
 
-        $.post( '/projects/add', formData, function(result) {
+        addProjectToDB(formData);
+    });
+
+    /**
+     * Submit init project form
+     */
+    $('#initProjectForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+
+        // Init mage stuff in dir first
+        $.post( '/mage/init', formData, function(result) {
             // Check if we have warning
             if(result["warn"]) {
                 toastr.warning(result["message"], 'MagePanel Projects');
             } else {
-                $('#addProjectModal').modal('hide');
-                $('#projectsList').load(document.URL +  ' #projectsList');
-                $('#projectDetail').html("Select a project..");
+                $('#initProjectModal').modal('hide');
                 toastr.success(result["message"], 'MagePanel Projects');
+
+                // After successful initialization, add created mage project to DB
+                addProjectToDB(formData);
             }
         }).error(function() {
             toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -470,6 +482,26 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
         error : function () {
             toastr.error("There was an error while opening task file", 'MagePanel Projects');
         }
+    });
+}
+
+/**
+ * Add project to DB using form data
+ * @param formData
+ */
+function addProjectToDB(formData) {
+    $.post( '/projects/add', formData, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            $('#addProjectModal').modal('hide');
+            $('#projectsList').load(document.URL +  ' #projectsList');
+            $('#projectDetail').html("Select a project..");
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
     });
 }
 

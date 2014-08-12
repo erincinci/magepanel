@@ -17,7 +17,7 @@ exports.envArrayToList = function(envArray, projectDir) {
     if (_.size(envArray) > 0) {
         var result = "<ul>";
     } else {
-        return "";
+        return "<br />";
     }
 
     // Prepare HTML list
@@ -64,7 +64,7 @@ exports.taskArrayToList = function(taskArray, projectDir) {
     if (_.size(taskArray) > 0) {
         var result = "<ul>";
     } else {
-        return "";
+        return "<br /";
     }
 
     // Prepare HTML list
