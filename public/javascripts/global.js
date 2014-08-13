@@ -59,6 +59,18 @@ $(document).ready(function() {
 
         appendToConsole('releases list to:' + selectedItem);
     });
+    $("#mageDeploy").click(function() {
+        var selectedItem = $('#activeEnvironment').val();
+        // Cancel if selection is not valid
+        if (selectedItem == 'null') {
+            toastr.warning("Please select an active environment", 'MagePanel Console');
+            return;
+        }
+
+        if(confirm("Do you really want to deploy to " + selectedItem)) {
+            appendToConsole('deploy to:' + selectedItem);
+        }
+    });
 
     /**
      * Check if notification needs to be shown
