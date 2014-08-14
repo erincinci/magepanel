@@ -185,6 +185,7 @@ $(document).ready(function() {
         codeMirror.toTextArea();
         codeMirror = null;
         var formData = $(this).serialize();
+        var selectedItem = $('.list-group-item.active')[0];
 
         $.post( '/projects/saveFile', formData, function(result) {
             // Check if we have warning
@@ -192,8 +193,7 @@ $(document).ready(function() {
                 toastr.warning(result["message"], 'MagePanel Projects');
             } else {
                 $('#editFileModal').modal('hide');
-                $('#projectsList').load(document.URL +  ' #projectsList');
-                $('#projectDetail').html("Select a project..");
+                $('#'+selectedItem.id).trigger("click");
                 toastr.success(result["message"], 'MagePanel Projects');
             }
         }).error(function() {
@@ -208,7 +208,8 @@ $(document).ready(function() {
         var previous = $(this).closest(".list-group").children(".active");
         previous.removeClass('active'); // previous list-item
         $(e.target).addClass('active'); // activated list-item
-
+        $("#delProjectBtn").prop('disabled',false);
+        $("#refreshProjectBtn").prop('disabled',false);
         // jQuery AJAX call for project detail
         $.get( '/projects/detail?id=' + e.target.id, function(output) {
             $('#projectDetail').html(output);
@@ -314,9 +315,7 @@ $('#refreshProjectBtn').on('click', function() {
         if(result["warn"]) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
-            $('#projectsList').load(document.URL +  ' #projectsList');
-            $('#projectDetail').html("Select a project..");
-            //$('#'+selectedItem.id).trigger('click'); // TODO: Select last active, possible bug in bootstrap
+            $('#'+selectedItem.id).trigger("click");
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
@@ -552,7 +551,7 @@ function addProjectToDB(formData) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
             $('#addProjectModal').modal('hide');
-            $('#projectsList').load(document.URL +  ' #projectsList');
+            $('#projectListContainer').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
             toastr.success(result["message"], 'MagePanel Projects');
         }
