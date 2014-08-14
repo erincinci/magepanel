@@ -24,25 +24,28 @@ block content
                 rel='tooltip',
                 data-original-title='Remove project',
                 type='button',
-                style='margin-right:10px')
+                style='margin-right:10px',
+                disabled)
         button#refreshProjectBtn.btn.btn-default.btn-success.icon.ion-refresh(
                 rel='tooltip',
                 data-original-title='Refresh project',
-                type='button')
+                type='button',
+                disabled)
 
     // Columns
     .row
         // Available projects
         .col-lg-6
-            ul.list-group#projectsList
-                for project in projects
-                    li.list-group-item(id= project.id) #{project.name}
-                else
-                    .panel.panel-primary
-                        .panel-heading
-                            h3.panel-title Projects
-                        .panel-body
-                            p No projects added yet..
+            div#projectListContainer
+                ul.list-group#projectsList
+                    for project in projects
+                        li.list-group-item(id= project.id) #{project.name}
+                    else
+                        .panel.panel-primary
+                            .panel-heading
+                                h3.panel-title Projects
+                            .panel-body
+                                p No projects added yet..
         // Selected project details
         .col-lg-6
             .panel.panel-primary
