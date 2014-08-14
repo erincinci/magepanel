@@ -15,12 +15,26 @@ body {
     line-height: 2em;
 }
 
+#projectLogs {
+    line-height: 2em;
+}
+
 /* Edit File Modal Size */
 #editFileModal .modal-dialog {
     width: 75%;
 }
 @media screen and (min-width: 768px) {
     #editFileModal .modal-dialog  {
+        width: 900px;
+    }
+}
+
+/* View File Modal Size */
+#viewFileModal .modal-dialog {
+    width: 75%;
+}
+@media screen and (min-width: 768px) {
+    #viewFileModal .modal-dialog  {
         width: 900px;
     }
 }

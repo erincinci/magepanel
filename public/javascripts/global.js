@@ -202,7 +202,7 @@ $(document).ready(function() {
     });
 
     /**
-     * Project list group item on select action
+     * Projects - Project list group item on select action
      */
     $(document).delegate('#projectsList .list-group-item', 'click', function(e) {
         var previous = $(this).closest(".list-group").children(".active");
@@ -212,6 +212,20 @@ $(document).ready(function() {
         // jQuery AJAX call for project detail
         $.get( '/projects/detail?id=' + e.target.id, function(output) {
             $('#projectDetail').html(output);
+        });
+    });
+
+    /**
+     * MageLogs - Project list group item on select action
+     */
+    $(document).delegate('#projectsListLogs .list-group-item', 'click', function(e) {
+        var previous = $(this).closest(".list-group").children(".active");
+        previous.removeClass('active'); // previous list-item
+        $(e.target).addClass('active'); // activated list-item
+
+        // jQuery AJAX call for project logs
+        $.get( '/mageLogs/project?id=' + e.target.id, function(output) {
+            $('#projectLogs').html(output);
         });
     });
 });
@@ -494,6 +508,36 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
         error : function () {
             toastr.error("There was an error while opening task file", 'MagePanel Projects');
         }
+    });
+}
+
+/**
+ * Tail log file in file viewer modal using Socket.IO
+ * @param orgFile
+ * @param logDate
+ * @param logTime
+ */
+function tailLogFile(orgFile, logDate, logTime) {
+    // Update UI
+    $('#viewFileModalLabel').html('Tail Log File : <i>' + logDate + " - " + logTime + "</i>");
+    var logView = $('#logView');
+    var logViewWrapper = $('#logViewWrapper');
+    logView.html('');
+
+    // Use Socket.IO for tailing log file
+    socket = io.connect();
+    socket.emit('tailLog', { file: orgFile });
+
+    // Get tail data from socket
+    socket.on('connect', function () {
+        socket.on('logTailContent', function(data) {
+            if(data.err) {
+                toastr.warning(data.line, 'MagePanel Logs');
+            } else {
+                logView.append(data.line);
+                logViewWrapper.scrollTop(logViewWrapper[0].scrollHeight);
+            }
+        });
     });
 }
 

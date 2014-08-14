@@ -1,0 +1,47 @@
+extends layout
+
+block content
+    .page-header
+        h1.icon.ion-document= title
+
+    // Columns
+    .row
+        // Available projects
+        .col-lg-6
+            ul.list-group#projectsListLogs
+                for project in projects
+                    li.list-group-item(id= project.id) #{project.name}
+                else
+                    .panel.panel-primary
+                        .panel-heading
+                            h3.panel-title Projects
+                        .panel-body
+                            p No projects added yet..
+        // Selected project logs
+        .col-lg-6
+            .panel.panel-primary
+                .panel-heading
+                    h3.panel-title Project Logs
+                .panel-body
+                    p#projectLogs(style='text-align: center;') Select a project..
+
+    // -------------
+    // Modal Windows
+
+    // View File Modal
+    #viewFileModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+        .modal-dialog
+            .modal-content
+                form#viewFileForm(method='POST')
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') ×
+                            span.sr-only Close
+                        h4#viewFileModalLabel.modal-title Tail Log File
+                    .modal-body
+                        // Code viewer
+                        #logViewWrapper(style='height: 80%; overflow: auto;')
+                            pre#logView.prettyprint.linenums
+                    .modal-footer
+                        button.btn.btn-warning.glyphicon.glyphicon-pause(type='button') Pause
+                        button.btn.btn-default.glyphicon.glyphicon-folder-close(type='button', data-dismiss='modal') Close
