@@ -275,6 +275,8 @@ $('#delProjectBtn').on('click', function() {
             } else {
                 $('#projectsList').load(document.URL +  ' #projectsList');
                 $('#projectDetail').html("Select a project..");
+                $("#delProjectBtn").prop('disabled',true);
+                $("#refreshProjectBtn").prop('disabled',true);
                 toastr.success(result["message"], 'MagePanel Projects');
             }
         }).error(function() {
@@ -381,6 +383,20 @@ function appendToConsole(cmd) {
 }
 
 /**
+ * Activate command buttons
+ */
+function activateCommandButtons () {
+    var selectedItem = $("#activeEnvironment").val();
+    if (selectedItem != 'null') {
+        $("#mageReleases").prop("disabled",false);
+        $("#mageDeploy").prop("disabled",false);
+    }else{
+        $("#mageReleases").prop("disabled",true);
+        $("#mageDeploy").prop("disabled",true);
+    }
+}
+
+/**
  * load environments of selected project
  */
 function loadEnvs() {
@@ -390,6 +406,8 @@ function loadEnvs() {
         $('#activeEnvironment').prop('disabled',true);
         $("#activeEnvironment option[value !='null']").remove();
         $('#activeEnvironment').selectpicker('refresh');
+        $("#mageReleases").prop("disabled",true);
+        $("#mageDeploy").prop("disabled",true);
         return false;
     }
 
@@ -509,6 +527,8 @@ function addProjectToDB(formData) {
             $('#addProjectModal').modal('hide');
             $('#projectListContainer').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
+            $("#delProjectBtn").prop('disabled',true);
+            $("#refreshProjectBtn").prop('disabled',true);
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
