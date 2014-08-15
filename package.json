@@ -27,8 +27,7 @@
     "user-settings": "*",
     "username": "0.1.1",
     "cli-color": "~0.3.2",
-    "string": "~1.9.1",
-    "tail": "~0.3.7"
+    "string": "~1.9.1"
   },
   "devDependencies": {
     "colors.css": "1.0.0"

@@ -255,6 +255,9 @@ $('#viewFileModal').on('shown.bs.modal', function () {
     $('#viewFileModal .modal-body').css({'height': $(window).height() * 0.8});
     $('#logView').css({'height': $(window).height() * 0.77});
 });
+$('#viewFileModal').on('hidden.bs.modal', function () {
+    // TODO: End file tail command on modal hidden
+});
 $('#addProjectEnvModal').on('shown.bs.modal', function () {
     $('#projectIdEnv').val($('.list-group-item.active')[0].id);
 });
@@ -530,7 +533,7 @@ function tailLogFile(orgFile, logDate, logTime) {
 
     // Use Socket.IO for tailing log file
     socket = io.connect();
-    socket.emit('tailLog', { file: orgFile });
+    socket.emit('tailLog', { file: orgFile, tailStatus: 'running' });
 
     // Get tail data from socket
     socket.on('connect', function () {
@@ -544,6 +547,14 @@ function tailLogFile(orgFile, logDate, logTime) {
         });
     });
 }
+
+/**
+ * Pause Tail file onClick Event
+ */
+$("#pauseTailFileBtn").click(function() {
+    // TODO: Pause & Resume log tail
+    socket.emit('pauseTail', {});
+});
 
 /**
  * Add project to DB using form data

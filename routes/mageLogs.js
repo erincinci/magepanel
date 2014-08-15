@@ -8,6 +8,7 @@ var fs = require('fs');
 // Vars
 var settings = Common.SettingsModel.create();
 var title = "Logs";
+var tailProcess = null;
 
 /**
  * Get logs index
@@ -88,20 +89,7 @@ exports.tailLog = function(req) {
     // File to tail
     var logFile = req.data.file;
 
-    // TODO: Start tailing file using tail module
-    // Read file content first
-    //var logContent = fs.readFileSync(logFile, "utf8");
-    //req.io.emit('logTailContent', { line: logContent });
-
-    /*var tailProcess = new Common.Tail(logFile);
-    tailProcess.on("line", function(data) {
-        req.io.emit('logTailContent', { line: data });
-    });
-    tailProcess.on("error", function(error) {
-        console.error(error);
-    });*/
-
-    // TODO: Tail log file using system spawn command
+    // Tail log file using system spawn command
     // Prepare tail command
     if (Common.os == 'win32') {
         // Prepare cygwin stuff for windows
@@ -112,9 +100,9 @@ exports.tailLog = function(req) {
 
         var tailCommand = "tail -n 100 -f " + logFile;
         tailCommand = cygwin_pre + tailCommand + cygwin_post;
-        var tailProcess = spawn('cmd', ['/c', tailCommand]);
+        tailProcess = spawn('cmd', ['/c', tailCommand]);
     } else {
-        var tailProcess = spawn('tail', ['-n', 100, '-f', logFile]);
+        tailProcess = spawn('tail', ['-n', 100, '-f', logFile]);
     }
 
     // Get realtime tail output
@@ -128,6 +116,17 @@ exports.tailLog = function(req) {
     tailProcess.on('exit', function (code) {
         console.log('Mage command exited with code ' + code);
     });
+}
+
+/**
+ * Pause Tail Log File
+ * @param req
+ */
+exports.pauseTail = function(req) {
+    // TODO: Pause & Resume tail
+    tailProcess.stdin.write('\x13'); // \x11 : Ctrl:Q (Resume)  |  \x13 : Ctrl:S (Pause)
+    tailProcess.stdin.end();
+    req.io.emit('logTailContent', { line: "Tail paused..", err: true });
 }
 
 /**

@@ -12,7 +12,6 @@ Common = {
     username: require('username').sync(),
     os: require('os').platform(),
     uuid: require('node-uuid'),
-    Tail: require('tail').Tail,
     path: require('path'),
     _: require('underscore'),
     dbUtils: require('./util/dbUtils'),
