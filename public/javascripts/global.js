@@ -250,6 +250,11 @@ $('#editFileModal').on('shown.bs.modal', function () {
     codeMirror.refresh();
     codeMirror.focus();
 });
+$('#viewFileModal').on('shown.bs.modal', function () {
+    // Adjust ViewFile Modal Size
+    $('#viewFileModal .modal-body').css({'height': $(window).height() * 0.8});
+    $('#logView').css({'height': $(window).height() * 0.77});
+});
 $('#addProjectEnvModal').on('shown.bs.modal', function () {
     $('#projectIdEnv').val($('.list-group-item.active')[0].id);
 });
@@ -520,8 +525,8 @@ function tailLogFile(orgFile, logDate, logTime) {
     // Update UI
     $('#viewFileModalLabel').html('Tail Log File : <i>' + logDate + " - " + logTime + "</i>");
     var logView = $('#logView');
-    var logViewWrapper = $('#logViewWrapper');
     logView.html('');
+    showAjaxLoader();
 
     // Use Socket.IO for tailing log file
     socket = io.connect();
@@ -530,11 +535,11 @@ function tailLogFile(orgFile, logDate, logTime) {
     // Get tail data from socket
     socket.on('connect', function () {
         socket.on('logTailContent', function(data) {
+            hideAjaxLoader();
             if(data.err) {
                 toastr.warning(data.line, 'MagePanel Logs');
             } else {
-                logView.append(data.line);
-                logViewWrapper.scrollTop(logViewWrapper[0].scrollHeight);
+                logView.append(data.line).scrollTop(logView[0].scrollHeight);
             }
         });
     });

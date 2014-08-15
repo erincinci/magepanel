@@ -110,11 +110,11 @@ exports.tailLog = function(req) {
         var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
         var cygwin_post = "'";
 
-        var tailCommand = "tail -n 50 -f " + logFile;
+        var tailCommand = "tail -n 100 -f " + logFile;
         tailCommand = cygwin_pre + tailCommand + cygwin_post;
         var tailProcess = spawn('cmd', ['/c', tailCommand]);
     } else {
-        var tailProcess = spawn('tail', ['-n', 50, '-f', logFile]);
+        var tailProcess = spawn('tail', ['-n', 100, '-f', logFile]);
     }
 
     // Get realtime tail output

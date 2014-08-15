@@ -23,7 +23,7 @@ block content
                 .panel-heading
                     h3.panel-title Project Logs
                 .panel-body
-                    p#projectLogs(style='text-align: center;') Select a project..
+                    p#projectLogs(style='text-align: center; max-height: 600px; overflow: auto;') Select a project..
 
     // -------------
     // Modal Windows
@@ -40,8 +40,7 @@ block content
                         h4#viewFileModalLabel.modal-title Tail Log File
                     .modal-body
                         // Code viewer
-                        #logViewWrapper(style='height: 80%; overflow: auto;')
-                            pre#logView.prettyprint.linenums
+                        pre#logView.prettyprint.linenums(style='max-height: 100%, overflow: auto;')
                     .modal-footer
                         button.btn.btn-warning.glyphicon.glyphicon-pause(type='button') Pause
                         button.btn.btn-default.glyphicon.glyphicon-folder-close(type='button', data-dismiss='modal') Close
