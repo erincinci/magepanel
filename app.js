@@ -95,6 +95,7 @@ app.io.route('mageCommand', mage.command); // Execute mage command with Socket.I
 app.get('/mageLogs', mageLogs.index); // Mage logs
 app.get('/mageLogs/project', mageLogs.projectLogs); // Get logs for project
 app.io.route('tailLog', mageLogs.tailLog); // Tail project log with Socket.IO
+app.io.route('exitTail', mageLogs.exitTail); // Exit tail log with Socket.IO
 app.io.route('pauseTail', mageLogs.pauseTail); // Pause tail log with Socket.IO
 
 /**

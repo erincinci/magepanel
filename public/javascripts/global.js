@@ -256,7 +256,8 @@ $('#viewFileModal').on('shown.bs.modal', function () {
     $('#logView').css({'height': $(window).height() * 0.77});
 });
 $('#viewFileModal').on('hidden.bs.modal', function () {
-    // TODO: End file tail command on modal hidden
+    // End file tail command on modal hidden
+    socket.emit('exitTail', {});
 });
 $('#addProjectEnvModal').on('shown.bs.modal', function () {
     $('#projectIdEnv').val($('.list-group-item.active')[0].id);
@@ -560,6 +561,7 @@ function tailLogFile(orgFile, logDate, logTime) {
             if(data.err) {
                 toastr.warning(data.line, 'MagePanel Logs');
             } else {
+                // TODO: We get multiplied liness after close&reopen log file!
                 logView.append(data.line).scrollTop(logView[0].scrollHeight);
             }
         });

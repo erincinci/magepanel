@@ -114,8 +114,19 @@ exports.tailLog = function(req) {
         req.io.emit('logTailContent', { line: data.toString(), err: true });
     });
     tailProcess.on('exit', function (code) {
-        console.log('Mage command exited with code ' + code);
+        console.log('Mage tail command exited with code ' + code);
     });
+}
+
+/**
+ * Exit Tail Log File
+ * @param req
+ */
+exports.exitTail = function(req) {
+    // TODO: Kill process not working!
+    //tailProcess.stdin.write('\x03');
+    tailProcess.kill();
+    req.io.emit('logTailContent', { line: "Tail closed..", err: true, status: 'closed' });
 }
 
 /**
@@ -124,8 +135,9 @@ exports.tailLog = function(req) {
  */
 exports.pauseTail = function(req) {
     // TODO: Pause & Resume tail
-    tailProcess.stdin.write('\x13'); // \x11 : Ctrl:Q (Resume)  |  \x13 : Ctrl:S (Pause)
-    tailProcess.stdin.end();
+    tailProcess.stdout.pause();
+    tailProcess.stdin.pause();
+    //tailProcess.stdin.write('\x13'); // \x11 : Ctrl:Q (Resume)  |  \x13 : Ctrl:S (Pause)
     req.io.emit('logTailContent', { line: "Tail paused..", err: true });
 }
 
