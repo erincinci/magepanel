@@ -6,6 +6,7 @@ var express = require('express.io');
 var routes = require('./routes');
 var projects = require('./routes/projects');
 var mage = require('./routes/mage');
+var mageLogs = require('./routes/mageLogs');
 var setup = require('./routes/setup');
 var http = require('http');
 var path = require('path');
@@ -67,10 +68,13 @@ if (app.get('env') == 'development') {
  * Routes
  */
 app.get('/', routes.index); // Index
+app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 
+// App Setup
 app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
 
+// Projects
 app.get('/projects', projects.index); // Projects page
 app.post('/projects/add', projects.add); // Add new project
 app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project environment file
@@ -82,11 +86,15 @@ app.post('/projects/saveFile', projects.saveFile); // Save project file
 app.get('/projects/detail', projects.detail); // Get project detail
 app.get('/projects/envs', projects.envs); // Get environments of selected project
 
+// Mage Console
 app.get('/mage', mage.index); // Mage console
 app.post('/mage/init', mage.init); // Execute mage init
 app.io.route('mageCommand', mage.command); // Execute mage command with Socket.IO
 
-app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
+// Mage Logs
+app.get('/mageLogs', mageLogs.index); // Mage logs
+app.get('/mageLogs/project', mageLogs.projectLogs); // Get logs for project
+app.io.route('tailLog', mageLogs.tailLog); // Tail project log with Socket.IO
 
 /**
  * Start Server

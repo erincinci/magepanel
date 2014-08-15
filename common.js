@@ -8,9 +8,11 @@ var nStore = require('nstore').extend(require('nstore/query')());
 Common = {
     config: require('./config'),
     scribe: require('./scribe'),
+    S: require('string'),
     username: require('username').sync(),
     os: require('os').platform(),
     uuid: require('node-uuid'),
+    Tail: require('tail').Tail,
     path: require('path'),
     _: require('underscore'),
     dbUtils: require('./util/dbUtils'),
