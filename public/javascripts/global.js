@@ -252,8 +252,8 @@ $('#editFileModal').on('shown.bs.modal', function () {
 });
 $('#viewFileModal').on('shown.bs.modal', function () {
     // Adjust ViewFile Modal Size
-    $('#viewFileModal .modal-body').css({'height': $(window).height() * 0.8});
-    $('#logView').css({'height': $(window).height() * 0.77});
+    $('#viewFileModal .modal-body').css({'height': $(window).height() * 0.7});
+    $('#logView').css({'height': $(window).height() * 0.68});
 });
 $('#viewFileModal').on('hidden.bs.modal', function () {
     // End file tail command on modal hidden

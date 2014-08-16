@@ -17,6 +17,14 @@ body {
 
 #projectLogs {
     line-height: 2em;
+    text-align: center;
+    max-height: 300px;
+    overflow: auto;
+}
+@media screen and (min-height: 1080px) {
+    #projectLogs  {
+        max-height: 650px;
+    }
 }
 
 /* Edit File Modal Size */
