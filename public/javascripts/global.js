@@ -548,6 +548,8 @@ function tailLogFile(orgFile, logDate, logTime) {
     $('#viewFileModalLabel').html('Tail Log File : <i>' + logDate + " - " + logTime + "</i>");
     var logView = $('#logView');
     logView.html('');
+    $('#pauseTailFileBtn').show();
+    $('#resumeTailFileBtn').hide();
     showAjaxLoader();
 
     // Use Socket.IO for tailing log file
@@ -558,22 +560,41 @@ function tailLogFile(orgFile, logDate, logTime) {
     socket.on('connect', function () {
         socket.on('logTailContent', function(data) {
             hideAjaxLoader();
-            if(data.err) {
-                toastr.warning(data.line, 'MagePanel Logs');
-            } else {
-                // TODO: We get multiplied liness after close&reopen log file!
-                logView.append(data.line).scrollTop(logView[0].scrollHeight);
+
+            // Update data or show toast according to data status
+            switch(data.status) {
+                case 'running':
+                    logView.append(data.line).scrollTop(logView[0].scrollHeight);
+                    break;
+                case 'paused':
+                    toastr.warning(data.line, 'MagePanel Logs');
+                    break;
+                case 'resumed':
+                    toastr.success(data.line, 'MagePanel Logs');
+                    break;
+                case 'closed':
+                    toastr.info(data.line, 'MagePanel Logs');
+                    break;
+                case 'error':
+                    toastr.error(data.line, 'MagePanel Logs');
+                    break;
             }
         });
     });
 }
 
 /**
- * Pause Tail file onClick Event
+ * Pause & Resume Tail file buttons onClick Events
  */
 $("#pauseTailFileBtn").click(function() {
-    // TODO: Pause & Resume log tail
     socket.emit('pauseTail', {});
+    $('#pauseTailFileBtn').hide();
+    $('#resumeTailFileBtn').show();
+});
+$("#resumeTailFileBtn").click(function() {
+    socket.emit('resumeTail', {});
+    $('#pauseTailFileBtn').show();
+    $('#resumeTailFileBtn').hide();
 });
 
 /**

@@ -90,7 +90,6 @@ exports.tailLog = function(req) {
     var logFile = req.data.file;
 
     // Tail log file using system spawn command
-    // Prepare tail command
     if (Common.os == 'win32') {
         // Prepare cygwin stuff for windows
         settings.cygwinBin(Common.settings.get("cygwinBin"));
@@ -107,11 +106,11 @@ exports.tailLog = function(req) {
 
     // Get realtime tail output
     tailProcess.stdout.on('data', function (data) {
-        req.io.emit('logTailContent', { line: data.toString(), err: false });
+        req.io.emit('logTailContent', { line: data.toString(), status: 'running' });
     });
     tailProcess.stderr.on('data', function (data) {
         console.error(data.toString());
-        req.io.emit('logTailContent', { line: data.toString(), err: true });
+        req.io.emit('logTailContent', { line: data.toString(), status: 'error' });
     });
     tailProcess.on('exit', function (code) {
         console.log('Mage tail command exited with code ' + code);
@@ -123,10 +122,9 @@ exports.tailLog = function(req) {
  * @param req
  */
 exports.exitTail = function(req) {
-    // TODO: Kill process not working!
-    //tailProcess.stdin.write('\x03');
+    // TODO: Kill process not working on Windows!
     tailProcess.kill();
-    req.io.emit('logTailContent', { line: "Tail closed..", err: true, status: 'closed' });
+    req.io.emit('logTailContent', { line: "Tail process closed", status: 'closed' });
 }
 
 /**
@@ -134,11 +132,19 @@ exports.exitTail = function(req) {
  * @param req
  */
 exports.pauseTail = function(req) {
-    // TODO: Pause & Resume tail
+    // TODO: Pause tail not working on Windows!
     tailProcess.stdout.pause();
-    tailProcess.stdin.pause();
-    //tailProcess.stdin.write('\x13'); // \x11 : Ctrl:Q (Resume)  |  \x13 : Ctrl:S (Pause)
-    req.io.emit('logTailContent', { line: "Tail paused..", err: true });
+    req.io.emit('logTailContent', { line: "Tail process paused..", status: 'paused' });
+}
+
+/**
+ * Resume Tail Log File
+ * @param req
+ */
+exports.resumeTail = function(req) {
+    // TODO: Resume tail not working on Windows!
+    tailProcess.stdout.resume();
+    req.io.emit('logTailContent', { line: "Tail process resumed", err: true, status: 'resumed' });
 }
 
 /**

@@ -70,11 +70,11 @@ if (app.get('env') == 'development') {
 app.get('/', routes.index); // Index
 app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 
-// App Setup
+// MagePanel App Setup
 app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
 
-// Projects
+// Mage Projects
 app.get('/projects', projects.index); // Projects page
 app.post('/projects/add', projects.add); // Add new project
 app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project environment file
@@ -97,6 +97,7 @@ app.get('/mageLogs/project', mageLogs.projectLogs); // Get logs for project
 app.io.route('tailLog', mageLogs.tailLog); // Tail project log with Socket.IO
 app.io.route('exitTail', mageLogs.exitTail); // Exit tail log with Socket.IO
 app.io.route('pauseTail', mageLogs.pauseTail); // Pause tail log with Socket.IO
+app.io.route('resumeTail', mageLogs.resumeTail); // Resume tail log with Socket.IO
 
 /**
  * Start Server
