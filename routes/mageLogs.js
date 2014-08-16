@@ -58,23 +58,45 @@ exports.projectLogs = function(req, res) {
             // Get project logs from dir
             var projectLogs = getProjectLogsFromDir(project.dir).sort().reverse();
 
-            // Prepare HTML output
-            var projectLogsHTML = "";
-            for (var i in projectLogs) {
-                // Prepare vars
-                var orgFile = project.dir + '/.mage/logs/' + projectLogs[i];
-                var logDateTime = Common.S(projectLogs[i]).chompLeft('log-').chompRight('.log');
+            // Group log times by dates
+            var logSet = Common._.groupBy(projectLogs, function(logFile) {
+                var logDateTime = Common.S(logFile).chompLeft('log-').chompRight('.log');
                 var logDate = logDateTime.substr(0, 4) + "/" + logDateTime.substr(4, 2) + "/" + logDateTime.substr(6, 2);
-                var logTime = logDateTime.substr(9, 2) + ":" + logDateTime.substr(11, 2) + ":" + logDateTime.substr(13, 2);
+                return logDate;
+            });
 
+            // Prepare HTML output
+            var projectLogsHTML = '<div class="panel-group">';
+            Common._.each(logSet, function(dateLogFiles, groupDate) {
+                // Prepare date panel
+                var groupId = Common.S(groupDate).replaceAll("/", "");
                 projectLogsHTML
-                    += "<span><a href='javascript:void(0);' type='button' onclick='tailLogFile(\""+orgFile+"\", \""+logDate+"\", \""+logTime+"\");' "
-                        + "data-toggle='modal' data-target='#viewFileModal' style='text-decoration: none;'>"
-                    + "<i class='glyphicon glyphicon-calendar'>" + logDate + "</i>"
-                    + "   -   "
-                    + "<i class='glyphicon glyphicon-time'>" + logTime + "</i>"
-                    + "</a></span><br />";
-            }
+                    += '<div class="panel panel-default">'
+                    + '<a class="list-group-item" data-toggle="collapse" href="#collapse' + groupId + '">'
+                    + '<span class="badge">' + Common._.size(dateLogFiles) + '</span>'
+                    + '<i class="glyphicon glyphicon-calendar" /> ' + groupDate + '</a>'
+                    + '<div class="panel-collapse collapse" id="collapse' + groupId + '"><div class="panel-body">';
+
+                // Add times for date group
+                Common._.each(dateLogFiles, function(logFile) {
+                    // Prepare variables
+                    var orgFile = project.dir + '/.mage/logs/' + logFile;
+                    var logDateTime = Common.S(logFile).chompLeft('log-').chompRight('.log');
+                    var logDate = logDateTime.substr(0, 4) + "/" + logDateTime.substr(4, 2) + "/" + logDateTime.substr(6, 2);
+                    var logTime = logDateTime.substr(9, 2) + ":" + logDateTime.substr(11, 2) + ":" + logDateTime.substr(13, 2);
+                    var onClickHTML = "tailLogFile('"+orgFile+"', '"+logDate+"', '"+logTime+"');";
+
+                    // Append log file to HTML
+                    projectLogsHTML
+                        += '<a href="#" onclick="'+onClickHTML+'" data-toggle="modal" data-target="#viewFileModal" '
+                        + 'class="list-group-item glyphicon glyphicon-time">'
+                        + logTime + '</a>';
+                });
+
+                // Finalize date group
+                projectLogsHTML += '</div></div></div>';
+            });
+            projectLogsHTML += '</div>';
 
             res.send(projectLogsHTML);
         });

@@ -476,7 +476,7 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
         success : function (data) {
             // Set hidden input value & Change modal title
             $("#orgFile").val(orgFile);
-            $("#editFileModalLabel").html("Edit '<strong>" + envName.capitalize() + "</strong>' Environment");
+            $("#editFileModalLabel").html("<i class='icon ion-cloud'/> Edit '<strong>" + envName.capitalize() + "</strong>' Environment");
 
             // Set code to textarea
             $("textarea#code").val(data);
@@ -513,7 +513,7 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
         success : function (data) {
             // Set hidden input value & Change modal title
             $("#orgFile").val(orgFile);
-            $("#editFileModalLabel").html("Edit '<strong>" + taskName.capitalize() + "</strong>' Task");
+            $("#editFileModalLabel").html("<i class='icon ion-ios7-gear'/> Edit '<strong>" + taskName.capitalize() + "</strong>' Task");
 
             // Set code to textarea
             $("textarea#code").val(data);
@@ -545,7 +545,7 @@ function taskListItemOnClick(phpFile, orgFile, taskName) {
  */
 function tailLogFile(orgFile, logDate, logTime) {
     // Update UI
-    $('#viewFileModalLabel').html('Tail Log File : <i>' + logDate + " - " + logTime + "</i>");
+    $('#viewFileModalLabel').html('<i class="icon ion-document"/> Tail Log File : <i>' + logDate + " - " + logTime + "</i>");
     var logView = $('#logView');
     logView.html('');
     $('#pauseTailFileBtn').show();
