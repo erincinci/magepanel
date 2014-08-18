@@ -18,6 +18,9 @@ IF %ERRORLEVEL% NEQ 0 ECHO node is not installed in system, please install it be
 WHERE nodemon
 IF %ERRORLEVEL% NEQ 0 ECHO nodemon is not installed in system, installing & call npm install nodemon -g & echo.
 
+WHERE winser
+IF %ERRORLEVEL% NEQ 0 ECHO winser is not installed in system, installing & call npm install winser -g & echo.
+
 ::::::::::::::::::::::::: Update Module Dependencies :::::::::::::::::::::::::
 echo Update module dependencies if necessary..
 echo.

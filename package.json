@@ -1,9 +1,17 @@
 {
-  "name": "magepanel",
-  "version": "0.0.1",
-  "private": true,
+  "name": "MagePanel",
+  "description": "UI for MagePHP Deployment Tool",
+  "homepage" : "https://github.com/erincinci/magepanel",
+  "keywords" : ["Magallanes", "MagePHP", "deployment", "UI"],
+  "author" : "Erinç İnci <erincinci@gmail.com>",
+  "contributors" : ["Murat Aksoy"],
+  "repository" : {"type": "git", "url": "https://github.com/erincinci/magepanel.git"},
+  "main" : "app.js",
+  "version": "1.0.0",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "install-windows-service": "winser -i",
+    "uninstall-windows-service": "winser -r"
   },
   "dependencies": {
     "ansi-to-html": "0.2.0",
