@@ -8,7 +8,7 @@ echo.
 ::::::::::::::::::::::::: Vars :::::::::::::::::::::::::
 set pageTitle="MagePanel"
 set host="localhost"
-set port=4624
+set port=8886
 set url="http://"%host%":"%port%"/"
 
 ::::::::::::::::::::::::: Check for executables :::::::::::::::::::::::::
