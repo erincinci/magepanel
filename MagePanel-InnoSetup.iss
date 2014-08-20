@@ -35,7 +35,7 @@ LicenseFile=.\Installers\Windows\LICENSE.TXT
 InfoBeforeFile=.\Installers\Windows\README.TXT
 OutputDir=C:\Users\erinci\Downloads
 OutputBaseFilename=MagePanelSetup-v{#MyAppVersion}
-SetupIconFile=.\Installers\Windows\magepanel.ico
+SetupIconFile=.\Installers\Windows\installer.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -84,10 +84,20 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
 [Run]
-; postinstall
+; post-install
 Filename: "{sys}\msiexec.exe"; Parameters: "/passive /i ""{app}\{#NODE}""";
 Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall add rule name=""Node In"" program=""{pf64}\nodejs\node.exe"" dir=in action=allow enable=yes"; Flags: runhidden;
 Filename: "{sys}\netsh.exe"; Parameters: "advfirewall firewall add rule name=""Node Out"" program=""{pf64}\nodejs\node.exe"" dir=out action=allow enable=yes"; Flags: runhidden;
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: shellexec postinstall skipifsilent runhidden
-Filename: "{app}\{#NSSM}"; Parameters: "install {#MyAppShortName} ""{pf64}\nodejs\node.exe"" ""{app}\app.js"" ""8886"""; Flags: runhidden;
-Filename: "{sys}\net.exe"; Parameters: "start {#MyAppShortName}"; Flags: runhidden;
+Filename: "{app}\{#NSSM}"; Parameters: "install {#MyAppShortName} ""{pf64}\nodejs\node.exe"" ""{app}\app.js"""; Flags: runhidden;
+Filename: "{app}\{#NSSM}"; Parameters: "set {#MyAppShortName} AppDirectory {app}"; Flags: runhidden;
+Filename: "{app}\{#NSSM}"; Parameters: "start {#MyAppShortName}"; Flags: runhidden;
+;Filename: "{sys}\net.exe"; Parameters: "start {#MyAppShortName}"; Flags: runhidden;
+
+[Registry]
+Root: HKCU; Subkey: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\{#MyAppShortName}\Parameters; ValueType: string; ValueName: AppDirectory; ValueData: {app}
+
+[UninstallRun]
+; pre-uninstall
+Filename: "{app}\{#NSSM}"; Parameters: "stop {#MyAppShortName}"; Flags: runhidden;
+Filename: "{app}\{#NSSM}"; Parameters: "remove {#MyAppShortName} confirm"; Flags: runhidden;
