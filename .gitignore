@@ -3,4 +3,8 @@ bower_components
 npm-debug.log
 .idea/
 *.db
-Iconr
+
+.DS_Store
+.VolumeIcon.icns
+.fseventsd
+Icon^M^M
