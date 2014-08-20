@@ -3,3 +3,7 @@ bower_components
 npm-debug.log
 .idea/
 *.db
+
+.DS_Store
+Icon?
+
