@@ -144,8 +144,19 @@ exports.tailLog = function(req) {
  * @param req
  */
 exports.exitTail = function(req) {
-    // TODO: Kill process not working on Windows!
-    tailProcess.kill();
+    // Kill process tree on Windows
+    if (Common.os == 'win32') {
+        var cp = require('child_process');
+        cp.exec('taskkill /PID ' + tailProcess.pid + ' /T /F', function (error, stdout, stderr) {
+            console.log('Windows Taskkill stdout: ' + stdout);
+            if(stderr)
+                console.log('Windows Taskkill stderr: ' + stderr);
+            if(error)
+                 console.error('Windows taskkill error: ' + error);
+        });
+    } else {
+        tailProcess.kill();
+    }
     req.io.emit('logTailContent', { line: "Tail process closed", status: 'closed' });
 }
 
@@ -154,7 +165,6 @@ exports.exitTail = function(req) {
  * @param req
  */
 exports.pauseTail = function(req) {
-    // TODO: Pause tail not working on Windows!
     tailProcess.stdout.pause();
     req.io.emit('logTailContent', { line: "Tail process paused..", status: 'paused' });
 }
@@ -164,7 +174,6 @@ exports.pauseTail = function(req) {
  * @param req
  */
 exports.resumeTail = function(req) {
-    // TODO: Resume tail not working on Windows!
     tailProcess.stdout.resume();
     req.io.emit('logTailContent', { line: "Tail process resumed", err: true, status: 'resumed' });
 }

@@ -21,7 +21,7 @@ body {
     max-height: 300px;
     overflow: auto;
 }
-@media screen and (min-height: 1080px) {
+@media screen and (min-height: 900px) {
     #projectLogs  {
         max-height: 650px;
     }

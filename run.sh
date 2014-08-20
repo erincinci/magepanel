@@ -3,7 +3,7 @@ set -e
 
 # Options
 host="localhost"
-port=4624
+port=8886
 url="http://${host}:${port}/"
 
 # -------------------------

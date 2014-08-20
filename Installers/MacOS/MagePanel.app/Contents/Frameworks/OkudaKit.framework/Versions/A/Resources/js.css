@@ -1,0 +1,57 @@
+/*
+
+Xcode default
+
+green:			#226D24
+red:			#881314
+pink:			#760F50
+orange:			#683820
+blue:			#0E0EFF
+gold:			#826B28
+light teal:		#3E6D74
+dark teal:		#25464A
+light purple:	#5B2599
+dark purple:	#2E0D6D
+slate:			#2C4287
+turquise:		#009FBE
+*/
+
+.default {
+    color:#000000;
+    background:#FFFFFF;
+    font:11px monospace;
+}
+
+comment {
+    color:#226D24;
+}
+
+identifier {
+    color:#000000;
+}
+
+reserved {
+    font:bold 11px monospace;
+    color:#760F50;
+}
+
+builtin {
+    color:#3E6D74;
+}
+
+openParen, closeParen, openCurly, closeCurly, openBracket, closeBracket, semi, equals, dot, comma, plus, minus, times, div, mod {
+    color:#000000;
+}
+
+number {
+    color:#009FBE;
+}
+
+string {
+    color:#881314;	
+} 
+
+regex {
+	color:#5B2599;
+}
+

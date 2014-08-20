@@ -1,0 +1,70 @@
+/*
+
+Xcode default
+
+green:			#226D24
+red:			#881314
+pink:			#760F50
+orange:			#683820
+blue:			#0E0EFF
+gold:			#826B28
+light teal:		#3E6D74
+dark teal:		#25464A
+light purple:	#5B2599
+dark purple:	#2E0D6D
+slate:			#2C4287
+*/
+
+.default {
+    color:#000000;
+    background:#FFFFFF;
+    font:11px 'Monaco', monospace;
+}
+
+comment {
+	color:#226D24;
+}
+
+openCurly,
+closeCurly,
+semi {
+	color:#000000;
+}
+
+eq,
+openParen,
+closeParen,
+openBracket,
+closeBracket,
+gt,
+tilde,
+pipe,
+fwdSlash,
+hash,
+dot, comma, colon {
+    color:#881314;
+}
+
+selectorWord {
+    color:#000000;
+}
+
+selectorString {
+    color:#760F50;
+}
+
+string, symbol {
+    color:#760F50;
+}
+
+constant {
+	color:#5B2599;	
+}
+
+property {
+    color:#3E6D74;
+}
+
+number, hexColor, url {
+    color:#0E0EFF;
+}
