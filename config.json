@@ -1,5 +1,5 @@
 {
-    "version": "v0.6.6",
+    "version": "v1.0.0",
 
     "logger": {
         "directory": "./logs",
@@ -20,6 +20,6 @@
 
     "server": {
         "name": "MagePanel",
-        "port": 4624
+        "port": 8886
     }
 }

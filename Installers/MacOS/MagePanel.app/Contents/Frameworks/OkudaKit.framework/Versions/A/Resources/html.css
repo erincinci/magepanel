@@ -1,0 +1,47 @@
+/*
+Chrome View Source
+
+purple:#72006C
+navy:#120093
+orange:#85330D
+gray:#B2B2B2
+green:#1D5D1B
+linkblue:#0000E9
+
+*/
+.default {
+    color:#000000;
+    background:#FFFFFF;
+    font:11px 'Monaco', monospace;
+}
+
+// tags, tagNames
+lt, gt, fwdSlash, unqualifiedName {
+    color:#72006C;
+}
+
+eq, colon, symbol {
+    color:#72006C;
+}
+
+// attrName
+constant {
+    color:#85330D;
+}
+
+// attrValue
+string, num {
+    color:#120093;
+}
+
+text, cdata {
+    color:#000000;
+}
+
+comment {
+	color:#1D5D1B;
+}
+
+doctype, pi {
+    color:#B2B2B2;
+}

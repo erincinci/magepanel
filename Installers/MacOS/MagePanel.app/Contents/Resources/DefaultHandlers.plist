@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FUHandlers</key>
+	<array>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>name</key>
+			<string>Gmail</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>URLPattern</key>
+					<string>mailto:*</string>
+					<key>enabled</key>
+					<true/>
+				</dict>
+			</array>
+			<key>source</key>
+			<string>function transform(inURLString) {
+	inURLString = inURLString.replace('mailto:', '');
+	inURLString = inURLString.replace('&amp;amp;', '&amp;');
+	 
+	var argStr = '';
+	var splits = inURLString.split('?');
+	
+	var emailAddr = null;
+	var args = {};
+	if (splits.length > 0) emailAddr = splits[0];
+	if (splits.length > 1) argStr = splits[1];
+		
+	var outURLString = 'https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=' + emailAddr;
+					 
+    if (argStr.length > 0) outURLString += '&amp;' + argStr;
+	return outURLString;
+}</string>
+		</dict>
+	</array>
+</dict>
+</plist>

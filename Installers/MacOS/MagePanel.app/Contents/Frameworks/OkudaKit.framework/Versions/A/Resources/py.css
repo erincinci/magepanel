@@ -1,0 +1,125 @@
+/*
+
+Xcode default
+
+green:			#226D24
+red:			#881314
+pink:			#760F50
+orange:			#683820
+blue:			#0E0EFF
+gold:			#826B28
+light teal:		#3E6D74
+dark teal:		#25464A
+light purple:	#5B2599
+dark purple:	#2E0D6D
+slate:			#2C4287
+turquise:		#009FBE
+*/
+
+.default {
+    color:#000000;
+    background:#FFFFFF;
+    font:11px monospace;
+}
+
+comment {
+    font:italic 11px monospace;
+    color:#226D24;
+}
+
+pdbPrompt {
+    color:#226D24;
+}
+
+pdbError {
+    font:italic 11px monospace;
+    color:#881314;	
+}
+
+identifier {
+    color:#000000;
+}
+
+reserved, def {
+    font:bold 11px monospace;
+    color:#760F50;
+}
+
+defName {
+    font:bold 11px monospace;
+    color:#2E0D6D;
+}
+
+builtin {
+    font:11px monospace;
+    color:#5B2599;
+}
+
+openParen, closeParen, openCurly, closeCurly, openBracket, closeBracket, semi, equals, dot, comma, plus, minus, times, div, mod {
+    color:#000000;
+}
+
+number {
+    color:#0E0EFF;
+}
+
+string, singleDocStr, doubleDocStr,
+rDoubleStr,
+uDoubleStr,
+urDoubleStr,
+bigRDoubleStr,
+bigUDoubleStr,
+bigUBigRDoubleStr,
+bigUrDoubleStr,
+ubigRDoubleStr,
+bDoubleStr,
+bigBDoubleStr,
+brDoubleStr,
+bigBrDoubleStr,
+bbigRDoubleStr,
+bigBbigRDoubleStr,
+rDoubleDoubleStr,
+uDoubleDoubleStr,
+urDoubleDoubleStr,
+bigRDoubleDoubleStr,
+bigUDoubleDoubleStr,
+bigUBigRDoubleDoubleStr,
+bigUrDoubleDoubleStr,
+ubigRDoubleDoubleStr,
+bDoubleDoubleStr,
+bigBDoubleDoubleStr,
+brDoubleDoubleStr,
+bigBrDoubleDoubleStr,
+bbigRDoubleDoubleStr,
+bigBbigRDoubleDoubleStr,
+rSingleStr,
+uSingleStr,
+urSingleStr,
+bigRSingleStr,
+bigUSingleStr,
+bigUBigRSingleStr,
+bigUrSingleStr,
+ubigRSingleStr,
+bSingleStr,
+bigBSingleStr,
+brSingleStr,
+bigBrSingleStr,
+bbigRSingleStr,
+bigBbigRSingleStr,
+rSingleSingleStr,
+uSingleSingleStr,
+urSingleSingleStr,
+bigRSingleSingleStr,
+bigUSingleSingleStr,
+bigUBigRSingleSingleStr,
+bigUrSingleSingleStr,
+ubigRSingleSingleStr,
+bSingleSingleStr,
+bigBSingleSingleStr,
+brSingleSingleStr,
+bigBrSingleSingleStr,
+bbigRSingleSingleStr,
+bigBbigRSingleSingleStr
+{
+    color:#881314;	
+} 

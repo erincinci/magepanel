@@ -1,0 +1,677 @@
+program
+
+@before {
+		self.statementTerminator = @";";
+		self.singleLineCommentMarker = @"//";
+		self.blockStartMarker = @"{";
+		self.blockEndMarker = @"]";
+		self.braces = @"( ) [ ]";
+	
+		PKTokenizer *t = self.tokenizer;
+
+		[t.symbolState add:@"<<"];
+		[t.symbolState add:@">>"];
+		[t.symbolState add:@"<="];
+		[t.symbolState add:@">="];
+		[t.symbolState add:@"=="];
+		[t.symbolState add:@"!="];
+		[t.symbolState add:@"+="];
+		[t.symbolState add:@"-="];
+		[t.symbolState add:@"*="];
+		[t.symbolState add:@"/="];
+		[t.symbolState add:@"%="];
+		[t.symbolState add:@"&="];
+		[t.symbolState add:@"|="];
+		[t.symbolState add:@"^="];
+		[t.symbolState add:@">>="];
+		[t.symbolState add:@"<<="];
+	
+        [t setTokenizerState:t.numberState from:'-' to:'-'];
+        [t.numberState setFallbackState:t.symbolState from:'-' to:'-'];
+        
+        [t setTokenizerState:t.wordState from:'_' to:'_'];
+        [t.wordState setWordChars:YES from:'_' to:'_'];
+        [t.wordState setWordChars:NO from:'-' to:'-'];
+        [t.wordState setWordChars:NO from:'\'' to:'\''];
+
+        // setup comments
+        t.commentState.reportsCommentTokens = YES;
+
+		// add C comments
+        [t setTokenizerState:t.commentState from:'/' to:'/'];
+        [t setTokenizerState:t.delimitState from:'#' to:'#'];
+
+        [t.commentState addSingleLineStartMarker:@"//"];
+        [t.commentState addSingleLineStartMarker:@"#"];
+        
+        [t.commentState addMultiLineStartMarker:@"/*" endMarker:@"*/"];
+        t.commentState.fallbackState = t.symbolState;
+        
+        // preprocessor
+//        [t setTokenizerState:t.delimitState from:'#' to:'#'];
+//        [t.delimitState addStartMarker:@"#" endMarker:@"" allowedCharacterSet:nil];
+//        [t.delimitState setFallbackState:t.symbolState from:'#' to:'#'];
+
+		// hex, oct, bin numbers
+		[t.numberState addPrefix:@"0x" forRadix:16];
+		//[t.numberState addPrefix:@"0"  forRadix:8];
+}
+              = element+;
+
+element       = reserved | builtin | identifier | string | number | comment | specialSymbol | symbol;
+identifier    = Word;
+string        = QuotedString;
+number        = Number;
+specialSymbol = openCurly | closeCurly | openParen | closeParen | openBracket | closeBracket | semi | comma | dot | colon;
+symbol        = Symbol;
+comment       = Comment;
+
+openCurly     = '{';
+closeCurly    = '}';
+openBracket   = '[';
+closeBracket  = ']';
+openParen     = '(';
+closeParen    = ')';
+semi          = ';';
+comma         = ',';
+dot           = '.';
+colon         = ':';
+
+/*
+plus         = '+';
+minus        = '-';
+star         = '*';
+div          = '/';
+mod          = '%';
+shiftLeft    = '<<';
+shiftRight   = '>>';
+bitwiseAnd   = '&';
+bitwiseOr    = '|';
+bitwiseXor   = '^';
+bitwiseNot   = '~';
+lt           = '<';
+gt           = '>';
+le           = '<=';
+ge           = '>=';
+eqEq         = '==';
+ne           = '!=';
+openParen    = '(';
+closeParen   = ')';
+openBracket  = '[';
+closeBracket = ']';
+openCurly    = '{';
+closeCurly   = '}';
+comma        = ',';
+colon        = ':';
+dot          = '.';
+semi         = ';';
+at           = '@';
+eq           = '=';
+plusEq       = '+=';
+minusEq      = '-=';
+timesEq      = '*=';
+divEq        = '/=';
+modEq        = '%=';
+andEq        = '&=';
+orEq         = '|=';
+xorEq        = '^=';
+shiftRightEq = '>>=';
+shiftLeftEq  = '<<=';
+*/
+
+reserved
+	= "auto"
+    | "break"
+    | "case"
+    | "char"
+    | "const"
+    | "continue"
+    | "default"
+    | "do"
+    | "double"
+    | "else"
+    | "entry"
+    | "enum"
+    | "extern"
+    | "float"
+    | "for"
+    | "goto"
+    | "if"
+    | "int"
+    | "long"
+    | "register"
+    | "return"
+    | "short"
+    | "signed"
+    | "sizeof"
+    | "static"
+    | "struct"
+    | "switch"
+    | "typedef"
+    | "void"
+    | "volatile"
+    | "union"
+    | "unsigned"
+    | "while"
+	;
+    
+    /*
+CG_EXTERN
+CG_AVAILABLE_STARTING
+bool
+size_t
+CGFloat
+__IPHONE_2_0
+CFTypeID
+
+uint32_t
+__MAC_10_1
+__MAC_10_4
+__MAC_10_2
+__MAC_10_0
+*/
+
+builtin
+	= "CGAffineTransformConcat"
+	| "CGAffineTransformEqualToTransform"
+	| "CGAffineTransformIdentity"
+	| "CGAffineTransformInvert"
+	| "CGAffineTransformIsIdentity"
+	| "CGAffineTransformMake"
+	| "CGAffineTransformMakeRotation"
+	| "CGAffineTransformMakeScale"
+	| "CGAffineTransformMakeTranslation"
+	| "CGAffineTransformRotate"
+	| "CGAffineTransformScale"
+	| "CGAffineTransformTranslate"
+	| "CGBitmapContextCreate"
+	| "CGBitmapContextCreateImage"
+	| "CGBitmapContextCreateWithData"
+	| "CGBitmapContextGetAlphaInfo"
+	| "CGBitmapContextGetBitmapInfo"
+	| "CGBitmapContextGetBitsPerComponent"
+	| "CGBitmapContextGetBitsPerPixel"
+	| "CGBitmapContextGetBytesPerRow"
+	| "CGBitmapContextGetColorSpace"
+	| "CGBitmapContextGetData"
+	| "CGBitmapContextGetHeight"
+	| "CGBitmapContextGetWidth"
+	| "CGColorCreate"
+	| "CGColorCreateCopy"
+	| "CGColorCreateCopyWithAlpha"
+	| "CGColorCreateGenericCMYK"
+	| "CGColorCreateGenericGray"
+	| "CGColorCreateGenericRGB"
+	| "CGColorCreateWithPattern"
+	| "CGColorEqualToColor"
+	| "CGColorGetAlpha"
+	| "CGColorGetColorSpace"
+	| "CGColorGetComponents"
+	| "CGColorGetConstantColor"
+	| "CGColorGetNumberOfComponents"
+	| "CGColorGetPattern"
+	| "CGColorGetTypeID"
+	| "CGColorRelease"
+	| "CGColorRetain"
+	| "CGColorSpaceCopyICCProfile"
+	| "CGColorSpaceCopyName"
+	| "CGColorSpaceCreateCalibratedGray"
+	| "CGColorSpaceCreateCalibratedRGB"
+	| "CGColorSpaceCreateDeviceCMYK"
+	| "CGColorSpaceCreateDeviceGray"
+	| "CGColorSpaceCreateDeviceRGB"
+	| "CGColorSpaceCreateICCBased"
+	| "CGColorSpaceCreateIndexed"
+	| "CGColorSpaceCreateLab"
+	| "CGColorSpaceCreatePattern"
+	| "CGColorSpaceCreateWithICCProfile"
+	| "CGColorSpaceCreateWithName"
+	| "CGColorSpaceCreateWithPlatformColorSpace"
+	| "CGColorSpaceGetBaseColorSpace"
+	| "CGColorSpaceGetColorTable"
+	| "CGColorSpaceGetColorTableCount"
+	| "CGColorSpaceGetModel"
+	| "CGColorSpaceGetNumberOfComponents"
+	| "CGColorSpaceGetTypeID"
+	| "CGColorSpaceRelease"
+	| "CGColorSpaceRetain"
+	| "CGContextAddArc"
+	| "CGContextAddArcToPoint"
+	| "CGContextAddCurveToPoint"
+	| "CGContextAddEllipseInRect"
+	| "CGContextAddLineToPoint"
+	| "CGContextAddLines"
+	| "CGContextAddPath"
+	| "CGContextAddQuadCurveToPoint"
+	| "CGContextAddRect"
+	| "CGContextAddRects"
+	| "CGContextBeginPage"
+	| "CGContextBeginPath"
+	| "CGContextBeginTransparencyLayer"
+	| "CGContextBeginTransparencyLayerWithRect"
+	| "CGContextClearRect"
+	| "CGContextClip"
+	| "CGContextClipToMask"
+	| "CGContextClipToRect"
+	| "CGContextClipToRects"
+	| "CGContextClosePath"
+	| "CGContextConcatCTM"
+	| "CGContextConvertPointToDeviceSpace"
+	| "CGContextConvertPointToUserSpace"
+	| "CGContextConvertRectToDeviceSpace"
+	| "CGContextConvertRectToUserSpace"
+	| "CGContextConvertSizeToDeviceSpace"
+	| "CGContextConvertSizeToUserSpace"
+	| "CGContextCopyPath"
+	| "CGContextDrawImage"
+	| "CGContextDrawLayerAtPoint"
+	| "CGContextDrawLayerInRect"
+	| "CGContextDrawLinearGradient"
+	| "CGContextDrawPDFDocument"
+	| "CGContextDrawPDFPage"
+	| "CGContextDrawPath"
+	| "CGContextDrawRadialGradient"
+	| "CGContextDrawShading"
+	| "CGContextDrawTiledImage"
+	| "CGContextEOClip"
+	| "CGContextEOFillPath"
+	| "CGContextEndPage"
+	| "CGContextEndTransparencyLayer"
+	| "CGContextFillEllipseInRect"
+	| "CGContextFillPath"
+	| "CGContextFillRect"
+	| "CGContextFillRects"
+	| "CGContextFlush"
+	| "CGContextGetCTM"
+	| "CGContextGetClipBoundingBox"
+	| "CGContextGetInterpolationQuality"
+	| "CGContextGetPathBoundingBox"
+	| "CGContextGetPathCurrentPoint"
+	| "CGContextGetTextMatrix"
+	| "CGContextGetTextPosition"
+	| "CGContextGetTypeID"
+	| "CGContextGetUserSpaceToDeviceSpaceTransform"
+	| "CGContextIsPathEmpty"
+	| "CGContextMoveToPoint"
+	| "CGContextPathContainsPoint"
+	| "CGContextRelease"
+	| "CGContextReplacePathWithStrokedPath"
+	| "CGContextRestoreGState"
+	| "CGContextRetain"
+	| "CGContextRotateCTM"
+	| "CGContextSaveGState"
+	| "CGContextScaleCTM"
+	| "CGContextSelectFont"
+	| "CGContextSetAllowsAntialiasing"
+	| "CGContextSetAllowsFontSmoothing"
+	| "CGContextSetAllowsFontSubpixelPositioning"
+	| "CGContextSetAllowsFontSubpixelQuantization"
+	| "CGContextSetAlpha"
+	| "CGContextSetBlendMode"
+	| "CGContextSetCMYKFillColor"
+	| "CGContextSetCMYKStrokeColor"
+	| "CGContextSetCharacterSpacing"
+	| "CGContextSetFillColor"
+	| "CGContextSetFillColorSpace"
+	| "CGContextSetFillColorWithColor"
+	| "CGContextSetFillPattern"
+	| "CGContextSetFlatness"
+	| "CGContextSetFont"
+	| "CGContextSetFontSize"
+	| "CGContextSetGrayFillColor"
+	| "CGContextSetGrayStrokeColor"
+	| "CGContextSetInterpolationQuality"
+	| "CGContextSetLineCap"
+	| "CGContextSetLineDash"
+	| "CGContextSetLineJoin"
+	| "CGContextSetLineWidth"
+	| "CGContextSetMiterLimit"
+	| "CGContextSetPatternPhase"
+	| "CGContextSetRGBFillColor"
+	| "CGContextSetRGBStrokeColor"
+	| "CGContextSetRenderingIntent"
+	| "CGContextSetShadow"
+	| "CGContextSetShadowWithColor"
+	| "CGContextSetShouldAntialias"
+	| "CGContextSetShouldSmoothFonts"
+	| "CGContextSetShouldSubpixelPositionFonts"
+	| "CGContextSetShouldSubpixelQuantizeFonts"
+	| "CGContextSetStrokeColor"
+	| "CGContextSetStrokeColorSpace"
+	| "CGContextSetStrokeColorWithColor"
+	| "CGContextSetStrokePattern"
+	| "CGContextSetTextDrawingMode"
+	| "CGContextSetTextMatrix"
+	| "CGContextSetTextPosition"
+	| "CGContextShowGlyphs"
+	| "CGContextShowGlyphsAtPoint"
+	| "CGContextShowGlyphsAtPositions"
+	| "CGContextShowGlyphsWithAdvances"
+	| "CGContextShowText"
+	| "CGContextShowTextAtPoint"
+	| "CGContextStrokeEllipseInRect"
+	| "CGContextStrokeLineSegments"
+	| "CGContextStrokePath"
+	| "CGContextStrokeRect"
+	| "CGContextStrokeRectWithWidth"
+	| "CGContextSynchronize"
+	| "CGContextTranslateCTM"
+	| "CGDataConsumerCreate"
+	| "CGDataConsumerCreateWithCFData"
+	| "CGDataConsumerCreateWithURL"
+	| "CGDataConsumerGetTypeID"
+	| "CGDataConsumerRelease"
+	| "CGDataConsumerRetain"
+	| "CGDataProviderCopyData"
+	| "CGDataProviderCreateDirect"
+	| "CGDataProviderCreateSequential"
+	| "CGDataProviderCreateWithCFData"
+	| "CGDataProviderCreateWithData"
+	| "CGDataProviderCreateWithFilename"
+	| "CGDataProviderCreateWithURL"
+	| "CGDataProviderGetTypeID"
+	| "CGDataProviderRelease"
+	| "CGDataProviderRetain"
+	| "CGImageCreate"
+	| "CGImageCreateCopy"
+	| "CGImageCreateCopyWithColorSpace"
+	| "CGImageCreateWithImageInRect"
+	| "CGImageCreateWithJPEGDataProvider"
+	| "CGImageCreateWithMask"
+	| "CGImageCreateWithMaskingColors"
+	| "CGImageCreateWithPNGDataProvider"
+	| "CGImageDestinationAddImage"
+	| "CGImageDestinationAddImageAndMetadata"
+	| "CGImageDestinationAddImageFromSource"
+	| "CGImageDestinationCopyImageSource"
+	| "CGImageDestinationCopyTypeIdentifiers"
+	| "CGImageDestinationCreateWithData"
+	| "CGImageDestinationCreateWithDataConsumer"
+	| "CGImageDestinationCreateWithURL"
+	| "CGImageDestinationFinalize"
+	| "CGImageDestinationGetTypeID"
+	| "CGImageDestinationSetProperties"
+	| "CGImageGetAlphaInfo"
+	| "CGImageGetBitmapInfo"
+	| "CGImageGetBitsPerComponent"
+	| "CGImageGetBitsPerPixel"
+	| "CGImageGetBytesPerRow"
+	| "CGImageGetColorSpace"
+	| "CGImageGetDataProvider"
+	| "CGImageGetDecode"
+	| "CGImageGetHeight"
+	| "CGImageGetRenderingIntent"
+	| "CGImageGetShouldInterpolate"
+	| "CGImageGetTypeID"
+	| "CGImageGetWidth"
+	| "CGImageIsMask"
+	| "CGImageMaskCreate"
+	| "CGImageRelease"
+	| "CGImageRetain"
+	| "CGImageSourceCopyMetadataAtIndex "
+	| "CGImageSourceCopyProperties"
+	| "CGImageSourceCopyPropertiesAtIndex"
+	| "CGImageSourceCopyTypeIdentifiers"
+	| "CGImageSourceCreateImageAtIndex"
+	| "CGImageSourceCreateIncremental"
+	| "CGImageSourceCreateThumbnailAtIndex"
+	| "CGImageSourceCreateWithData"
+	| "CGImageSourceCreateWithDataProvider"
+	| "CGImageSourceCreateWithURL"
+	| "CGImageSourceGetCount"
+	| "CGImageSourceGetStatus"
+	| "CGImageSourceGetStatusAtIndex"
+	| "CGImageSourceGetType"
+	| "CGImageSourceGetTypeID"
+	| "CGImageSourceUpdateData"
+	| "CGImageSourceUpdateDataProvider"
+	| "CGLayerCreateWithContext"
+	| "CGLayerGetContext"
+	| "CGLayerGetSize"
+	| "CGLayerGetTypeID"
+	| "CGLayerRelease"
+	| "CGLayerRetain"
+	| "CGPathAddArc"
+	| "CGPathAddArcToPoint"
+	| "CGPathAddCurveToPoint"
+	| "CGPathAddEllipseInRect"
+	| "CGPathAddLineToPoint"
+	| "CGPathAddLines"
+	| "CGPathAddPath"
+	| "CGPathAddQuadCurveToPoint"
+	| "CGPathAddRect"
+	| "CGPathAddRects"
+	| "CGPathAddRelativeArc"
+	| "CGPathCloseSubpath"
+	| "CGPathContainsPoint"
+	| "CGPathCreateCopy"
+	| "CGPathCreateCopyByDashingPath"
+	| "CGPathCreateCopyByStrokingPath"
+	| "CGPathCreateCopyByTransformingPath"
+	| "CGPathCreateMutable"
+	| "CGPathCreateMutableCopy"
+	| "CGPathCreateMutableCopyByTransformingPath"
+	| "CGPathCreateWithEllipseInRect"
+	| "CGPathCreateWithRect"
+	| "CGPathEqualToPath"
+	| "CGPathGetBoundingBox"
+	| "CGPathGetCurrentPoint"
+	| "CGPathGetPathBoundingBox"
+	| "CGPathGetTypeID"
+	| "CGPathIsEmpty"
+	| "CGPathIsRect"
+	| "CGPathMoveToPoint"
+	| "CGPathRelease"
+	| "CGPathRetain"
+	| "CGPointApplyAffineTransform"
+	| "CGPointCreateDictionaryRepresentation"
+	| "CGPointEqualToPoint"
+	| "CGPointMake"
+	| "CGPointMakeWithDictionaryRepresentation"
+	| "CGPointZero"
+	| "CGRectApplyAffineTransform"
+	| "CGRectContainsPoint"
+	| "CGRectContainsRect"
+	| "CGRectCreateDictionaryRepresentation"
+	| "CGRectDivide"
+	| "CGRectEqualToRect"
+	| "CGRectGetHeight"
+	| "CGRectGetMaxX"
+	| "CGRectGetMaxY"
+	| "CGRectGetMidX"
+	| "CGRectGetMidY"
+	| "CGRectGetMinX"
+	| "CGRectGetMinY"
+	| "CGRectGetWidth"
+	| "CGRectInfinite"
+	| "CGRectInset"
+	| "CGRectIntegral"
+	| "CGRectIntersection"
+	| "CGRectIntersectsRect"
+	| "CGRectIsEmpty"
+	| "CGRectIsInfinite"
+	| "CGRectIsNull"
+	| "CGRectMake"
+	| "CGRectMakeWithDictionaryRepresentation"
+	| "CGRectMaxXEdge"
+	| "CGRectMaxYEdge"
+	| "CGRectMinXEdge"
+	| "CGRectMinYEdge"
+	| "CGRectNull"
+	| "CGRectOffset"
+	| "CGRectStandardize"
+	| "CGRectUnion"
+	| "CGRectZero"
+	| "CGSizeApplyAffineTransform"
+	| "CGSizeCreateDictionaryRepresentation"
+	| "CGSizeEqualToSize"
+	| "CGSizeMake"
+	| "CGSizeMakeWithDictionaryRepresentation"
+	| "CGSizeZero"
+	| "kCGBitmapAlphaInfoMask"
+	| "kCGBitmapByteOrder16Big"
+	| "kCGBitmapByteOrder16Host"
+	| "kCGBitmapByteOrder16Little"
+	| "kCGBitmapByteOrder32Big"
+	| "kCGBitmapByteOrder32Host"
+	| "kCGBitmapByteOrder32Little"
+	| "kCGBitmapByteOrderDefault"
+	| "kCGBitmapByteOrderMask"
+	| "kCGBitmapFloatComponents"
+	| "kCGBlendModeClear"
+	| "kCGBlendModeColor"
+	| "kCGBlendModeColorBurn"
+	| "kCGBlendModeColorDodge"
+	| "kCGBlendModeCopy"
+	| "kCGBlendModeDarken"
+	| "kCGBlendModeDestinationAtop"
+	| "kCGBlendModeDestinationIn"
+	| "kCGBlendModeDestinationOut"
+	| "kCGBlendModeDestinationOver"
+	| "kCGBlendModeDifference"
+	| "kCGBlendModeExclusion"
+	| "kCGBlendModeHardLight"
+	| "kCGBlendModeHue"
+	| "kCGBlendModeLighten"
+	| "kCGBlendModeLuminosity"
+	| "kCGBlendModeMultiply"
+	| "kCGBlendModeNormal"
+	| "kCGBlendModeOverlay"
+	| "kCGBlendModePlusDarker"
+	| "kCGBlendModePlusLighter"
+	| "kCGBlendModeSaturation"
+	| "kCGBlendModeScreen"
+	| "kCGBlendModeSoftLight"
+	| "kCGBlendModeSourceAtop"
+	| "kCGBlendModeSourceIn"
+	| "kCGBlendModeSourceOut"
+	| "kCGBlendModeXOR"
+	| "kCGColorBlack"
+	| "kCGColorClear"
+	| "kCGColorSpaceAdobeRGB1998"
+	| "kCGColorSpaceGenericCMYK"
+	| "kCGColorSpaceGenericGray"
+	| "kCGColorSpaceGenericGrayGamma2_2"
+	| "kCGColorSpaceGenericRGB"
+	| "kCGColorSpaceGenericRGBLinear"
+	| "kCGColorSpaceModelCMYK"
+	| "kCGColorSpaceModelDeviceN"
+	| "kCGColorSpaceModelIndexed"
+	| "kCGColorSpaceModelLab"
+	| "kCGColorSpaceModelMonochrome"
+	| "kCGColorSpaceModelPattern"
+	| "kCGColorSpaceModelRGB"
+	| "kCGColorSpaceModelUnknown"
+	| "kCGColorSpaceSRGB"
+	| "kCGColorWhite"
+	| "kCGEncodingFontSpecific"
+	| "kCGEncodingMacRoman"
+	| "kCGImageAlphaFirst"
+	| "kCGImageAlphaLast"
+	| "kCGImageAlphaNone"
+	| "kCGImageAlphaNoneSkipFirst"
+	| "kCGImageAlphaNoneSkipLast"
+	| "kCGImageAlphaOnly"
+	| "kCGImageAlphaPremultipliedFirst"
+	| "kCGImageAlphaPremultipliedLast"
+	| "kCGImageDestinationBackgroundColor"
+	| "kCGImageDestinationDateTime"
+	| "kCGImageDestinationLossyCompressionQuality"
+	| "kCGImageDestinationMergeMetadata"
+	| "kCGImageDestinationMetadata"
+	| "kCGImageDestinationOrientation"
+	| "kCGImageMetadataShouldExcludeXMP"
+	| "kCGImageSourceCreateThumbnailFromImageAlways"
+	| "kCGImageSourceCreateThumbnailFromImageIfAbsent"
+	| "kCGImageSourceCreateThumbnailWithTransform"
+	| "kCGImageSourceShouldAllowFloat"
+	| "kCGImageSourceShouldCache"
+	| "kCGImageSourceThumbnailMaxPixelSize"
+	| "kCGImageSourceTypeIdentifierHint"
+	| "kCGImageStatusComplete"
+	| "kCGImageStatusIncomplete"
+	| "kCGImageStatusInvalidData"
+	| "kCGImageStatusReadingHeader"
+	| "kCGImageStatusUnexpectedEOF"
+	| "kCGImageStatusUnknownType"
+	| "kCGInterpolationDefault"
+	| "kCGInterpolationHigh"
+	| "kCGInterpolationLow"
+	| "kCGInterpolationMedium"
+	| "kCGInterpolationNone"
+	| "kCGLineCapButt"
+	| "kCGLineCapRound"
+	| "kCGLineCapSquare"
+	| "kCGLineJoinBevel"
+	| "kCGLineJoinMiter"
+	| "kCGLineJoinRound"
+	| "kCGPathEOFill"
+	| "kCGPathEOFillStroke"
+	| "kCGPathElementAddCurveToPoint"
+	| "kCGPathElementAddLineToPoint"
+	| "kCGPathElementAddQuadCurveToPoint"
+	| "kCGPathElementCloseSubpath"
+	| "kCGPathElementMoveToPoint"
+	| "kCGPathFill"
+	| "kCGPathFillStroke"
+	| "kCGPathStroke"
+	| "kCGRenderingIntentAbsoluteColorimetric"
+	| "kCGRenderingIntentDefault"
+	| "kCGRenderingIntentPerceptual"
+	| "kCGRenderingIntentRelativeColorimetric"
+	| "kCGRenderingIntentSaturation"
+	| "kCGTextClip"
+	| "kCGTextFill"
+	| "kCGTextFillClip"
+	| "kCGTextFillStroke"
+	| "kCGTextFillStrokeClip"
+	| "kCGTextInvisible"
+	| "kCGTextStroke"
+	| "kCGTextStrokeClip"
+	| "CGGradientCreateWithColorComponents"
+	| "CGGradientCreateWithColors"
+	| "CGGradientGetTypeID"
+	| "CGGradientRelease"
+	| "CGGradientRetain"
+	| "kCGGradientDrawsAfterEndLocation"
+	| "kCGGradientDrawsBeforeStartLocation"
+	| "CGPatternCreate"
+	| "CGPatternGetTypeID"
+	| "CGPatternRelease"
+	| "CGPatternRetain"
+	| "kCGPatternTilingConstantSpacing"
+	| "kCGPatternTilingConstantSpacingMinimalDistortion"
+	| "kCGPatternTilingNoDistortion"
+	| "CGPDFContextAddDestinationAtPoint"
+	| "CGPDFContextAddDocumentMetadata"
+	| "CGPDFContextBeginPage"
+	| "CGPDFContextClose"
+	| "CGPDFContextCreate"
+	| "CGPDFContextCreateWithURL"
+	| "CGPDFContextEndPage"
+	| "CGPDFContextSetDestinationForRect"
+	| "CGPDFContextSetURLForRect"
+	| "kCGPDFContextAllowsCopying"
+	| "kCGPDFContextAllowsPrinting"
+	| "kCGPDFContextArtBox"
+	| "kCGPDFContextAuthor"
+	| "kCGPDFContextBleedBox"
+	| "kCGPDFContextCreator"
+	| "kCGPDFContextCropBox"
+	| "kCGPDFContextEncryptionKeyLength"
+	| "kCGPDFContextKeywords"
+	| "kCGPDFContextMediaBox"
+	| "kCGPDFContextOutputIntent"
+	| "kCGPDFContextOutputIntents"
+	| "kCGPDFContextOwnerPassword"
+	| "kCGPDFContextSubject"
+	| "kCGPDFContextTitle"
+	| "kCGPDFContextTrimBox"
+	| "kCGPDFContextUserPassword"
+	| "kCGPDFXDestinationOutputProfile"
+	| "kCGPDFXInfo"
+	| "kCGPDFXOutputCondition"
+	| "kCGPDFXOutputConditionIdentifier"
+	| "kCGPDFXOutputIntentSubtype"
+	| "kCGPDFXRegistryName"
+	;
