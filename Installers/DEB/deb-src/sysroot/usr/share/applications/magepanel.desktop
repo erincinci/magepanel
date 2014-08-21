@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=MagePanel
+Comment=Open MagePanel GUI
+Exec=google-chrome --app="http://localhost:8886#%U"
+Terminal=false
+Type=Application
+Icon=magepanel
+Categories=WebBrowser;Development
+StartupNotify=true
