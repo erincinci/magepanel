@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 CURMAJOR=0
 CURMINOR=10
 CURPATCH=4
