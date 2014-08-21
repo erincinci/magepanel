@@ -17,7 +17,7 @@ rm -rf ${SRC}
 rsync -a deb-src/ ${SRC}/
 mkdir -p ${SYSROOT}/opt/
 
-rsync -a ../../ ${SYSROOT}/opt/magepanel/ --delete --exclude='.idea/' --exclude='*.db' --exclude='logs/*' --exclude='public/tmp/*' --exclude='Installers' --exclude='*.iss' --exclude='.gitignore' --exclude='*.bat' --exclude='run.sh'
+rsync -a ../../ ${SYSROOT}/opt/magepanel/ --delete --exclude='.idea/' --exclude='*.db' --exclude='logs/*' --exclude='public/tmp/*' --exclude='Installers' --exclude='*.iss' --exclude='.gitignore' --exclude='*.bat' --exclude='run.sh' --exclude='.git/'
 rsync -a ./install-chrome.sh ${SYSROOT}/opt/magepanel/
 
 find ${SRC}/ -type d -exec chmod 0755 {} \;
