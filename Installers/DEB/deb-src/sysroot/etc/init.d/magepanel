@@ -1,0 +1,110 @@
+#!/bin/sh
+#
+# magepanel - MagePanel Daemon
+#
+# chkconfig:   - 57 47
+# description:  MagePanel - UI for Magallanes Deployment Tool
+# processname:  magepanel
+#              
+
+### BEGIN INIT INFO
+# Provides: magepanel
+# Default-Stop: 0 1 2 6
+# Short-Description: start and stop magepanel
+# Description: MagePanel - UI for Magallanes Deployment Tool
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+exec=/opt/magepanel/app.js
+CURR_USER=root
+
+prog=$(basename $exec)
+
+lockfile=/var/lock/subsys/magepanel
+
+start() {
+    [ -x $exec ] || exit 5
+    echo -n $"Starting $prog: "
+    
+    daemon /usr/sbin/daemonize -u ${CURR_USER} $exec -c
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && touch $lockfile
+    return $retval
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    local PIDS="$(pgrep -f $prog)"
+
+    if [ -n "$PIDS" ]; then
+       kill -INT $PIDS
+       retval=$?
+       if [ $retval -eq 0 ]; then
+            success "stopped"
+            echo
+       fi
+       return 0
+    else
+       failure
+       return 1
+    fi       
+}
+
+restart() {
+    stop
+    start
+}
+
+reload() {
+    restart
+}
+
+force_reload() {
+    restart
+}
+
+rh_status() {
+    # run checks to determine if the service is running or use generic status
+    local PIDS="$(pgrep -f $prog)"
+
+    if [ -n "$PIDS" ]; then
+ echo "${prog} (pid $PIDS) is running..."
+ return 0
+    else
+        echo "${prog} is stopped"
+        return 1
+    fi
+    #status $prog
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        $1
+        ;;
+    stop)
+        rh_status_q || exit 0
+        $1
+        ;;
+    restart)
+        $1
+        ;;
+    status)
+        rh_status
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload}"
+        exit 2
+esac
+exit $?
