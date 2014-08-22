@@ -15,15 +15,17 @@ fi
 # TODO test version
 if [ ! -f /usr/local/bin/node ]
 then
-  pushd /tmp
-  wget -c "http://nodejs.org/dist/v${VER}/node-v${VER}-linux-${ARCH}.tar.gz"
-  rm -rf /tmp/node-v${VER}-linux-${ARCH}
-  tar xf node-v${VER}-linux-${ARCH}.tar.gz -C /tmp/
-  cp -a /tmp/node-v${VER}-linux-${ARCH}/* /usr/local/
+	echo -e "\tNode JS not found on the system! Downloading & Installing.."
+	pushd /tmp
+	wget -c "http://nodejs.org/dist/v${VER}/node-v${VER}-linux-${ARCH}.tar.gz"
+	rm -rf /tmp/node-v${VER}-linux-${ARCH}
+	tar xf node-v${VER}-linux-${ARCH}.tar.gz -C /tmp/
+	cp -a /tmp/node-v${VER}-linux-${ARCH}/* /usr/local/
 fi
 
 # Install magallanes if not exists
 if ! type "mage" > /dev/null; then
+	echo -e "\tMagallanes not found on the system! Downloading & Installing.."
 	cd /tmp
 	wget http://download.magephp.com/magallanes.latest.tar.gz -O magallanes.tar.gz
 	tar xfz magallanes.tar.gz

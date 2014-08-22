@@ -1,4 +1,5 @@
 #!/bin/bash
 
-# Stop the appserver:
-service magepanel stop || true
+# Stop the service:
+#service magepanel stop || true
+magepanel stop || true
