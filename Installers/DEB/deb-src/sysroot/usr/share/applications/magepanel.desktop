@@ -1,0 +1,24 @@
+[Desktop Entry]
+Name=MagePanel
+Comment=Open MagePanel GUI
+Exec=google-chrome --app="http://localhost:8886"
+Terminal=false
+Type=Application
+Icon=magepanel
+Categories=WebBrowser;Development
+StartupNotify=true
+
+[Desktop Action Console]
+Name=Console
+Exec=google-chrome --app="http://localhost:8886/mage"
+OnlyShowIn=Unity;
+
+[Desktop Action Logs]
+Name=Logs
+Exec=google-chrome --app="http://localhost:8886/mageLogs"
+OnlyShowIn=Unity;
+
+[Desktop Action Projects]
+Name=Projects
+Exec=google-chrome --app="http://localhost:8886/projects"
+OnlyShowIn=Unity;
