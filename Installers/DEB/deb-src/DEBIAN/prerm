@@ -2,4 +2,4 @@
 
 # Stop the service:
 #service magepanel stop || true
-magepanel stop || true
+initctl stop magepanel || true
