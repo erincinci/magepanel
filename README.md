@@ -1,25 +1,27 @@
-## MagePanel ##
-![Alt text](http://s27.postimg.org/k2ek5zrjn/magepanel.png)
+# ![Alt text](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
 
 This project is a web-based user interface for [Magallanes Project](http://magephp.com/).
 
 Enjoy!
 
+![Alt text](http://s30.postimg.org/ugokqktlt/Main_Page.png)
+
 *(Requires [Node](http://nodejs.org/) v0.10.2 or newer)*
 
 ## Installers ##
 
-- [Windows](https://github.com/erincinci/magepanel/releases/download/v1.0/MagePanelSetup-v1.0.exe)
-- Mac OS X (***TODO***)
-- Linux (***TODO***)
+- [![alt text](http://s11.postimg.org/w7biouren/windows.png) Windows Installer](https://github.com/erincinci/magepanel/releases/download/v1.0/MagePanelSetup-v1.0.exe)
+- [![alt text](http://s11.postimg.org/hzlu07epr/deb.png) Linux DEB Package](https://github.com/erincinci/magepanel/releases/download/v1.0/magepanel-v10.deb)
+- [![alt text](http://s11.postimg.org/cmwzm2qtb/rpm.png) Linux RPM Package](https://github.com/erincinci/magepanel/releases/download/v1.0/magepanel-1.0-2.i386.rpm)
+- ![alt text](http://s13.postimg.org/9oskv0dnn/mac.png) Mac OS X Package (***TODO***)
 
 ## Starting Application from Source ##
 
 ```bash
-git clone https://github.com/erincinci/magepanel.git MagePanel
-cd MagePanel
+>> git clone https://github.com/erincinci/magepanel.git MagePanel
+>> cd MagePanel
 # On Unix
-./run.sh
+>> ./run.sh
 # On Windows
-run.bat
+>> run.bat
 ```
