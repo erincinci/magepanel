@@ -23,6 +23,12 @@ then
 	cp -a /tmp/node-v${VER}-linux-${ARCH}/* /usr/local/
 fi
 
+# Install PHP-CLI if not exists
+if ! type "php" > /dev/null; then
+	echo -e "\tPHP-CLI not found on the system! Installing from package manager.."
+	apt-get install php5-cli
+fi
+
 # Install magallanes if not exists
 if ! type "mage" > /dev/null; then
 	echo -e "\tMagallanes not found on the system! Downloading & Installing.."
