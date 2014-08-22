@@ -4,5 +4,5 @@ npm-debug.log
 .idea/
 *.db
 .DS_Store
-.VolumeIcon.icns
-.fseventsdIcon?
+.fseventsd
+Icon?
