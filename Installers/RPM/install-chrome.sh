@@ -5,8 +5,8 @@ sleep 5
 
 # http://blog.coolaj86.com/articles/google-repos-for-linux.html
 
-apt-get install curl && \
+yum install curl && \
 wget -q -E https://gist.github.com/raw/4686647/ubuntu-install-google.bash -O - \
 | bash
 
-apt-get install -y google-chrome-stable
+yum install -y google-chrome-stable

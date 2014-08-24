@@ -26,7 +26,7 @@ fi
 # Install PHP-CLI if not exists
 if ! type "php" > /dev/null; then
 	echo -e "\tPHP-CLI not found on the system! Installing from package manager.."
-	apt-get install php5-cli
+	yum install php-cli
 fi
 
 # Install magallanes if not exists

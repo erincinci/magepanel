@@ -42,4 +42,6 @@ chown -R root:root ${DIST}/
 ar r ${DIST}/magepanel-v1.deb debian-binary control.tar.gz data.tar.gz
 popd
 rsync -a ${DIST}/magepanel-v1.deb ./
-alien -r ./magepanel-v1.deb
+
+echo -e "\n\t--> Debian package generated, now converting to RPM package..\n"
+alien --to-rpm --scripts --keep-version --verbose ./magepanel-v1.deb

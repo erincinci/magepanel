@@ -1,5 +1,4 @@
 #!/bin/bash
 
 # Stop the service:
-#service magepanel stop || true
-initctl stop magepanel || true
+service magepanel stop || true

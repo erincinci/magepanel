@@ -1,10 +1,9 @@
 #!/bin/bash
 
-# Start the services!
+# Start the service
 echo -e "\tMagePanel installed successfully! Starting service.."
-#chmod +x /opt/magepanel/init-server.sh
-#service magepanel start
-initctl start magepanel
+update-rc.d magepanel defaults
+service magepanel start
 
 echo -e "\tGive MagePanel about 3 minutes to initialize (installing Chrome for browser side)"
 rm -f /tmp/hnc.log /tmp/hnc.err
