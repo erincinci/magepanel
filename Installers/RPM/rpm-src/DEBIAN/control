@@ -1,0 +1,9 @@
+Package: magepanel
+Version: 1.0-1
+Section: base
+Priority: optional
+Architecture: i386
+Installed-Size: SIZE
+Depends:
+Maintainer: Erinc Inci <erincinci@gmail.com>
+Description: MagePanel - UI for Magallanes Deployment Tool

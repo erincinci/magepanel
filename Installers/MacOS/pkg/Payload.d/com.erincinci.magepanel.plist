@@ -11,8 +11,8 @@
     <string>com.erincinci.magepanel</string>
     <key>ProgramArguments</key>
     <array>
-      <string>/usr/local/bin/node</string>
-      <string>/opt/MagePanel/app.js</string>
+	  <string>sh</string>
+	  <string>/opt/MagePanel/init-server-mac.sh</string>
     </array>
     <key>UserName</key>
     <string>root</string>
@@ -22,13 +22,11 @@
     <true/>
     <key>OnDemand</key>
     <false/>
-    <!--
     <key>StandardOutPath</key>
-    <string>/var/log/hellonode.info.log</string>
+    <string>/var/log/magepanel.info.log</string>
     <key>StandardErrorPath</key>
-    <string>/var/log/hellonode.err.log</string>
+    <string>/var/log/magepanel.err.log</string>
     <key>Debug</key>
     <true/>
-    -->
   </dict>
 </plist>

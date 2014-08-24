@@ -1,7 +1,7 @@
 /**
  * Created by erinci on 14.07.2014.
  */
-var appConfig = require('./config');
+var appConfig = require('./config.json');
 var appSettings = require('user-settings').file(appConfig.setup.file);
 var nStore = require('nstore').extend(require('nstore/query')());
 
