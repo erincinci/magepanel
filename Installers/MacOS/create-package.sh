@@ -1,43 +1,45 @@
 #!/bin/bash
-# If something breaks: stop service using
+# Stop & Tail service using
 # sudo launchctl unload -w /Library/LaunchDaemons/com.erincinci.magepanel.plist
 # tail -f /var/log/magepanel.err.log
-#set -e
+set -e
 
 # Variables
+PACKAGE_MAKER=/Applications/PackageMaker.app/Contents/MacOS/PackageMaker
 INSTALL_USER=`whoami`
+TEMP_DIR="tmp/MagePanel"
+OUT_DIR="."
+VERSION="1.0"
 echo -e "\n\t--> Executing script as '${INSTALL_USER}'\n"
 
-# Make sure only root can run our script
-#if [ "$(id -u)" != "0" ]; then
-#   echo -e "\n\t--> This script must be run as root!\n" 1>&2
-#   exit 1
-#fi
+# Init temp dir & Copy files
+echo -e "\n\t--> Initializing temp dir & Copying files..\n"
+rm -rf ${TEMP_DIR} || true
+mkdir -p ${TEMP_DIR}
+rsync --progress -a ../../ ${TEMP_DIR} --exclude='.idea/' --exclude='*.db' --exclude='logs/*' --exclude='public/tmp/*' --exclude='Installers' --exclude='*.iss' --exclude='.gitignore' --exclude='*.bat' --exclude='run.sh' --exclude='.git/'
 
 # Find & Remove problematic files
 echo -e "\n\t--> Finding and removing problematic files on source dir..\n"
-find ../.. -name "~*" -exec rm -f {} \;
-find ../.. -name ".DS_Store" -exec rm -f {} \;
+find ${TEMP_DIR} -name "~*" -exec rm -f {} \;
+find ${TEMP_DIR} -name ".DS_Store" -exec rm -f {} \;
 
 # Changing ownership of folders for the process
-echo -e "\n\t--> Changing ownership to root for creating package..\n";
-#sudo chown -R root:wheel ../../.
-#ls -alh ../../.
-sudo chown -R root:wheel /Users/${INSTALL_USER}/Downloads/MagePanel
-ls -alh /Users/${INSTALL_USER}/Downloads/MagePanel
-sudo chown root:wheel pkg/Payload.d/com.erincinci.magepanel.plist
-ls -alh pkg/Payload.d/com.erincinci.magepanel.plist
-sudo chown -R ${INSTALL_USER}:staff MagePanel-PackageMaker.pmdoc
+#echo -e "\n\t--> Changing ownership to root for creating package..\n";
+#sudo chown root:wheel pkg/Payload.d/com.erincinci.magepanel.plist
+#ls -alh pkg/Payload.d/com.erincinci.magepanel.plist
+#sudo chown -R ${INSTALL_USER}:staff MagePanel-PackageMaker.pmdoc
 
 # Create package installer with verbose (Alternate: GUI)
 echo -e "\n\t--> Creating installer package with PackageMaker..\n"
-#/Applications/PackageMaker.app/Contents/MacOS/PackageMaker -v -d MagePanel-PackageMaker.pmdoc -o /Users/${INSTALL_USER}/Desktop/MagePanel-v1.0.pkg -p dmg
-/Applications/PackageMaker.app/Contents/MacOS/PackageMaker -v -d MagePanel-PackageMaker.pmdoc -o /Users/${INSTALL_USER}/Desktop/MagePanel-v1.0.pkg
+#${PACKAGE_MAKER} --verbose --no-recommend -d MagePanel-PackageMaker.pmdoc -o ${OUT_DIR}/MagePanel-v${VERSION}.pkg -p dmg
+${PACKAGE_MAKER} --verbose --no-recommend -d MagePanel-PackageMaker.pmdoc -o ${OUT_DIR}/MagePanel-v${VERSION}.pkg
 
-# Taking back the ownership after process is done
-#echo -e "\n\t--> Taking back ownership for user: ${INSTALL_USER}..\n"
-#sudo chown -R ${INSTALL_USER}:staff ../../.
+# Clean TEMP folder
+echo -e "\n\t--> Cleaning temp folder..\n"
+rm -rf ${TEMP_DIR}
 
 # Tail GUI installer
+echo -e "\n\t--> Press any key to continue script.."
+read toContinue
 echo -e "\n\t--> Tailing Mac Installer log..\n"
 tail -f /var/log/install.log

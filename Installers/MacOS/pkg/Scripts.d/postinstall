@@ -1,26 +1,32 @@
 #!/bin/bash
 
-# Adjust file ownerships
-echo "Changing ownership for source folders.."
-chown -R root:staff /opt/MagePanel
-chmod +x /opt/MagePanel/init-server.sh || true
+# Variables
+#if [[ ${SUDO_USER}  == '' ]]; then
+#        INSTALL_USER=`whoami`
+#else
+#        INSTALL_USER=${SUDO_USER}
+#fi
+INSTALL_USER=`ls -l /dev/console | awk ' /dev/ {print $3}'`
+PLIST_FILE=/Library/LaunchDaemons/com.erincinci.magepanel.plist
+SOURCE_PATH=/opt/MagePanel
+
+# Create folders & Adjust file/folder ownerships
+echo "Creating & Changing ownership for source folders.."
+mkdir -p ${SOURCE_PATH}/logs || true
+mkdir /opt/logs || true
+mkdir -p ${SOURCE_PATH}/dbs || true
+chmod +x ${SOURCE_PATH}/init-server-mac.sh
+chown -R ${INSTALL_USER}:staff ${SOURCE_PATH}
+chown -R ${INSTALL_USER}:staff /opt/logs
+chown root:wheel ${PLIST_FILE}
 
 # Get npm modules for project
-echo "Download project's npm modules.."
-mkdir -p /opt/MagePanel/logs || true
-mkdir -p /opt/MagePanel/dbs || true
-cd /opt/MagePanel
-/usr/local/bin/npm install
+#echo "Download project's npm modules.."
+#cd /opt/MagePanel
+#/usr/local/bin/npm install
 
 # Unload & Load Daemon
-echo "Unload & Load daemon.."
-launchctl unload -w /Library/LaunchDaemons/com.erincinci.magepanel.plist || true
-launchctl load -w /Library/LaunchDaemons/com.erincinci.magepanel.plist
-
-#launchctl submit \
-#  -l com.erincinci.magepanel \
-#  -o /var/log/magepanel.info.log \
-#  -e /var/log/magepanel.err.log \
-#  -- \
-#  /usr/local/bin/node \
-#  /opt/MagePanel/app.js
+echo "Adjust daemon to user(${INSTALL_USER}) - Unload & Load daemon.."
+sed -i '' s/root/${INSTALL_USER}/g ${PLIST_FILE}
+launchctl unload -w ${PLIST_FILE} || true
+launchctl load -w ${PLIST_FILE}
