@@ -8,7 +8,7 @@
 # Description:       UI for Magallanes Deployment Tool
 ### END INIT INFO
  
-SCRIPT="sh /opt/magepanel/init-server.sh"
+SCRIPT="su root -c \"bash -c 'cd /opt/magepanel; sh init-server.sh'\""
 RUNAS=`ls -l /dev/console | awk ' /dev/ {print $3}'`
  
 PIDFILE=/var/run/magepanel.pid
