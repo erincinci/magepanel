@@ -5,11 +5,13 @@
 set -u
 set -e
 
+INSTALL_USER=`logname`
 SRC=/tmp/magepanel-deb-src
 DIST=/tmp/magepanel-deb-dist
 SYSROOT=${SRC}/sysroot
 DEBIAN=${SRC}/DEBIAN
 
+find . -type f -name '*~' -exec rm -f '{}' \;
 rm -rf ${DIST}
 mkdir -p ${DIST}/
 
@@ -42,3 +44,4 @@ chown -R root:root ${DIST}/
 ar r ${DIST}/magepanel-v1.deb debian-binary control.tar.gz data.tar.gz
 popd
 rsync -a ${DIST}/magepanel-v1.deb ./
+chown ${INSTALL_USER}:${INSTALL_USER} magepanel-v1.deb
