@@ -14,6 +14,7 @@ Common = {
     uuid: require('node-uuid'),
     path: require('path'),
     _: require('underscore'),
+    mailUtils: require('./util/mailUtils'),
     dbUtils: require('./util/dbUtils'),
     stringUtils: require('./util/stringUtils'),
     settings: require('user-settings').file(appConfig.setup.file),

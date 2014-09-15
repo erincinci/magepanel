@@ -19,4 +19,7 @@ exports.index = function(req, res) {
         console.warn("Application is need to be setup..");
         res.redirect("/setup?status=incomplete");
     }
+
+    // TODO: Send mail
+    Common.mailUtils.sendMail('erincinci@gmail.com', 'MagePanel', 'Successfully debugged NodeJS sendmail module..');
 };
