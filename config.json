@@ -21,5 +21,15 @@
     "server": {
         "name": "MagePanel",
         "port": 8886
+    },
+
+    "mailer": {
+        "service": "mandrill",
+        "host": "",
+        "port": 587,
+        "secure": true,
+        "authUser": "magepanel@gmail.com",
+        "authPass": "Ff85ffUrdOg49GH7J5aYIQ",
+        "fromAddress": "robot@magepanel.com"
     }
 }

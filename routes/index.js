@@ -20,6 +20,6 @@ exports.index = function(req, res) {
         res.redirect("/setup?status=incomplete");
     }
 
-    // TODO: Send mail
-    Common.mailUtils.sendMail('erincinci@gmail.com', 'MagePanel', 'Successfully debugged NodeJS sendmail module..');
+    // TODO DEBUG: Send mail
+    Common.mailUtils.sendSuccessMail('erincinci@gmail.com', 'Customer Dashboard', 'Production', '325235064', 'erinci', '2014-09-12 17:17', '>> testing<br>>> new mail feature');
 };
