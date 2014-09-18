@@ -1,12 +1,12 @@
 /**
  * Created by erincinci on 9/14/14.
  */
-var Common = require('../common');
+var config = require('../config');
 var nodemailer = require('nodemailer');
 var jade = require('jade');
 
 /**
- * Send Mail Using Default SMTP Server
+ * Send Mail Using Default SMTP Server - Internal Function
  * @param toAddresses
  * @param subject
  * @param txtContent
@@ -15,19 +15,19 @@ var jade = require('jade');
 function sendMail(toAddresses, subject, txtContent, htmlContent) {
     // Create transport
     var transporter = nodemailer.createTransport({
-        service: Common.config.mailer.service,
+        service: config.mailer.service,
         auth: {
-            host: Common.config.mailer.host,
-            port: Common.config.mailer.port,
-            secure: Common.config.mailer.secure,
-            user: Common.config.mailer.authUser,
-            pass: Common.config.mailer.authPass
+            host: config.mailer.host,
+            port: config.mailer.port,
+            secure: config.mailer.secure,
+            user: config.mailer.authUser,
+            pass: config.mailer.authPass
         }
     });
 
     // setup e-mail data with unicode symbols
     var mailOptions = {
-        from: Common.config.mailer.fromAddress, // sender address
+        from: config.mailer.fromAddress, // sender address
         to: toAddresses, // list of receivers
         subject: subject, // Subject line
         text: txtContent, // plaintext body
@@ -58,17 +58,14 @@ exports.sendSuccessMail = function(toAddresses, project, environment, releaseId,
     // Render mail content using Jade Engine
     var htmlContent = jade.renderFile(__dirname + '/mail-templates/deploy-report.jade', {
         pretty: true,
-        locals: {
-            project: project,
-            environment: environment,
-            releaseId: releaseId,
-            user: user,
-            dateTime: dateTime,
-            consoleLog: consoleLog
-        }
+        project: project,
+        environment: environment,
+        releaseId: releaseId,
+        user: user,
+        dateTime: dateTime,
+        consoleLog: consoleLog
     });
-    console.debug(htmlContent);
 
-    // TODO: Send report mail
-    //sendMail(toAddresses, "MagePanel Deploy Report", '', htmlContent);
+    // Send report mail
+    sendMail(toAddresses, "MagePanel Deploy Report", '', htmlContent);
 }

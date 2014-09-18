@@ -123,21 +123,55 @@ exports.command = function(req) {
             spawn = require('child_process').spawn;
 
         // Spawn command
-        if (Common.os == 'win32')
+        if (Common.os == 'win32') {
             var mageCmd = spawn('cmd', ['/c', mageCommand]);
-        else
+        } else {
             var mageCmd = spawn('bash', []);
+        }
 
         // Get realtime output
+        var consoleOutput = '';
         mageCmd.stdout.on('data', function (data) {
             console.debug(data.toString());
+            consoleOutput += ansiTrim(data.toString());
             req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stdout' });
         });
         mageCmd.stderr.on('data', function (data) {
             console.error(data.toString());
             req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stderr' });
         });
+
+        // On process exit
         mageCmd.on('exit', function (code) {
+            // TODO: If project report mailing is ON and e-mail address is valid
+            //if(project.reportingEnabled && project.email != '') {
+                // If command is DEPLOY and is SUCCESS, send report mail
+                if (Common.S(req.data.cmd).include('deploy') && code == 0) {
+                    // Parse project info from console output
+                    var releaseId = Common.S(consoleOutput.match(/Release ID: *.*/g)).replaceAll('Release ID: ', '').s;
+                    var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
+
+                    /*console.debug("Mage command was: " + req.data.cmd + " | Includes deploy?: " + Common.S(req.data.cmd).include('deploy'));
+                    console.debug("Process exit code: " + code);
+                    console.debug("Parsed project info; releaseId: " + releaseId + " | Environment: " + environment);*/
+
+                    // TODO: Get mail parameters from project
+                    /*Common.mailUtils.sendSuccessMail(
+                        project.email
+                        project.name,
+                        environment,
+                        releaseId,
+                        Common.username + ' (' + Common.os + ')',
+                        new Date().toLocaleString(),
+                        consoleOutput
+                    );*/
+                }
+            /*} else {
+                // If project email is empty, show warning to user
+                req.io.emit('cmdResponse', { result: "Project's e-mail address is blank, please specify e-mail for automatic report mailing..", status: 'error' });
+            }*/
+
+            // Emit exit code to frontend
             console.log('Mage command exited with code ' + code);
             req.io.emit('cmdResponse', { result: code, status: 'exit' });
         });

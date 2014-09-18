@@ -19,7 +19,4 @@ exports.index = function(req, res) {
         console.warn("Application is need to be setup..");
         res.redirect("/setup?status=incomplete");
     }
-
-    // TODO DEBUG: Send mail
-    Common.mailUtils.sendSuccessMail('erincinci@gmail.com', 'Customer Dashboard', 'Production', '325235064', 'erinci', '2014-09-12 17:17', '>> testing<br>>> new mail feature');
 };

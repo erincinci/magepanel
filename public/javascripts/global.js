@@ -394,6 +394,10 @@ function appendToConsole(cmd) {
                 case "stderr":
                     // TODO: Show error in MageConsole in different style
                     break;
+                case "warning":
+                    // Show warning toast to user
+                    toastr.warning(data.result, 'MagePanel Console');
+                    break;
                 case "exit":
                     hideAjaxLoader();
                     break;
