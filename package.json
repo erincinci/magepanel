@@ -46,7 +46,9 @@
     "stylus": "*",
     "underscore": "~1.6.0",
     "user-settings": "*",
-    "username": "0.1.1"
+    "username": "0.1.1",
+    "ip": "~0.3.1",
+    "validator": "~3.18.1"
   },
   "devDependencies": {
     "colors.css": "1.0.0"

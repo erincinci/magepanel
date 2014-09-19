@@ -143,33 +143,44 @@ exports.command = function(req) {
 
         // On process exit
         mageCmd.on('exit', function (code) {
-            // TODO: If project report mailing is ON and e-mail address is valid
-            //if(project.reportingEnabled && project.email != '') {
-                // If command is DEPLOY and is SUCCESS, send report mail
-                if (Common.S(req.data.cmd).include('deploy') && code == 0) {
-                    // Parse project info from console output
-                    var releaseId = Common.S(consoleOutput.match(/Release ID: *.*/g)).replaceAll('Release ID: ', '').s;
-                    var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
+            // If command is DEPLOY
+            if (Common.S(req.data.cmd).include('deploy')) {
+                console.debug("Mage command was DEPLOY");
 
-                    /*console.debug("Mage command was: " + req.data.cmd + " | Includes deploy?: " + Common.S(req.data.cmd).include('deploy'));
-                    console.debug("Process exit code: " + code);
-                    console.debug("Parsed project info; releaseId: " + releaseId + " | Environment: " + environment);*/
+                // If deploy command is SUCCESS
+                if (code == 0) {
+                    console.debug("Deploy command was SUCCESS");
 
-                    // TODO: Get mail parameters from project
-                    /*Common.mailUtils.sendSuccessMail(
-                        project.email
-                        project.name,
-                        environment,
-                        releaseId,
-                        Common.username + ' (' + Common.os + ')',
-                        new Date().toLocaleString(),
-                        consoleOutput
-                    );*/
+                    // If auto-reporting is ENABLED
+                    if(project.reportingEnabled == true) {
+                        console.debug("Project Auto-Reporting is ENABLED");
+
+                        // If e-mail address is VALID
+                        if (Common.validator.isEmail(project.mailAddress)) {
+                            console.debug("E-Mail address is valid, sending report mail..");
+
+                            // Parse project info from console output
+                            var releaseId = Common.S(consoleOutput.match(/Release ID: *.*/g)).replaceAll('Release ID: ', '').s;
+                            var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
+
+                            // Get mail parameters from project
+                            Common.mailUtils.sendSuccessMail(
+                                project.mailAddress,
+                                project.name,
+                                environment,
+                                releaseId,
+                                Common.username + ' (OS: ' + Common.os + ', IP: ' + Common.ip.address() + ')',
+                                new Date().toLocaleString(),
+                                consoleOutput
+                            );
+                        } else {
+                            // E-mail address is not valid, show warning..
+                            console.warn("Project's e-mail address is invalid!");
+                            req.io.emit('cmdResponse', { result: "Failed sending report mail, project's e-mail address is invalid..", status: 'warning' });
+                        }
+                    }
                 }
-            /*} else {
-                // If project email is empty, show warning to user
-                req.io.emit('cmdResponse', { result: "Project's e-mail address is blank, please specify e-mail for automatic report mailing..", status: 'error' });
-            }*/
+            }
 
             // Emit exit code to frontend
             console.log('Mage command exited with code ' + code);
