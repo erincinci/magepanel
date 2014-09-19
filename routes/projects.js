@@ -55,6 +55,11 @@ exports.add = function(req, res) {
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
+    project.mailAddress(data['projectMail']);
+    if (data['projectReportingEnabled'] == 'on')
+        project.reportingEnabled(true);
+    else
+        project.reportingEnabled(false);
 
     // TODO: Check if projects already exists in DB
     /*Common.projectsDB.find({dir: project.dir()}, function(err, result) {
@@ -117,6 +122,8 @@ exports.refresh = function(req, res) {
             refreshedProject.name(project.name);
             refreshedProject.envs(getProjectEnvs(project.dir));
             refreshedProject.tasks(getProjectTasks(project.dir));
+            refreshedProject.mailAddress(project.mailAddress);
+            refreshedProject.reportingEnabled(project.reportingEnabled);
 
             // Refresh project at DB
             Common.projectsDB.save(selectedId, refreshedProject, function(err) {
@@ -268,6 +275,8 @@ exports.detail = function(req, res) {
             var details =
                 "<i class='icon ion-android-information' /> <b>Name: </b>" + project.name +
                 "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
+                "<br><i class='icon ion-android-mail' /> <b>Reporting E-Mail: </b>" + project.mailAddress +
+                "<br><i class='icon ion-speakerphone' /> <b>Automatic Reporting: </b>" + Common.S(project.reportingEnabled).toUpperCase().s +
                 "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
                     + " <a href='#' data-toggle='modal' data-target='#addProjectEnvModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
                     + Common.stringUtils.envArrayToList(project.envs, project.dir) +

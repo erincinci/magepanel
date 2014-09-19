@@ -123,21 +123,66 @@ exports.command = function(req) {
             spawn = require('child_process').spawn;
 
         // Spawn command
-        if (Common.os == 'win32')
+        if (Common.os == 'win32') {
             var mageCmd = spawn('cmd', ['/c', mageCommand]);
-        else
+        } else {
             var mageCmd = spawn('bash', []);
+        }
 
         // Get realtime output
+        var consoleOutput = '';
         mageCmd.stdout.on('data', function (data) {
             console.debug(data.toString());
+            consoleOutput += ansiTrim(data.toString());
             req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stdout' });
         });
         mageCmd.stderr.on('data', function (data) {
             console.error(data.toString());
             req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stderr' });
         });
+
+        // On process exit
         mageCmd.on('exit', function (code) {
+            // If command is DEPLOY
+            if (Common.S(req.data.cmd).include('deploy')) {
+                console.debug("Mage command was DEPLOY");
+
+                // If deploy command is SUCCESS
+                if (code == 0) {
+                    console.debug("Deploy command was SUCCESS");
+
+                    // If auto-reporting is ENABLED
+                    if(project.reportingEnabled == true) {
+                        console.debug("Project Auto-Reporting is ENABLED");
+
+                        // If e-mail address is VALID
+                        if (Common.validator.isEmail(project.mailAddress)) {
+                            console.debug("E-Mail address is valid, sending report mail..");
+
+                            // Parse project info from console output
+                            var releaseId = Common.S(consoleOutput.match(/Release ID: *.*/g)).replaceAll('Release ID: ', '').s;
+                            var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
+
+                            // Get mail parameters from project
+                            Common.mailUtils.sendSuccessMail(
+                                project.mailAddress,
+                                project.name,
+                                environment,
+                                releaseId,
+                                Common.username + ' (OS: ' + Common.os + ', IP: ' + Common.ip.address() + ')',
+                                new Date().toLocaleString(),
+                                consoleOutput
+                            );
+                        } else {
+                            // E-mail address is not valid, show warning..
+                            console.warn("Project's e-mail address is invalid!");
+                            req.io.emit('cmdResponse', { result: "Failed sending report mail, project's e-mail address is invalid..", status: 'warning' });
+                        }
+                    }
+                }
+            }
+
+            // Emit exit code to frontend
             console.log('Mage command exited with code ' + code);
             req.io.emit('cmdResponse', { result: code, status: 'exit' });
         });

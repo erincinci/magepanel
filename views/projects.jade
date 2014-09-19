@@ -80,7 +80,12 @@ block content
                         p.input-group
                             span.input-group-addon
                                 i.icon.ion-android-mail
-                            input.form-control#projectInitMail(name='projectMail', type='text', placeholder='Enter e-mail')
+                            input.form-control#projectInitMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-speakerphone
+                            input.form-control#reportingLabel(name='reportingLabel', type='text', placeholder='Automatic Reporting Enabled?', disabled='true')
+                        input.form-control#projectInitReportingSwitch(name='projectReportingEnabled', type='checkbox', checked)
                     .modal-footer
                         button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
                         button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Initialize
@@ -107,6 +112,15 @@ block content
                             span.input-group-addon
                                 i.icon.ion-android-information
                             input.form-control#projectName(name='projectName', type='text', placeholder='Enter project name')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-android-mail
+                            input.form-control#projectMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-speakerphone
+                            input.form-control#reportingLabel(name='reportingLabel', type='text', placeholder='Automatic Reporting Enabled?', disabled='true')
+                        input.form-control#projectReportingSwitch(name='projectReportingEnabled', type='checkbox', checked)
                     .modal-footer
                         button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
                         button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save

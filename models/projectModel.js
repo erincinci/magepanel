@@ -9,12 +9,16 @@ module.exports = ProjectModel = model("Project")
     .attr('id')
     .attr('name')
     .attr('dir')
+    .attr('mailAddress')
+    .attr('reportingEnabled')
     .attr('envs')
     .attr('tasks');
 
 // Initialize object attributes
 ProjectModel.init = function(instance) {
     instance.name("Default Project");
+    instance.mailAddress("");
+    instance.reportingEnabled(true);
 };
 
 // Object to string
@@ -22,6 +26,8 @@ exports.toString = toString = function(project) {
     var str = "<b>Name: </b>" + project.name +
         "<br><b>Dir: </b>" + project.dir +
         "<br><b>Environments: </b>" + project.envs +
-        "<br><b>Custom Tasks: </b>" + project.tasks;
+        "<br><b>Custom Tasks: </b>" + project.tasks +
+        "<br><b>E-Mail: </b>" + project.mailAddress +
+        "<br><b>Reporting Enabled?: </b>" + project.reportingEnabled;
     return str;
 };
