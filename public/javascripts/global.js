@@ -110,6 +110,16 @@ $(document).ready(function() {
     });
 
     /**
+     * Submit edit project form
+     */
+    $('#addProjectForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+
+        // TODO: Submit edit project form to backend
+    });
+
+    /**
      * Submit init project form
      */
     $('#initProjectForm').submit(function(event) {
@@ -208,6 +218,7 @@ $(document).ready(function() {
         var previous = $(this).closest(".list-group").children(".active");
         previous.removeClass('active'); // previous list-item
         $(e.target).addClass('active'); // activated list-item
+        $("#editProjectBtn").prop('disabled',false);
         $("#delProjectBtn").prop('disabled',false);
         $("#refreshProjectBtn").prop('disabled',false);
         // jQuery AJAX call for project detail
@@ -298,6 +309,7 @@ $('#delProjectBtn').on('click', function() {
             } else {
                 $('#projectsList').load(document.URL +  ' #projectsList');
                 $('#projectDetail').html("Select a project..");
+                $("#editProjectBtn").prop('disabled',true);
                 $("#delProjectBtn").prop('disabled',true);
                 $("#refreshProjectBtn").prop('disabled',true);
                 toastr.success(result["message"], 'MagePanel Projects');
@@ -614,6 +626,7 @@ function addProjectToDB(formData) {
             $('#addProjectModal').modal('hide');
             $('#projectListContainer').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
+            $("#editProjectBtn").prop('disabled',true);
             $("#delProjectBtn").prop('disabled',true);
             $("#refreshProjectBtn").prop('disabled',true);
             toastr.success(result["message"], 'MagePanel Projects');

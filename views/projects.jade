@@ -6,7 +6,7 @@ block content
 
     // Buttons
     p
-        button.btn.btn-default.btn-info.icon.ion-android-add(
+        button.btn.btn-default.btn-primary.icon.ion-android-add(
                 rel='tooltip',
                 data-original-title='Add project',
                 data-toggle='modal',
@@ -20,6 +20,15 @@ block content
                 data-target='#initProjectModal',
                 type='button',
                 style='margin-right:10px')
+        | |&nbsp;
+        button#editProjectBtn.btn.btn-default.btn-info.icon.ion-edit(
+                rel='tooltip',
+                data-original-title='Edit project',
+                data-toggle='modal',
+                data-target='#editProjectModal',
+                type='button',
+                style='margin-right:10px',
+                disabled)
         button#delProjectBtn.btn.btn-default.btn-danger.icon.ion-android-remove(
                 rel='tooltip',
                 data-original-title='Remove project',
@@ -124,6 +133,39 @@ block content
                     .modal-footer
                         button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
                         button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save
+
+    // Edit Project Modal
+    #editProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+        .modal-dialog
+            .modal-content
+                form#editProjectForm(method='POST', action='/projects/edit')
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') ×
+                            span.sr-only Close
+                        h4#modalLabel.modal-title Edit Project
+                    .modal-body
+                        // Add project form contents
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-folder
+                            input.form-control#projectDir(name='projectDir', type='text', placeholder='Enter project directory')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-android-information
+                            input.form-control#projectName(name='projectName', type='text', placeholder='Enter project name')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-android-mail
+                            input.form-control#projectMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
+                        p.input-group
+                            span.input-group-addon
+                                i.icon.ion-speakerphone
+                            input.form-control#reportingLabel(name='reportingLabel', type='text', placeholder='Automatic Reporting Enabled?', disabled='true')
+                        input.form-control#projectReportingSwitch(name='projectReportingEnabled', type='checkbox', checked)
+                    .modal-footer
+                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Discard
+                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Update
 
     // Add Project Env Modal
     #addProjectEnvModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')

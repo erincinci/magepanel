@@ -80,6 +80,7 @@ app.post('/projects/add', projects.add); // Add new project
 app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project environment file
 app.post('/projects/addTaskFile', projects.addTaskFile); // Add new project task file
 app.post('/projects/refresh', projects.refresh); // Refresh project
+app.post('/projects/edit', projects.edit); // Edit project
 app.post('/projects/delete', projects.delete); // Delete projects
 app.post('/projects/deleteFile', projects.deleteFile); // Delete project file
 app.post('/projects/saveFile', projects.saveFile); // Save project file
