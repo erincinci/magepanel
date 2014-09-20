@@ -76,6 +76,7 @@ app.post('/setup/save', setup.save); // Setup save
 
 // Mage Projects
 app.get('/projects', projects.index); // Projects page
+app.get('/projects/get', projects.getProject); // Get project from DB with ID
 app.post('/projects/add', projects.add); // Add new project
 app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project environment file
 app.post('/projects/addTaskFile', projects.addTaskFile); // Add new project task file

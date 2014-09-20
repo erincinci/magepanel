@@ -110,6 +110,28 @@ $(document).ready(function() {
     });
 
     /**
+     * Submit edit project form
+     */
+    $('#editProjectForm').submit(function(event) {
+        event.preventDefault();
+        var formData = $(this).serialize();
+        var projectId = $('.list-group-item.active')[0].id;
+
+        // First delete old project
+        $.post( '/projects/delete?id=' + projectId, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                // No error deleting, then add edited project as new
+                addProjectToDB(formData);
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    });
+
+    /**
      * Submit init project form
      */
     $('#initProjectForm').submit(function(event) {
@@ -208,6 +230,7 @@ $(document).ready(function() {
         var previous = $(this).closest(".list-group").children(".active");
         previous.removeClass('active'); // previous list-item
         $(e.target).addClass('active'); // activated list-item
+        $("#editProjectBtn").prop('disabled',false);
         $("#delProjectBtn").prop('disabled',false);
         $("#refreshProjectBtn").prop('disabled',false);
         // jQuery AJAX call for project detail
@@ -249,6 +272,31 @@ $('#editFileModal').on('shown.bs.modal', function () {
     codeMirror.setSize('100%', '100%');
     codeMirror.refresh();
     codeMirror.focus();
+});
+$('#editProjectModal').on('shown.bs.modal', function () {
+    // Fill edit form with project data on modalShown
+    var selectedItem = $('.list-group-item.active')[0];
+
+    if (selectedItem != null) {
+        $.get( '/projects/get?id=' + selectedItem.id, function(project) {
+            if (project != 'null') {
+                $('#projectEditId').val(project.id);
+                $('#projectEditDir').val(project.dir);
+                $('#projectEditName').val(project.name);
+                $('#projectEditMail').val(project.mailAddress);
+                var reportingEnabled = (project.reportingEnabled ? "On" : "Off");
+                $('#projectEditReportingSwitch').val(reportingEnabled);
+                $('#projectEditReportingSwitch').selectpicker('refresh');
+            } else {
+                toastr.error('There was a problem getting project details', 'MagePanel Projects');
+                $('#editProjectModal').modal('hide');
+            }
+        });
+    } else {
+        // Selected project ID is invalid
+        toastr.error('There was a problem getting project details', 'MagePanel Projects');
+        $('#editProjectModal').modal('hide');
+    }
 });
 $('#viewFileModal').on('shown.bs.modal', function () {
     // Adjust ViewFile Modal Size
@@ -298,6 +346,7 @@ $('#delProjectBtn').on('click', function() {
             } else {
                 $('#projectsList').load(document.URL +  ' #projectsList');
                 $('#projectDetail').html("Select a project..");
+                $("#editProjectBtn").prop('disabled',true);
                 $("#delProjectBtn").prop('disabled',true);
                 $("#refreshProjectBtn").prop('disabled',true);
                 toastr.success(result["message"], 'MagePanel Projects');
@@ -611,9 +660,10 @@ function addProjectToDB(formData) {
         if(result["warn"]) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
-            $('#addProjectModal').modal('hide');
+            $('.modal').modal('hide');
             $('#projectListContainer').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
+            $("#editProjectBtn").prop('disabled',true);
             $("#delProjectBtn").prop('disabled',true);
             $("#refreshProjectBtn").prop('disabled',true);
             toastr.success(result["message"], 'MagePanel Projects');
