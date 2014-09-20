@@ -88,7 +88,7 @@ exports.add = function(req, res) {
             return;
         }
 
-        res.send({"warn": false, "message": "Project successfully added"});
+        res.send({"warn": false, "message": "Project successfully added/changed"});
     });
 };
 
@@ -307,12 +307,30 @@ exports.saveFile = function(req, res) {
 };
 
 /**
- * Edit project
+ * Get Project from DB with ID
  * @param req
  * @param res
  */
-exports.edit = function(req, res) {
-    // TODO: Implement project edit functionality
+exports.getProject = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send('null');
+        return;
+    } else {
+        // Get project from DB
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(err);
+                res.send("There was an error getting project with ID: " + req.query.id);
+                return;
+            }
+
+            // Clean result object & send
+            project = Common.dbUtils.cleanResult(project);
+            res.json(project);
+        });
+    }
 }
 
 /**

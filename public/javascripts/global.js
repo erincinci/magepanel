@@ -112,11 +112,23 @@ $(document).ready(function() {
     /**
      * Submit edit project form
      */
-    $('#addProjectForm').submit(function(event) {
+    $('#editProjectForm').submit(function(event) {
         event.preventDefault();
         var formData = $(this).serialize();
+        var projectId = $('.list-group-item.active')[0].id;
 
-        // TODO: Submit edit project form to backend
+        // First delete old project
+        $.post( '/projects/delete?id=' + projectId, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                // No error deleting, then add edited project as new
+                addProjectToDB(formData);
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
     });
 
     /**
@@ -260,6 +272,29 @@ $('#editFileModal').on('shown.bs.modal', function () {
     codeMirror.setSize('100%', '100%');
     codeMirror.refresh();
     codeMirror.focus();
+});
+$('#editProjectModal').on('shown.bs.modal', function () {
+    // Fill edit form with project data on modalShown
+    var selectedItem = $('.list-group-item.active')[0];
+
+    if (selectedItem != null) {
+        $.get( '/projects/get?id=' + selectedItem.id, function(project) {
+            if (project != 'null') {
+                $('#projectEditId').val(project.id);
+                $('#projectEditDir').val(project.dir);
+                $('#projectEditName').val(project.name);
+                $('#projectEditMail').val(project.mailAddress);
+                $('#projectReportingEnabled').prop('checked', project.reportingEnabled); // TODO: Not working!
+            } else {
+                toastr.error('There was a problem getting project details', 'MagePanel Projects');
+                $('#editProjectModal').modal('hide');
+            }
+        });
+    } else {
+        // Selected project ID is invalid
+        toastr.error('There was a problem getting project details', 'MagePanel Projects');
+        $('#editProjectModal').modal('hide');
+    }
 });
 $('#viewFileModal').on('shown.bs.modal', function () {
     // Adjust ViewFile Modal Size
@@ -623,7 +658,7 @@ function addProjectToDB(formData) {
         if(result["warn"]) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
-            $('#addProjectModal').modal('hide');
+            $('.modal').modal('hide');
             $('#projectListContainer').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
             $("#editProjectBtn").prop('disabled',true);
