@@ -56,7 +56,7 @@ exports.add = function(req, res) {
     project.dir(Common.path.resolve(data['projectDir']));
     project.name(data['projectName']);
     project.mailAddress(data['projectMail']);
-    if (data['projectReportingEnabled'] == 'on')
+    if (data['projectReportingEnabled'] == 'On')
         project.reportingEnabled(true);
     else
         project.reportingEnabled(false);
@@ -270,13 +270,17 @@ exports.detail = function(req, res) {
             project = Common.dbUtils.cleanResult(project);
             var projectEnvSize = Common._.size(project.envs);
             var projectTaskSize = Common._.size(project.tasks);
+            if (project.reportingEnabled)
+                var reportingStatus = "<i class='icon ion-checkmark'>";
+            else
+                var reportingStatus = "<i class='icon ion-close'>";
 
             //var details = project.toString();
             var details =
                 "<i class='icon ion-android-information' /> <b>Name: </b>" + project.name +
                 "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
                 "<br><i class='icon ion-android-mail' /> <b>Reporting E-Mail: </b>" + project.mailAddress +
-                "<br><i class='icon ion-speakerphone' /> <b>Automatic Reporting: </b>" + Common.S(project.reportingEnabled).toUpperCase().s +
+                "<br><i class='icon ion-speakerphone' /> <b>Automatic Reporting: </b>" + reportingStatus +
                 "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
                     + " <a href='#' data-toggle='modal' data-target='#addProjectEnvModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
                     + Common.stringUtils.envArrayToList(project.envs, project.dir) +

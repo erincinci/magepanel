@@ -284,7 +284,9 @@ $('#editProjectModal').on('shown.bs.modal', function () {
                 $('#projectEditDir').val(project.dir);
                 $('#projectEditName').val(project.name);
                 $('#projectEditMail').val(project.mailAddress);
-                $('#projectReportingEnabled').prop('checked', project.reportingEnabled); // TODO: Not working!
+                var reportingEnabled = (project.reportingEnabled ? "On" : "Off");
+                $('#projectEditReportingSwitch').val(reportingEnabled);
+                $('#projectEditReportingSwitch').selectpicker('refresh');
             } else {
                 toastr.error('There was a problem getting project details', 'MagePanel Projects');
                 $('#editProjectModal').modal('hide');
