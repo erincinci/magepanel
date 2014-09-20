@@ -17,7 +17,7 @@
     "url": "https://github.com/erincinci/magepanel.git"
   },
   "main": "app.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "start": "node app.js",
     "install-windows-service": "winser -i",
