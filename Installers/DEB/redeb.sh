@@ -41,7 +41,7 @@ echo 2.0 > ./debian-binary
 find ${DIST}/ -type d -exec chmod 0755 {} \;
 find ${DIST}/ -type f -exec chmod go-w {} \;
 chown -R root:root ${DIST}/
-ar r ${DIST}/magepanel-v1.deb debian-binary control.tar.gz data.tar.gz
+ar r ${DIST}/magepanel-v1.1.deb debian-binary control.tar.gz data.tar.gz
 popd
-rsync -a ${DIST}/magepanel-v1.deb ./
-chown ${INSTALL_USER}:${INSTALL_USER} magepanel-v1.deb
+rsync -a ${DIST}/magepanel-v1.1.deb ./
+chown ${INSTALL_USER}:${INSTALL_USER} magepanel-v1.1.deb
