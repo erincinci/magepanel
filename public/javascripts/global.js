@@ -5,7 +5,8 @@
 var codeMirror = null;
 var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
-var socket = null;
+var logSocket = null;
+var consoleSocket = null;
 
 // DOM Ready =============================================================
 $(window).load(function() {
@@ -43,6 +44,32 @@ $(document).ready(function() {
     /**
      * Console Button click events
      */
+    $("#tailLatestLog").click(function() {
+        // Check if any project is selected
+        var selectedId = $('#activeProject').val();
+        if (selectedId == 'null') {
+            toastr.warning("Please select an active project first", 'MagePanel Console');
+            $('#viewFileModal').modal('hide');
+            return;
+        }
+
+        // Find latest log file and tail it
+        if (selectedId != null) {
+            $.get( '/mageLogs/projectLatestLog?id=' + selectedId, function(logJson) {
+                if (logJson != 'null') {
+                    // TODO: Fix mixing of tail log and tail console sockets
+                    tailLogFile(logJson.logFile, logJson.logDate, logJson.logTime);
+                } else {
+                    toastr.error('There was a problem getting latest log file', 'MagePanel Logs');
+                    $('#viewFileModal').modal('hide');
+                }
+            });
+        } else {
+            // Selected project ID is invalid
+            toastr.error('There was a problem getting latest log file', 'MagePanel Logs');
+            $('#viewFileModal').modal('hide');
+        }
+    });
     $("#clearConsole").click(function() {
         $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i><br>");
     });
@@ -305,7 +332,7 @@ $('#viewFileModal').on('shown.bs.modal', function () {
 });
 $('#viewFileModal').on('hidden.bs.modal', function () {
     // End file tail command on modal hidden
-    socket.emit('exitTail', {});
+    logSocket.emit('exitTail', {});
 });
 $('#addProjectEnvModal').on('shown.bs.modal', function () {
     $('#projectIdEnv').val($('.list-group-item.active')[0].id);
@@ -424,16 +451,16 @@ function appendToConsole(cmd) {
     }
 
     // Use Socket.IO for getting live command response
-    socket = io.connect();
-    socket.emit('mageCommand', { cmd: cmd, id: selectedItem });
+    consoleSocket = io.connect();
+    consoleSocket.emit('mageCommand', { cmd: cmd, id: selectedItem });
     showAjaxLoader();
 
     // Get live response
     var mageConsole = $('#console');
     var mageConsoleFrame = $('#consoleFrame');
-    socket.on('connect', function () {
+    consoleSocket.on('connect', function () {
         //console.log('Connected to backend!');
-        socket.on('cmdResponse', function(data) {
+        consoleSocket.on('cmdResponse', function(data) {
             switch(data.status) {
                 case "stdout":
                     // Append results to console tag
@@ -606,12 +633,12 @@ function tailLogFile(orgFile, logDate, logTime) {
     showAjaxLoader();
 
     // Use Socket.IO for tailing log file
-    socket = io.connect();
-    socket.emit('tailLog', { file: orgFile, tailStatus: 'running' });
+    logSocket = io.connect();
+    logSocket.emit('tailLog', { file: orgFile, tailStatus: 'running' });
 
     // Get tail data from socket
-    socket.on('connect', function () {
-        socket.on('logTailContent', function(data) {
+    logSocket.on('connect', function () {
+        logSocket.on('logTailContent', function(data) {
             hideAjaxLoader();
 
             // Update data or show toast according to data status
@@ -640,12 +667,12 @@ function tailLogFile(orgFile, logDate, logTime) {
  * Pause & Resume Tail file buttons onClick Events
  */
 $("#pauseTailFileBtn").click(function() {
-    socket.emit('pauseTail', {});
+    logSocket.emit('pauseTail', {});
     $('#pauseTailFileBtn').hide();
     $('#resumeTailFileBtn').show();
 });
 $("#resumeTailFileBtn").click(function() {
-    socket.emit('resumeTail', {});
+    logSocket.emit('resumeTail', {});
     $('#pauseTailFileBtn').show();
     $('#resumeTailFileBtn').hide();
 });

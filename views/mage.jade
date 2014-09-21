@@ -26,6 +26,7 @@ block content
                         select#activeEnvironment.selectpicker(name='activeEnvironment', data-width='auto',onchange='activateCommandButtons()', disabled)
                             option(value='null', selected) Select Environment
                 td
+                    button#tailLatestLog.btn.btn-default.btn-success(type='button', style='margin-right:10px', data-toggle='modal' data-target='#viewFileModal') Latest Log
                     button#clearConsole.btn.btn-default.btn-warning(type='button', style='margin-right:10px') Clear
                     button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
                     button#mageReleases.btn.btn-default.btn-info(type='button',style='margin-right:10px',disabled) Releases List
@@ -35,3 +36,7 @@ block content
         p#console!= content
     .spacer
         br
+
+    // -------------
+    // Modal Windows
+    include modals/tailLogFile

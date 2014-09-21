@@ -27,21 +27,4 @@ block content
 
     // -------------
     // Modal Windows
-
-    // View File Modal
-    #viewFileModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
-        .modal-dialog
-            .modal-content
-                form#viewFileForm(method='POST')
-                    .modal-header
-                        button.close(type='button', data-dismiss='modal')
-                            span(aria-hidden='true') ×
-                            span.sr-only Close
-                        h4#viewFileModalLabel.modal-title Tail Log File
-                    .modal-body
-                        // Code viewer
-                        pre#logView.prettyprint.linenums(style='max-height: 100%, overflow: auto;')
-                    .modal-footer
-                        button.btn.btn-warning.glyphicon.glyphicon-pause#pauseTailFileBtn(type='button') Pause
-                        button.btn.btn-success.glyphicon.glyphicon-play#resumeTailFileBtn(type='button') Resume
-                        button.btn.btn-default.glyphicon.glyphicon-folder-close(type='button', data-dismiss='modal') Close
+    include modals/tailLogFile
