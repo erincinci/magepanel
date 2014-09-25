@@ -94,10 +94,26 @@ $(document).ready(function() {
             return;
         }
 
-        if(confirm("Do you really want to deploy to " + selectedItem)) {
+        if(confirm("Do you really want to deploy to " + selectedItem + " ?")) {
             appendToConsole('deploy to:' + selectedItem);
         }
     });
+    $("#mageRollback").click(function() {
+        var selectedItem = $('#activeRelease option:selected');
+        var selectedItemVal = selectedItem.val();
+        var selectedItemText = selectedItem.text();
+        var selectedEnvironment = $('#activeEnvironment').val();
+        // Cancel if selection is not valid
+        if (selectedItem == 'null') {
+            toastr.warning("Please select an active release", 'MagePanel Console');
+            return;
+        }
+
+        if(confirm("Do you really want to rollback to " + selectedItemText + " release?")) {
+            appendToConsole('releases rollback --release=' + selectedItemVal + " to:" + selectedEnvironment);
+        }
+    });
+
 
     /**
      * Check if notification needs to be shown
@@ -493,9 +509,27 @@ function activateCommandButtons () {
     if (selectedItem != 'null') {
         $("#mageReleases").prop("disabled",false);
         $("#mageDeploy").prop("disabled",false);
+        $("#activeRelease").prop("disabled",false);
     }else{
         $("#mageReleases").prop("disabled",true);
         $("#mageDeploy").prop("disabled",true);
+        $("#activeRelease").val("null");
+        $("#activeRelease").prop("disabled",true);
+        $("#mageRollback").prop("disabled",true);
+
+    }
+    $('#activeRelease').selectpicker('refresh');
+}
+
+/**
+ * Activate Rollback button
+ */
+function activateRollbackButton () {
+    var selectedItem = $("#activeRelease").val();
+    if (selectedItem != 'null') {
+        $("#mageRollback").prop("disabled",false);
+    }else{
+        $("#mageRollback").prop("disabled",true);
     }
 }
 
@@ -509,8 +543,7 @@ function loadEnvs() {
         $('#activeEnvironment').prop('disabled',true);
         $("#activeEnvironment option[value !='null']").remove();
         $('#activeEnvironment').selectpicker('refresh');
-        $("#mageReleases").prop("disabled",true);
-        $("#mageDeploy").prop("disabled",true);
+        activateCommandButtons();
         return false;
     }
 
