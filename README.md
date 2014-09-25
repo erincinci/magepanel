@@ -26,6 +26,21 @@ Rest of the requirements will be automatically installed with installers provide
 - [![alt text](http://s11.postimg.org/hzlu07epr/deb.png) Linux DEB Package](https://github.com/erincinci/magepanel/releases/download/v1.1/magepanel-v1.1.deb)
 - [![alt text](http://s11.postimg.org/cmwzm2qtb/rpm.png) Linux RPM Package](https://github.com/erincinci/magepanel/releases/download/v1.1/magepanel-v1.1.i386.rpm)
 - [![alt text](http://s13.postimg.org/9oskv0dnn/mac.png) Mac OS X Package](https://github.com/erincinci/magepanel/releases/download/v1.1/MagePanel-v1.1.pkg)
+ 
+## Running Magallanes on Cygwin (Windows) ##
+
+* Install **cygwin** *(Will be automatically installed with MagePanel Windows Installer)* → [**Here**](https://cygwin.com/install.html)
+* Download & Extract latest **Magallanes** release → [**Here**](https://github.com/andres-montanez/Magallanes/releases/latest)
+* Download & Setup your keys in **Putty Pageant** → [**Here**](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html)
+* Download & Copy **ssh-pageant** binary in cygwin `/usr/bin/` directory as described → [**Here**](https://github.com/cuviper/ssh-pageant)
+* Start **cygwin** and change dir to extracted **Magallanes** `bin/` dir → *ex:* `cd /cygdrive/c/Downloads/magallanes/bin/`
+* Run commands →
+```bash
+>> ./mage compile
+>> cp mage.phar /usr/bin/mage
+>> chmod +x /usr/bin/mage
+```
+* Run `mage version` command on **cygwin** to test if **Magallanes** is working correctly
 
 ## Starting Application from Source ##
 
