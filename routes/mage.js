@@ -100,6 +100,7 @@ exports.command = function(req) {
         }
 
         // Init variables
+        // TODO: Add cygwin-sshPageant option globally to use command " & bash --login -c 'eval $(/usr/bin/ssh-pageant -ra /tmp/.ssh-pageant); "
         var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
         var cygwin_post = "'";
         project = Common.dbUtils.cleanResult(project);
