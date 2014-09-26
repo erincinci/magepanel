@@ -219,9 +219,17 @@ exports.addEnvFile = function(req, res) {
  */
 exports.addTaskFile = function(req, res) {
     // Get task name from form data
-    var templateFile = "public/file-templates/Task.php";
     var selectedId = req.body['projectId'];
     var newFileName = req.body['taskName'];
+    var rollbackAware = req.body['rollbackAware'];
+    var templatePath = "public/file-templates/";
+    var templateFile;
+
+    if (rollbackAware == "on") {
+        var templateFile = templatePath + "Task-RollbackAware.php";
+    }else{
+        var templateFile = templatePath + "Task.php";
+    }
 
     Common.projectsDB.get(selectedId, function (err, project) {
         if (err) {
