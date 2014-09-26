@@ -2,6 +2,7 @@
  * Created by erincinci on 9/14/14.
  */
 var config = require('../config');
+var Common = require('../common');
 var nodemailer = require('nodemailer');
 var jade = require('jade');
 
@@ -12,7 +13,7 @@ var jade = require('jade');
  * @param txtContent
  * @param htmlContent
  */
-function sendMail(toAddresses, subject, txtContent, htmlContent) {
+function sendMail(reqIo, toAddresses, subject, txtContent, htmlContent) {
     // Create transport
     var transporter = nodemailer.createTransport({
         service: config.mailer.service,
@@ -38,8 +39,11 @@ function sendMail(toAddresses, subject, txtContent, htmlContent) {
     transporter.sendMail(mailOptions, function(error, info){
         if(error) {
             console.error(error);
+            reqIo.emit('cmdResponse', { result: error, status: 'stderr' });
         } else {
-            console.log('Mail sent to ' + toAddresses + ' : ' + info.response);
+            var msg = 'Report mail successfully sent to ' + toAddresses + ' : ' + info.response;
+            console.log(msg);
+            reqIo.emit('cmdResponse', { result: msg, status: 'stdout' });
         }
     });
 }
@@ -54,7 +58,7 @@ function sendMail(toAddresses, subject, txtContent, htmlContent) {
  * @param dateTime
  * @param consoleLog
  */
-exports.sendSuccessMail = function(toAddresses, project, environment, releaseId, user, dateTime, consoleLog) {
+exports.sendSuccessMail = function(reqIo, toAddresses, project, environment, releaseId, user, dateTime, consoleLog) {
     // Render mail content using Jade Engine
     var htmlContent = jade.renderFile(__dirname + '/mail-templates/deploy-report.jade', {
         pretty: true,
@@ -67,5 +71,5 @@ exports.sendSuccessMail = function(toAddresses, project, environment, releaseId,
     });
 
     // Send report mail
-    sendMail(toAddresses, "MagePanel Deploy Report", '', htmlContent);
+    return sendMail(reqIo, toAddresses, "MagePanel Deploy Report", '', htmlContent);
 }

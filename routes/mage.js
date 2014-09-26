@@ -119,7 +119,7 @@ exports.command = function(req) {
             mageCommand = cygwin_pre + mageCommand + cygwin_post;
 
         // Use spawn instead of exec to get live stout data
-        req.io.emit('cmdResponse', { result: Common.config.html.consolePointer, status: 'stdout' });
+        req.io.emit('cmdResponse', { result: Common.config.html.consolePointer, status: Common.eCmdStatus.success });
         var util  = require('util'),
             spawn = require('child_process').spawn;
 
@@ -135,11 +135,11 @@ exports.command = function(req) {
         mageCmd.stdout.on('data', function (data) {
             console.debug(data.toString());
             consoleOutput += ansiTrim(data.toString());
-            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stdout' });
+            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: Common.eCmdStatus.success });
         });
         mageCmd.stderr.on('data', function (data) {
             console.error(data.toString());
-            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stderr' });
+            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: Common.eCmdStatus.error });
         });
 
         // On process exit
@@ -166,6 +166,7 @@ exports.command = function(req) {
 
                             // Get mail parameters from project
                             Common.mailUtils.sendSuccessMail(
+                                req.io,
                                 project.mailAddress,
                                 project.name,
                                 environment,
@@ -177,7 +178,7 @@ exports.command = function(req) {
                         } else {
                             // E-mail address is not valid, show warning..
                             console.warn("Project's e-mail address is invalid!");
-                            req.io.emit('cmdResponse', { result: "Failed sending report mail, project's e-mail address is invalid..", status: 'warning' });
+                            req.io.emit('cmdResponse', { result: "Failed sending report mail, project's e-mail address is invalid..", status: Common.eCmdStatus.warning });
                         }
                     }
                 }
@@ -185,7 +186,7 @@ exports.command = function(req) {
 
             // Emit exit code to frontend
             console.log('Mage command exited with code ' + code);
-            req.io.emit('cmdResponse', { result: code, status: 'exit' });
+            req.io.emit('cmdResponse', { result: code, status: Common.eCmdStatus.exit });
         });
 
         // If not on windows, wait some time and send command after connecting to bash shell

@@ -6,8 +6,13 @@ var appSettings = require('user-settings').file(appConfig.setup.file);
 var nStore = require('nstore').extend(require('nstore/query')());
 
 Common = {
+    // Locals
     config: require('./config'),
     scribe: require('./scribe'),
+    settings: require('user-settings').file(appConfig.setup.file),
+    setupCompleted: appSettings.get(appConfig.setup.completed),
+
+    // Tools
     S: require('string'),
     username: require('username').sync(),
     os: require('os').platform(),
@@ -16,14 +21,21 @@ Common = {
     path: require('path'),
     validator: require('validator'),
     _: require('underscore'),
+
+    // Utils
     mailUtils: require('./util/mailUtils'),
     dbUtils: require('./util/dbUtils'),
     stringUtils: require('./util/stringUtils'),
-    settings: require('user-settings').file(appConfig.setup.file),
+
+    // Models
     SettingsModel: require('./models/settingsModel'),
     ProjectModel: require('./models/projectModel'),
+
+    // DBs
     projectsDB: nStore.new('dbs/projects.db'),
-    setupCompleted: appSettings.get(appConfig.setup.completed)
+
+    // Enums
+    eCmdStatus: { error: 'stderr', success: 'stdout', warning: 'warning', exit: 'exit' }
 };
 
 module.exports = Common;
