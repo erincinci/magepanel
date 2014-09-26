@@ -15,6 +15,13 @@
                         span.input-group-addon
                             i.icon.ion-ios7-gear
                         input.form-control#taskName(name='taskName', type='text', placeholder='Enter custom task name')
+                    p.input-group
+                        span.input-group-addon
+                            i.ion-android-timer
+                        select.selectpicker#rollbackAware(name='rollbackAware', data-width='auto')
+                            option(value='on') Rollback aware on
+                            option(value='off',selected="selected") Rollback aware off
+
                 .modal-footer
                     button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
                     button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Create
