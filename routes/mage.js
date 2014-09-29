@@ -26,6 +26,8 @@ exports.index = function(req, res) {
         var pathWarning = false;
 
         if(Common.os == 'win32') {
+            settings.sshPageantSupport(Common.settings.get("sshPageantSupport"));
+
             var fs = require('fs');
             if (! fs.existsSync(settings.cygwinBin())) {
                 console.warn("Folder '%s' doesn't exists!", settings.cygwinBin());
@@ -100,8 +102,11 @@ exports.command = function(req) {
         }
 
         // Init variables
-        // TODO: Add cygwin-sshPageant option globally to use command " & bash --login -c 'eval $(/usr/bin/ssh-pageant -ra /tmp/.ssh-pageant); "
-        var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
+        console.debug("SSH-Pageant support: " + settings.sshPageantSupport());
+        if (settings.sshPageantSupport() == 'true')
+            var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c 'eval $(/usr/bin/ssh-pageant -ra /tmp/.ssh-pageant); ";
+        else
+            var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
         var cygwin_post = "'";
         project = Common.dbUtils.cleanResult(project);
         var projectDir = project.dir;

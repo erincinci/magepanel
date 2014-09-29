@@ -13,6 +13,7 @@ exports.index = function(req, res) {
     var settings = Common.SettingsModel.create();
     settings.setupCompleted(Common.setupCompleted);
 
+    settings.sshPageantSupport(Common.settings.get("sshPageantSupport"));
     settings.cygwinBin(Common.settings.get("cygwinBin"));
     if(typeof(settings.cygwinBin()) === 'undefined')
         settings.cygwinBin(Common.config.setup.defaultCygwinBin);

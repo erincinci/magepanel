@@ -14,6 +14,16 @@ block content
                         span.input-group-addon
                             i.icon.ion-social-windows  Cygwin bin directory
                         input.form-control(name='cygwinBin', type='text', value=settings.cygwinBin(), placeholder='cygwin bin folder')
+                    | &nbsp;
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-key  ssh-pageant Support
+                        select.selectpicker(name='sshPageantSupport', data-width='auto')
+                            for title, value in {true:'On', false:'Off'}
+                                if value == settings.sshPageantSupport()
+                                    option(value= value, selected)= title
+                                else
+                                    option(value= value)= title
 
         .panel.panel-info
             .panel-heading

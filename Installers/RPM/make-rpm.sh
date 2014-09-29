@@ -5,6 +5,7 @@
 set -u
 set -e
 
+VERSION="1.2"
 SRC=/tmp/magepanel-rpm-src
 DIST=/tmp/magepanel-rpm-dist
 SYSROOT=${SRC}/sysroot
@@ -39,9 +40,9 @@ echo 2.0 > ./debian-binary
 find ${DIST}/ -type d -exec chmod 0755 {} \;
 find ${DIST}/ -type f -exec chmod go-w {} \;
 chown -R root:root ${DIST}/
-ar r ${DIST}/magepanel-v1.1.deb debian-binary control.tar.gz data.tar.gz
+ar r ${DIST}/magepanel-v${VERSION}.deb debian-binary control.tar.gz data.tar.gz
 popd
-rsync -a ${DIST}/magepanel-v1.1.deb ./
+rsync -a ${DIST}/magepanel-v${VERSION}.deb ./
 
 echo -e "\n\t--> Debian package generated, now converting to RPM package..\n"
-alien --to-rpm --scripts --keep-version --verbose ./magepanel-v1.1.deb
+alien --to-rpm --scripts --keep-version --verbose ./magepanel-v${VERSION}.deb

@@ -9,7 +9,7 @@ PACKAGE_MAKER=/Applications/PackageMaker.app/Contents/MacOS/PackageMaker
 INSTALL_USER=`whoami`
 TEMP_DIR="tmp/MagePanel"
 OUT_DIR="."
-VERSION="1.1"
+VERSION="1.2"
 echo -e "\n\t--> Executing script as '${INSTALL_USER}'\n"
 
 # Init temp dir & Copy files

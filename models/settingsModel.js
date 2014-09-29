@@ -7,9 +7,11 @@ var model = require('nodejs-model');
 module.exports = SettingsModel = model("SettingsModel")
     .attr('setupCompleted')
     .attr('cygwinBin')
+    .attr('sshPageantSupport')
     .attr('mageDeployStrategy');
 
 // Initialize object attributes
 SettingsModel.init = function(instance) {
     instance.setupCompleted(false);
+    instance.sshPageantSupport(true);
 };
