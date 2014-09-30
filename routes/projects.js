@@ -422,4 +422,3 @@ function getProjectTasks(projectDir) {
 
     return projectTasks;
 }
-

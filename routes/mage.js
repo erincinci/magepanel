@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 var Common = require('../common');
+var fsExtra = require('fs-extra');
 var Convert = require('ansi-to-html');
 var ansiTrim = require('cli-color/trim');
 var exec = require('child_process').exec;
@@ -56,6 +57,8 @@ exports.init = function(req, res) {
     var projectDir = data['projectDir'];
     var projectName = data['projectName'];
     var projectMail = data['projectMail'];
+    var selectedProjectDir = data['projectInitImport'];
+    var importResponse;
 
     // Init variables
     settings.cygwinBin(Common.settings.get("cygwinBin"));
@@ -84,8 +87,35 @@ exports.init = function(req, res) {
         }
 
         console.debug("STDOUT during mage init of project: " + projectName + " - " + stdout);
+        if (selectedProjectDir != "null") {
+            importResponse = importProject(projectDir,selectedProjectDir);
+            //console.log(importResponse);
+        }
+
         res.send({"warn": false, "message": "Successfully initialized project '" + projectName + "', please edit environments and tasks.."});
     });
+}
+
+/**
+ * Import project to new created one
+ * @param projectDir
+ * @param selectedProjectDir
+ * @returns {Array}
+ */
+function importProject(projectDir,selectedProjectDir) {
+    projectDir = Common.path.normalize(projectDir);
+    selectedProjectDir = Common.path.normalize(selectedProjectDir);
+
+    var copyEnvs = fsExtra.copySync(
+        Common.path.join(selectedProjectDir, "/.mage/config/environment"),
+        Common.path.join(projectDir, "/.mage/config/environment")
+    );
+    var copyTasks = fsExtra.copySync(
+        Common.path.join(selectedProjectDir, "/.mage/tasks"),
+        Common.path.join(projectDir, "/.mage/tasks")
+    );
+
+    return ({envs: copyEnvs, tasks: copyTasks });
 }
 
 /**
