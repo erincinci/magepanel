@@ -312,7 +312,24 @@ exports.saveFile = function(req, res) {
     var code = data['code'];
     var fileName = Common.path.basename(orgFile);
 
-    // Overwrite environment YAML file
+    // Overwrite project file
+    fs.writeFileSync(orgFile, code);
+
+    res.send({"warn": false, "message": "<strong>" + fileName + "</strong> file successfully saved"});
+};
+
+/**
+ * Apply Edited File
+ * @param req
+ * @param res
+ */
+exports.applyFile = function(req, res) {
+    // Get data
+    var orgFile = req.body.orgFile;
+    var code = req.body.code;
+    var fileName = Common.path.basename(orgFile);
+
+    // Overwrite project file
     fs.writeFileSync(orgFile, code);
 
     res.send({"warn": false, "message": "<strong>" + fileName + "</strong> file successfully saved"});

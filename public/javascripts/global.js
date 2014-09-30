@@ -114,6 +114,28 @@ $(document).ready(function() {
         }
     });
 
+    /**
+     * Other Button Click Events
+     */
+    $("#applyFileBtn").click(function() {
+        // Get current form data
+        var formData = {
+            orgFile: $("#orgFile").val(),
+            code: codeMirror.getValue()
+        };
+
+        $.post( '/projects/applyFile', formData, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Projects');
+            } else {
+                toastr.success(result["message"], 'MagePanel Projects');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Projects');
+        });
+    });
+
 
     /**
      * Check if notification needs to be shown
@@ -305,17 +327,28 @@ $('.modal').on('hidden.bs.modal', function(){
     if (codeMirror != null) {
         codeMirror.toTextArea();
         codeMirror = null;
+        document.removeEventListener("keydown", CtrlSListener, false);
+        $("#refreshProjectBtn").trigger("click");
     }
 });
 $('#editFileModal').on('shown.bs.modal', function () {
-    // Adjust EditEnv Modal Size
+    // Adjust Edit File Modal Size
     $('#editFileModal .modal-body').css({'overflow-y': 'auto', 'height': $(window).height() * 0.7});
 
     // Resize & Refresh & Focus CodeMirror Editor
     codeMirror.setSize('100%', '100%');
     codeMirror.refresh();
     codeMirror.focus();
+
+    // Capture CTRL+S key combination
+    document.addEventListener("keydown", CtrlSListener, false);
 });
+function CtrlSListener(e) {
+    if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && $("#editFileModal").data('bs.modal').isShown) {
+        e.preventDefault();
+        $('#applyFileBtn').click();
+    }
+}
 $('#editProjectModal').on('shown.bs.modal', function () {
     // Fill edit form with project data on modalShown
     var selectedItem = $('.list-group-item.active')[0];
