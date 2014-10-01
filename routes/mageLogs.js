@@ -58,16 +58,22 @@ exports.projectLatestLog = function(req, res) {
             // Get project logs from dir
             var projectLogs = getProjectLogsFromDir(project.dir).sort().reverse();
 
-            // First log is the latest log, prepare JSON data to send
-            var latestLog = projectLogs[0];
-            var logDateTime = Common.S(latestLog).chompLeft('log-').chompRight('.log');
-            var latestLogJson = {
-                "logFile": project.dir + '/.mage/logs/' + latestLog,
-                "logDate": logDateTime.substr(0, 4) + "/" + logDateTime.substr(4, 2) + "/" + logDateTime.substr(6, 2),
-                "logTime": logDateTime.substr(9, 2) + ":" + logDateTime.substr(11, 2) + ":" + logDateTime.substr(13, 2)
+            if (Common._.size(projectLogs) > 0) {
+                // First log is the latest log, prepare JSON data to send
+                var latestLog = projectLogs[0];
+                var logDateTime = Common.S(latestLog).chompLeft('log-').chompRight('.log');
+                var latestLogJson = {
+                    "status" : "success",
+                    "logFile": project.dir + '/.mage/logs/' + latestLog,
+                    "logDate": logDateTime.substr(0, 4) + "/" + logDateTime.substr(4, 2) + "/" + logDateTime.substr(6, 2),
+                    "logTime": logDateTime.substr(9, 2) + ":" + logDateTime.substr(11, 2) + ":" + logDateTime.substr(13, 2)
+                }
+                res.json(latestLogJson);
+            }else{
+                res.json({"status" : "warning","message":"No log file found"});
             }
 
-            res.json(latestLogJson);
+
         });
     }
 }

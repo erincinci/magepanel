@@ -57,17 +57,20 @@ $(document).ready(function() {
         if (selectedId != null) {
             $.get( '/mageLogs/projectLatestLog?id=' + selectedId, function(logJson) {
                 if (logJson != 'null') {
-                    // TODO: Fix mixing of tail log and tail console sockets
-                    tailLogFile(logJson.logFile, logJson.logDate, logJson.logTime);
+                    if (logJson["status"] == "success") {
+                        $('#viewFileModal').modal('show');
+                        // TODO: Fix mixing of tail log and tail console sockets
+                        tailLogFile(logJson.logFile, logJson.logDate, logJson.logTime);
+                    }else{
+                        toastr.warning(logJson["message"], 'MagePanel Logs');
+                    }
                 } else {
                     toastr.error('There was a problem getting latest log file', 'MagePanel Logs');
-                    $('#viewFileModal').modal('hide');
                 }
             });
         } else {
             // Selected project ID is invalid
             toastr.error('There was a problem getting latest log file', 'MagePanel Logs');
-            $('#viewFileModal').modal('hide');
         }
     });
     $("#clearConsole").click(function() {
