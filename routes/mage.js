@@ -55,6 +55,7 @@ exports.index = function(req, res) {
 exports.init = function(req, res) {
     var data = req.body;
     var projectDir = data['projectDir'];
+    var projectDirOrg = projectDir;
     var projectName = data['projectName'];
     var projectMail = data['projectMail'];
     var selectedProjectDir = data['projectInitImport'];
@@ -88,11 +89,12 @@ exports.init = function(req, res) {
 
         console.debug("STDOUT during mage init of project: " + projectName + " - " + stdout);
         if (selectedProjectDir != "null") {
-            importResponse = importProject(projectDir,selectedProjectDir);
-            //console.log(importResponse);
+            importProject(projectDirOrg, selectedProjectDir);
+            res.send({"warn": false, "message": "Successfully initialized project '" + projectName + "' and imported environments and tasks.."});
+        } else {
+            res.send({"warn": false, "message": "Successfully initialized project '" + projectName + "', please edit environments and tasks.."});
         }
 
-        res.send({"warn": false, "message": "Successfully initialized project '" + projectName + "', please edit environments and tasks.."});
     });
 }
 
@@ -102,20 +104,18 @@ exports.init = function(req, res) {
  * @param selectedProjectDir
  * @returns {Array}
  */
-function importProject(projectDir,selectedProjectDir) {
+function importProject(projectDir, selectedProjectDir) {
     projectDir = Common.path.normalize(projectDir);
     selectedProjectDir = Common.path.normalize(selectedProjectDir);
 
-    var copyEnvs = fsExtra.copySync(
+    fsExtra.copySync(
         Common.path.join(selectedProjectDir, "/.mage/config/environment"),
         Common.path.join(projectDir, "/.mage/config/environment")
     );
-    var copyTasks = fsExtra.copySync(
+    fsExtra.copySync(
         Common.path.join(selectedProjectDir, "/.mage/tasks"),
         Common.path.join(projectDir, "/.mage/tasks")
     );
-
-    return ({envs: copyEnvs, tasks: copyTasks });
 }
 
 /**
