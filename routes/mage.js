@@ -134,7 +134,7 @@ exports.command = function(req) {
         // Init variables
         console.debug("SSH-Pageant support: " + settings.sshPageantSupport());
         if (settings.sshPageantSupport() == 'true')
-            var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c 'eval $(/usr/bin/ssh-pageant -ra /tmp/.ssh-pageant); ";
+            var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c 'eval $(/usr/bin/ssh-pageant -ra /tmp/.ssh-pageant); keychain -q -Q; . ~/.keychain/`hostname`-sh; ";
         else
             var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
         var cygwin_post = "'";
