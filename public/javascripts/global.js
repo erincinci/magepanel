@@ -301,6 +301,7 @@ $(document).ready(function() {
         $("#editProjectBtn").prop('disabled',false);
         $("#delProjectBtn").prop('disabled',false);
         $("#refreshProjectBtn").prop('disabled',false);
+        $("#gitPullProjectBtn").prop('disabled',false);
         // jQuery AJAX call for project detail
         $.get( '/projects/detail?id=' + e.target.id, function(output) {
             $('#projectDetail').html(output);
@@ -428,6 +429,7 @@ $('#delProjectBtn').on('click', function() {
                 $("#editProjectBtn").prop('disabled',true);
                 $("#delProjectBtn").prop('disabled',true);
                 $("#refreshProjectBtn").prop('disabled',true);
+                $("#gitPullProjectBtn").prop('disabled',true);
                 toastr.success(result["message"], 'MagePanel Projects');
             }
         }).error(function() {
@@ -450,6 +452,32 @@ $('#refreshProjectBtn').on('click', function() {
 
     // jQuery AJAX call for project refresh
     $.post( '/projects/refresh?id=' + selectedItem.id, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            $('#'+selectedItem.id).trigger("click");
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+});
+
+/**
+ * GIT Pull project button onClick
+ */
+$('#gitPullProjectBtn').on('click', function() {
+    var selectedItem = $('.list-group-item.active')[0];
+
+    // Cancel if selection is not valid
+    if (selectedItem == null) {
+        toastr.warning("Select a project first", 'MagePanel Projects');
+        return;
+    }
+
+    // jQuery AJAX call for project refresh
+    $.post( '/projects/gitPull?id=' + selectedItem.id, function(result) {
         // Check if we have warning
         if(result["warn"]) {
             toastr.warning(result["message"], 'MagePanel Projects');
@@ -762,6 +790,7 @@ function addProjectToDB(formData) {
             $("#editProjectBtn").prop('disabled',true);
             $("#delProjectBtn").prop('disabled',true);
             $("#refreshProjectBtn").prop('disabled',true);
+            $("#gitPullProjectBtn").prop('disabled',true);
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {

@@ -4,6 +4,7 @@
 var Common = require('../common');
 var fs = require('fs');
 var tempWrite = require('../util/temp-write');
+var gitpull = require('git-pull');
 
 // Vars
 var settings = Common.SettingsModel.create();
@@ -134,6 +135,42 @@ exports.refresh = function(req, res) {
                 }
 
                 res.send({"warn": false, "message": "Project successfully refreshed"});
+            });
+        });
+    }
+};
+
+/**
+ * GIT Pull Project
+ * @param req
+ * @param res
+ */
+exports.gitPull = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // Send git pull command on project directory
+            console.debug("GIT pull on dir " + project.dir);
+            gitpull(project.dir, function (err, consoleOutput) {
+                if (err) {
+                    res.send({ "warn": true, "message": "Error: " + err + " | Output: " + consoleOutput });
+                } else {
+                    res.send({ "warn": false, "message": "GIT Pull Success! : " + consoleOutput });
+                }
             });
         });
     }
