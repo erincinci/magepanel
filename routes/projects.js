@@ -107,7 +107,7 @@ exports.refresh = function(req, res) {
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
-                console.error(selectedId + ": " + err);
+                console.error(selectedId + ": " + err.message);
                 res.send({"warn": true, "message": "There was an error getting project from DB!"});
                 return;
             }
@@ -125,6 +125,13 @@ exports.refresh = function(req, res) {
             refreshedProject.tasks(getProjectTasks(project.dir));
             refreshedProject.mailAddress(project.mailAddress);
             refreshedProject.reportingEnabled(project.reportingEnabled);
+
+            /*try {
+                console.debug("First.. " + gitTools.currentBranchSync(project.dir));
+                console.debug("I should be last..");
+            } catch (ex) {
+                console.error(ex.message);
+            }*/
 
             // Refresh project at DB
             Common.projectsDB.save(selectedId, refreshedProject, function(err) {

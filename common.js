@@ -23,6 +23,7 @@ Common = {
     _: require('underscore'),
 
     // Utils
+    util: require('util'),
     mailUtils: require('./util/mailUtils'),
     dbUtils: require('./util/dbUtils'),
     stringUtils: require('./util/stringUtils'),

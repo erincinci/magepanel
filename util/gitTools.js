@@ -3,7 +3,7 @@
  */
 'use strict';
 var path = require('path');
-var cmd = require("cmd-exec").init();
+var syncExec = require('sync-exec');
 
 /**
  * Runs git command for finding current branch (ASync)
@@ -26,17 +26,7 @@ exports.currentBranch = function resolveGitBranch(dir, cb) {
  * @param dir
  */
 exports.currentBranchSync = function resolveGitBranchSync(dir) {
-    cmd.exec('cd ' + path.resolve(__dirname, dir) + ' && git rev-parse --abbrev-ref HEAD')
-        .then(function(result) {
-            console.debug("Found branch: " + result.message.trim());
-            return result.message.trim();
-        })
-        .fail(function(err) {
-            console.error(err.message);
-        })
-        .done(function() {
-            // done..
-        });
+    return syncExec('cd ' + path.resolve(__dirname, dir) + ' && git rev-parse --abbrev-ref HEAD', 2000);
 };
 
 /**
