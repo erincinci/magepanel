@@ -4,7 +4,7 @@
 var Common = require('../common');
 var fs = require('fs');
 var tempWrite = require('../util/temp-write');
-var gitpull = require('git-pull');
+var gitTools = require('../util/gitTools');
 
 // Vars
 var settings = Common.SettingsModel.create();
@@ -165,7 +165,7 @@ exports.gitPull = function(req, res) {
 
             // Send git pull command on project directory
             console.debug("GIT pull on dir " + project.dir);
-            gitpull(project.dir, function (err, consoleOutput) {
+            gitTools.pull(project.dir, function (err, consoleOutput) {
                 if (err) {
                     res.send({ "warn": true, "message": "Error: " + err + " | Output: " + consoleOutput });
                 } else {
