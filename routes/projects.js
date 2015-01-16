@@ -21,6 +21,14 @@ exports.index = function(req, res) {
         if (err)
             console.error(err);
 
+        // [Backward compatibility] Check if current projects has branch info
+        Common._.each(projects, function(project) {
+            if (project.branch == null) {
+                console.debug("Old project branch info is missing, searching for branch info..");
+                project.branch(gitTools.currentBranchSync(project.dir));
+            }
+        });
+
         res.render('projects', {
             username: Common.username,
             menu: 'projects',
@@ -55,6 +63,7 @@ exports.add = function(req, res) {
     var project = Common.ProjectModel.create();
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
+    project.branch(gitTools.currentBranchSync(data['projectDir']));
     project.name(data['projectName']);
     project.mailAddress(data['projectMail']);
     if (data['projectReportingEnabled'] == 'On')
@@ -120,18 +129,12 @@ exports.refresh = function(req, res) {
             var refreshedProject = Common.ProjectModel.create();
             refreshedProject.id(project.id);
             refreshedProject.dir(project.dir);
+            refreshedProject.branch(gitTools.currentBranchSync(project.dir));
             refreshedProject.name(project.name);
             refreshedProject.envs(getProjectEnvs(project.dir));
             refreshedProject.tasks(getProjectTasks(project.dir));
             refreshedProject.mailAddress(project.mailAddress);
             refreshedProject.reportingEnabled(project.reportingEnabled);
-
-            /*try {
-                console.debug("First.. " + gitTools.currentBranchSync(project.dir));
-                console.debug("I should be last..");
-            } catch (ex) {
-                console.error(ex.message);
-            }*/
 
             // Refresh project at DB
             Common.projectsDB.save(selectedId, refreshedProject, function(err) {

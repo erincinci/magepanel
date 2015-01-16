@@ -54,7 +54,7 @@ block content
             div#projectListContainer
                 ul.list-group#projectsList
                     for project in projects
-                        li.list-group-item(id= project.id) #{project.name}
+                        li.list-group-item(id= project.id) #{project.name} [#{project.branch}]
                     else
                         .panel.panel-primary
                             .panel-heading
