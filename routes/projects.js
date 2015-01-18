@@ -11,6 +11,29 @@ var settings = Common.SettingsModel.create();
 var title = "Projects";
 
 /**
+ * [Backward Compatibility]
+ * Refresh old project with adding new info
+ * @param projects
+ */
+function fixProject(project) {
+    project = Common.dbUtils.cleanResult(project);
+    project.dir = Common.path.normalize(project.dir);
+
+    // Create refreshed project
+    var refreshedProject = Common.ProjectModel.create();
+    refreshedProject.id(project.id);
+    refreshedProject.dir(project.dir);
+    refreshedProject.branch(gitTools.currentBranchSync(project.dir));
+    refreshedProject.name(project.name);
+    refreshedProject.envs(getProjectEnvs(project.dir));
+    refreshedProject.tasks(getProjectTasks(project.dir));
+    refreshedProject.mailAddress(project.mailAddress);
+    refreshedProject.reportingEnabled(project.reportingEnabled);
+
+    return refreshedProject;
+}
+
+/**
  * Get projects index
  * @param req
  * @param res
@@ -19,13 +42,21 @@ exports.index = function(req, res) {
     // Get all projects from DB
     Common.projectsDB.all(function(err, projects) {
         if (err)
-            console.error(err);
+            console.error(err.message);
 
         // [Backward compatibility] Check if current projects has branch info
         Common._.each(projects, function(project) {
             if (project.branch == null) {
-                console.debug("Old project branch info is missing, searching for branch info..");
-                project.branch(gitTools.currentBranchSync(project.dir));
+                console.debug("Project before fix: " + Common.util.inspect(project, false, null));
+                var dirtyProject = fixProject(project);
+                project = Common.dbUtils.cleanResult(dirtyProject);
+                console.debug("Project after fix: " + Common.util.inspect(project, false, null));
+
+                // Refresh project at DB
+                Common.projectsDB.save(project.id, project, function(err) {
+                    if (err)
+                        console.error(err.message);
+                });
             }
         });
 

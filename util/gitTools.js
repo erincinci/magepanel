@@ -3,7 +3,6 @@
  */
 'use strict';
 var path = require('path');
-var syncExec = require('sync-exec');
 var getRepoInfo = require('git-repo-info');
 
 /**
@@ -30,11 +29,11 @@ exports.currentBranchSync = function resolveGitBranchSync(dir) {
     //return syncExec('cd ' + path.resolve(__dirname, dir) + ' && git rev-parse --abbrev-ref HEAD', 2000);
     var repoInfo = getRepoInfo(path.join(dir, ".git"));
     if (repoInfo.sha == null) {
-        console.warn("No GIT repo found at the mage path, searching parent dirs..");
+        console.warn("No GIT repo found at the mage path, searching parent dirs.. " + dir);
         var foundPath = require('git-repo-info')._findRepo(dir);
 
         if (foundPath == null) {
-            console.warn("Project may not be a GIT project..");
+            console.warn("Project may not be a GIT project.. Dir: " + dir);
             return "N/A";
         }
 
