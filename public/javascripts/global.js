@@ -301,7 +301,10 @@ $(document).ready(function() {
         $("#editProjectBtn").prop('disabled',false);
         $("#delProjectBtn").prop('disabled',false);
         $("#refreshProjectBtn").prop('disabled',false);
-        $("#gitPullProjectBtn").prop('disabled',false);
+        if ($(e.target).hasClass('ion-fork-repo'))
+            $("#gitPullProjectBtn").prop('disabled',false);
+        else
+            $("#gitPullProjectBtn").prop('disabled',true);
         // jQuery AJAX call for project detail
         $.get( '/projects/detail?id=' + e.target.id, function(output) {
             $('#projectDetail').html(output);

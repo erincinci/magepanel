@@ -53,8 +53,12 @@ block content
         .col-lg-6
             div#projectListContainer
                 ul.list-group#projectsList
-                    for project in projects
-                        li.list-group-item(id= project.id) #{project.name} [#{project.branch}]
+                    if projects
+                        for project in projects
+                            if project.branch != 'N/A'
+                                li.list-group-item(id= project.id).ion-fork-repo  [#{project.branch}] - #{project.name}
+                            else
+                                li.list-group-item(id= project.id).ion-briefcase  [Local] - #{project.name}
                     else
                         .panel.panel-primary
                             .panel-heading
