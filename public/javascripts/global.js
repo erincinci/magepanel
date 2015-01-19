@@ -493,6 +493,33 @@ $('#gitPullProjectBtn').on('click', function() {
     });
 });
 
+/**
+ * GIT Switch Branch project button onClick
+ */
+$('#gitSwitchBranchProjectBtn').on('click', function() {
+    var selectedItem = $('.list-group-item.active')[0];
+
+    // Cancel if selection is not valid
+    if (selectedItem == null) {
+        toastr.warning("Select a project first", 'MagePanel Projects');
+        return;
+    }
+
+    // jQuery AJAX call for project refresh
+    $.post( '/projects/gitSwitchBranch?id=' + selectedItem.id + "&branch=" + "master", function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            $('#'+selectedItem.id).trigger("click");
+            $('#refreshProjectBtn').click();
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+});
+
 // Functions =============================================================
 /**
  * Capitalize String

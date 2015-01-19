@@ -41,11 +41,22 @@ block content
                 type='button',
                 style='margin-right:10px',
                 disabled)
+        | &nbsp;
         button#gitPullProjectBtn.btn.btn-default.btn-success.icon.ion-arrow-down-c(
                 rel='tooltip',
                 data-original-title='GIT Pull project',
                 type='button',
+                style='margin-right:10px',
                 disabled)
+        button#gitSwitchBranchProjectBtn.btn.btn-warning.btn-success.icon.ion-fork-repo(
+                rel='tooltip',
+                data-original-title='GIT Switch Branch',
+                type='button',
+                disabled)
+        //.input-group
+            span.input-group-addon
+                i.icon.ion-social-windows  a
+            input.form-control(name='branchName', type='text', value='', placeholder='Branch Name')
 
     // Columns
     .row

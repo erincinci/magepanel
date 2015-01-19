@@ -182,6 +182,43 @@ exports.refresh = function(req, res) {
 };
 
 /**
+ * GIT Checkout Branch
+ * @param req
+ * @param res
+ */
+exports.gitSwitchBranch = function(req, res) {
+    var selectedId = req.query.id;
+    var checkoutBranch = req.query.branch;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // Send git checkout branch command on project directory
+            console.debug("GIT checkout branch on dir " + project.dir + " with branch " + checkoutBranch);
+            gitTools.checkoutBranch(project.dir, checkoutBranch, function (err, consoleOutput) {
+                if (err) {
+                    res.send({ "warn": true, "message": "Error: " + err + " | Output: " + consoleOutput });
+                } else {
+                    res.send({ "warn": false, "message": "GIT switch branch success! : " + consoleOutput });
+                }
+            });
+        });
+    }
+};
+
+/**
  * GIT Pull Project
  * @param req
  * @param res

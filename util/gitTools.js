@@ -22,6 +22,21 @@ exports.currentBranch = function resolveGitBranch(dir, cb) {
 };
 
 /**
+ * Runs git checkout BRANC_NAME on project dir (ASync)
+ * @param dir
+ * @param branchName
+ * @param cb
+ */
+exports.checkoutBranch = function checkoutBranch(dir, branchName, cb) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git checkout ' + branchName, function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+        if (stderr) return cb(stderr);
+
+        cb(null, stdout.trim());
+    });
+};
+
+/**
  * Runs git command for finding current branch (Sync)
  * @param dir
  */
