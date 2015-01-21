@@ -52,11 +52,17 @@ block content
                 rel='tooltip',
                 data-original-title='GIT Switch Branch',
                 type='button',
+                data-placement='bottom',
+                data-toggle='popover',
+                data-title='Login',
+                data-container='body',
+                data-html='true',
                 disabled)
-        //.input-group
-            span.input-group-addon
-                i.icon.ion-social-windows  a
-            input.form-control(name='branchName', type='text', value='', placeholder='Branch Name')
+        #popover-content.hide
+            form.form-inline#switchGitBranchForm(role='form', style='width:400px')
+                .form-group
+                    input.form-control#newBranchName(type='text', placeholder='Branch Name', maxlength='10')
+                    button.btn.btn-primary(type='submit') Switch &raquo;
 
     // Columns
     .row
