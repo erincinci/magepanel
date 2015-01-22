@@ -438,6 +438,38 @@ $(document).on('change', '.btn-file :file', function() {
 });
 
 /**
+ * GIT Switch branch modal button onClick
+ */
+$('#gitSwitchBranchProjectBtn').on('click', function() {
+    var selectedItem = $('.list-group-item.active')[0];
+
+    // Cancel if selection is not valid
+    if (selectedItem == null) {
+        toastr.warning("Select a project first", 'MagePanel Projects');
+        return;
+    }
+
+    // jQuery AJAX call for project remote branches
+    $.post( '/projects/gitRemoteBranches?id=' + selectedItem.id, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            // TODO: Dynamically change #newBranchName selectPicker options
+            var branches = result["message"];
+            $("#switchBranchPicker option[value !='null']").remove();
+            $.each(branches, function(i, val) {
+                console.log(val);
+                $("#switchBranchPicker").append("<option>" + val + "</option>");
+            });
+            $('#switchBranchPicker').selectpicker('refresh');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+});
+
+/**
  * Delete project button onClick
  */
 $('#delProjectBtn').on('click', function() {

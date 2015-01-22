@@ -37,6 +37,29 @@ exports.checkoutBranch = function checkoutBranch(dir, branchName, cb) {
 };
 
 /**
+ * Run git branch -r command on project dir (Async)
+ * @param dir
+ * @param cb
+ */
+exports.remoteBranches = function remoteBranches(dir, cb) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git branch -r', function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+        if (stderr) return cb(stderr);
+
+        // Parse remote branch names (Exclude HEAD reference)
+        var branchList = stdout.trim().split("\n");
+        var branches = [];
+        for(var i in branchList) {
+            var branch = branchList[i].trim();
+            if(branch.indexOf("->") == -1)
+                branches.push(branch);
+        }
+        console.debug(branches);
+        cb(null, branches);
+    });
+};
+
+/**
  * Runs git command for finding current branch (Sync)
  * @param dir
  */

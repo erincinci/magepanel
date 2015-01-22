@@ -182,6 +182,41 @@ exports.refresh = function(req, res) {
 };
 
 /**
+ * GIT Remote Branch Names
+ * @param req
+ * @param res
+ */
+exports.gitRemoteBranches = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // Send git branch -r command on project directory
+            gitTools.remoteBranches(project.dir, function (err, branches) {
+                if (err) {
+                    res.send({ "warn": true, "message": "Error: " + err });
+                } else {
+                    res.send({ "warn": false, "message": branches });
+                }
+            });
+        });
+    }
+};
+
+/**
  * GIT Checkout Branch
  * @param req
  * @param res

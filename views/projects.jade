@@ -54,14 +54,14 @@ block content
                 type='button',
                 data-placement='bottom',
                 data-toggle='popover',
-                data-title='Login',
                 data-container='body',
-                data-html='true',
-                disabled)
+                data-html='true')
         #popover-content.hide
             form.form-inline#switchGitBranchForm(role='form', style='width:400px')
                 .form-group
-                    input.form-control#newBranchName(type='text', placeholder='Branch Name', maxlength='10')
+                    select.selectpicker#switchBranchPicker(name='newBranchName', data-width='auto')
+                        option(value='null', selected) Branch Name
+                    | &nbsp;
                     button.btn.btn-primary(type='submit') Switch &raquo;
 
     // Columns
