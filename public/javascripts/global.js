@@ -20,14 +20,11 @@ $(document).ready(function() {
     /**
      * TODO: Hide popovers on random clicks
      */
-    /*$('body').on('click', function (e) {
-        //did not click a popover toggle or popover
-        if ($(e.target).data('toggle') !== 'popover'
-            && $(e.target).parents('.popover.in').length === 0
-            && $(e.target).attr('id') !== 'gitSwitchBranchProjectBtn') {
-            $('[data-toggle="popover"]').popover('hide');
+    $('html').on('click', function(e) {
+        if (typeof $(e.target).data('original-title') == 'undefined' && !$(e.target).parents().is('.popover.in')) {
+            $('[data-original-title]').popover('destroy'); // hide | destroy
         }
-    });*/
+    });
 
     /**
      * Render select picker components
@@ -459,27 +456,30 @@ $('#gitSwitchBranchProjectBtn').on('click', function() {
 
     var selectedItem = $('.list-group-item.active')[0];
     el = $(this);
-    el.html('');
 
     $.post( '/projects/gitRemoteBranches?id=' + selectedItem.id, function(result) {
         var content_header = '<form class="form-inline" id="switchGitBranchForm" role="form" style="width:400px"><div class="form-group">' +
-            '<select id="switchBranchPicker" name="newBranchName" data-width="auto" class="selectpicker">';
-        var content_footer = '</select> <button class="btn btn-primary" type="submit">Switch &raquo;</button>' +
-            '</div></form>';
+            '<select id="switchBranchPicker" name="newBranchName" data-width="150px" data-size="8" class="selectpicker">';
+        var content_footer = '</select> <button class="btn btn-primary" type="submit">Switch &raquo;</button></div></form>';
         var options = '';
         var branches = result["message"];
         $.each(branches, function(i, val) {
-            options += "<option>" + val + "</option>";
+            options += '<option data-icon="ion-fork-repo">' + val + '</option>';
         });
         var content = content_header + options + content_footer;
 
-        el.unbind('click').popover({
+        //el.unbind('click').popover({
+        el.popover({
             content: content,
             title: 'Switch Branch',
             html: true,
-            delay: {show: 500, hide: 100}
+            delay: {show: 400, hide: 100}
         }).popover('show');
     });
+});
+$('#gitSwitchBranchProjectBtn').on('shown.bs.popover', function () {
+    // Set style for selectpicker on popover content shown event
+    $('.selectpicker').selectpicker('refresh');
 });
 
 /**
