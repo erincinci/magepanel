@@ -54,7 +54,7 @@ exports.remoteBranches = function remoteBranches(dir, cb) {
             if(branch.indexOf("->") == -1)
                 branches.push(branch);
         }
-        console.debug(branches);
+
         cb(null, branches);
     });
 };

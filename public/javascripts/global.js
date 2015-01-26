@@ -16,6 +16,19 @@ $(window).load(function() {
 $(document).ready(function() {
     $('[rel=tooltip]').tooltip();
 
+
+    /**
+     * TODO: Hide popovers on random clicks
+     */
+    /*$('body').on('click', function (e) {
+        //did not click a popover toggle or popover
+        if ($(e.target).data('toggle') !== 'popover'
+            && $(e.target).parents('.popover.in').length === 0
+            && $(e.target).attr('id') !== 'gitSwitchBranchProjectBtn') {
+            $('[data-toggle="popover"]').popover('hide');
+        }
+    });*/
+
     /**
      * Render select picker components
      */
@@ -295,9 +308,10 @@ $(document).ready(function() {
      * Submit GIT switch branch form
      */
     $('#switchGitBranchForm').submit(function(event) {
-        // TODO: Implement
+        // TODO: Switch GIT branch of project on submit
         event.preventDefault();
         var formData = $(this).serialize();
+        console.debug(formData);
         var selectedItem = $('.list-group-item.active')[0];
 
         // Cancel if selection is not valid
@@ -307,7 +321,7 @@ $(document).ready(function() {
         }
 
         // jQuery AJAX call for project refresh
-        $.post( '/projects/gitSwitchBranch?id=' + selectedItem.id + "&branch=" + "master", function(result) {
+        $.post( '/projects/gitSwitchBranch?id=' + selectedItem.id + "&branch=" + $('#switchBranchPicker').val(), function(result) {
             // Check if we have warning
             if(result["warn"]) {
                 toastr.warning(result["message"], 'MagePanel Projects');
@@ -441,31 +455,30 @@ $(document).on('change', '.btn-file :file', function() {
  * GIT Switch branch modal button onClick
  */
 $('#gitSwitchBranchProjectBtn').on('click', function() {
+    // TODO: Adjust popover content style
+
     var selectedItem = $('.list-group-item.active')[0];
+    el = $(this);
+    el.html('');
 
-    // Cancel if selection is not valid
-    if (selectedItem == null) {
-        toastr.warning("Select a project first", 'MagePanel Projects');
-        return;
-    }
-
-    // jQuery AJAX call for project remote branches
     $.post( '/projects/gitRemoteBranches?id=' + selectedItem.id, function(result) {
-        // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
-        } else {
-            // TODO: Dynamically change #newBranchName selectPicker options
-            var branches = result["message"];
-            $("#switchBranchPicker option[value !='null']").remove();
-            $.each(branches, function(i, val) {
-                console.log(val);
-                $("#switchBranchPicker").append("<option>" + val + "</option>");
-            });
-            $('#switchBranchPicker').selectpicker('refresh');
-        }
-    }).error(function() {
-        toastr.error('Something went wrong ', 'MagePanel Projects');
+        var content_header = '<form class="form-inline" id="switchGitBranchForm" role="form" style="width:400px"><div class="form-group">' +
+            '<select id="switchBranchPicker" name="newBranchName" data-width="auto" class="selectpicker">';
+        var content_footer = '</select> <button class="btn btn-primary" type="submit">Switch &raquo;</button>' +
+            '</div></form>';
+        var options = '';
+        var branches = result["message"];
+        $.each(branches, function(i, val) {
+            options += "<option>" + val + "</option>";
+        });
+        var content = content_header + options + content_footer;
+
+        el.unbind('click').popover({
+            content: content,
+            title: 'Switch Branch',
+            html: true,
+            delay: {show: 500, hide: 100}
+        }).popover('show');
     });
 });
 
@@ -553,14 +566,6 @@ $('#gitPullProjectBtn').on('click', function() {
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
-});
-
-// Popover Content =======================================================
-$("[data-toggle=popover]").popover({
-    html: true,
-    content: function() {
-        return $('#popover-content').html();
-    }
 });
 
 // Functions =============================================================
