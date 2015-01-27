@@ -128,10 +128,7 @@ $('#delProjectBtn').on('click', function() {
             } else {
                 $('#projectsList').load(document.URL +  ' #projectsList');
                 $('#projectDetail').html("Select a project..");
-                $("#editProjectBtn").prop('disabled',true);
-                $("#delProjectBtn").prop('disabled',true);
-                $("#refreshProjectBtn").prop('disabled',true);
-                $("#gitPullProjectBtn").prop('disabled',true);
+                toggleProjectsPageButtons('off', null); // disable buttons
                 toastr.success(result["message"], 'MagePanel Projects');
             }
         }).error(function() {
@@ -205,7 +202,7 @@ $('#gitSwitchBranchProjectBtn').on('click', function() {
         var content_header = '<form class="form-inline" id="switchGitBranchForm" role="form" style="width:400px"><div class="form-group">' +
             '<select id="switchBranchPicker" name="newBranchName" data-width="160px" data-size="8" class="selectpicker">';
         var content_footer = '</select> <button class="btn btn-primary" id="switchToSelectedBranchBtn" type="button" onclick="switchGitBranch(switchBranchPicker.value);">Switch &raquo;</button>' +
-            '</div></form>';
+            '</div></form><script type="text/javascript">$(\'#switchBranchPicker\').selectpicker(\'refresh\');</script>';
         var options = '';
         var branches = result["message"];
         $.each(branches, function(i, val) {
@@ -221,10 +218,6 @@ $('#gitSwitchBranchProjectBtn').on('click', function() {
             delay: {show: 400, hide: 100}
         }).popover('show');
     });
-});
-$('#gitSwitchBranchProjectBtn').on('shown.bs.popover', function () {
-    // Set style for selectpicker on popover content shown event
-    $('.selectpicker').selectpicker('refresh');
 });
 
 // Mage Logs Page - Button onClick Events =============================================================

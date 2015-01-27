@@ -280,7 +280,7 @@ exports.gitPull = function(req, res) {
             console.debug("GIT pull on dir " + project.dir);
             gitTools.pull(project.dir, function (err, consoleOutput) {
                 if (err) {
-                    res.send({ "warn": true, "message": "Error: " + err + " | Output: " + consoleOutput });
+                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
                 } else {
                     res.send({ "warn": false, "message": "GIT Pull Success! : " + consoleOutput });
                 }

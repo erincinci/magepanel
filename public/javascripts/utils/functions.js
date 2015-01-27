@@ -284,10 +284,7 @@ function addProjectToDB(formData) {
             $('.modal').modal('hide');
             $('#projectListContainer').load(document.URL +  ' #projectsList');
             $('#projectDetail').html("Select a project..");
-            $("#editProjectBtn").prop('disabled',true);
-            $("#delProjectBtn").prop('disabled',true);
-            $("#refreshProjectBtn").prop('disabled',true);
-            $("#gitPullProjectBtn").prop('disabled',true);
+            toggleProjectsPageButtons('off', null); // disable buttons
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
@@ -336,4 +333,32 @@ function switchGitBranch(branchName) {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
     $('#gitSwitchBranchProjectBtn').popover('hide');
+};
+
+/**
+ * Toggle disabled/enabled states for Projects Page Buttons
+ * @param mode
+ * @param target
+ */
+function toggleProjectsPageButtons(mode, target) {
+    if (mode == 'on') {
+        // Enabled
+        $("#editProjectBtn").prop('disabled', false);
+        $("#delProjectBtn").prop('disabled', false);
+        $("#refreshProjectBtn").prop('disabled', false);
+        if (target.hasClass('ion-fork-repo')) {
+            $("#gitPullProjectBtn").prop('disabled', false);
+            $("#gitSwitchBranchProjectBtn").prop('disabled', false);
+        } else {
+            $("#gitPullProjectBtn").prop('disabled', true);
+            $("#gitSwitchBranchProjectBtn").prop('disabled', true);
+        }
+    } else {
+        // Disabled
+        $("#editProjectBtn").prop('disabled', true);
+        $("#delProjectBtn").prop('disabled', true);
+        $("#refreshProjectBtn").prop('disabled', true);
+        $("#gitPullProjectBtn").prop('disabled', true);
+        $("#gitSwitchBranchProjectBtn").prop('disabled', true);
+    }
 };
