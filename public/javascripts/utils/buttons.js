@@ -1,7 +1,7 @@
 /**
  * Created by erinci on 27.01.2015.
  */
-// Button onClick Events =============================================================
+// Mage Console Page - Button onClick Events =============================================================
 /**
  * Console Button click events
  */
@@ -34,12 +34,15 @@ $("#tailLatestLog").click(function() {
         toastr.error('There was a problem getting latest log file', 'MagePanel Logs');
     }
 });
+
 $("#clearConsole").click(function() {
     $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i><br>");
 });
+
 $("#mageinfo").click(function() {
     appendToConsole('version');
 });
+
 $("#mageReleases").click(function() {
     var selectedItem = $('#activeEnvironment').val();
     // Cancel if selection is not valid
@@ -50,6 +53,7 @@ $("#mageReleases").click(function() {
 
     appendToConsole('releases list to:' + selectedItem);
 });
+
 $("#mageDeploy").click(function() {
     var selectedItem = $('#activeEnvironment').val();
     // Cancel if selection is not valid
@@ -62,6 +66,7 @@ $("#mageDeploy").click(function() {
         appendToConsole('deploy to:' + selectedItem);
     }
 });
+
 $("#mageRollback").click(function() {
     var selectedItem = $('#activeRelease option:selected');
     var selectedItemVal = selectedItem.val();
@@ -78,6 +83,7 @@ $("#mageRollback").click(function() {
     }
 });
 
+// Projects Page - Button onClick Events =============================================================
 /**
  * Project Page Button Click Events
  */
@@ -219,6 +225,8 @@ $('#gitPullProjectBtn').on('click', function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
 });
+
+// Mage Logs Page - Button onClick Events =============================================================
 
 /**
  * Pause & Resume Tail file buttons onClick Events

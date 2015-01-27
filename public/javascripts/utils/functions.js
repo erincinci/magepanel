@@ -109,7 +109,7 @@ function activateRollbackButton () {
 }
 
 /**
- * load environments of selected project
+ * Load environments of selected project
  */
 function loadEnvs() {
     var selectedItem = $("#activeProject").val();

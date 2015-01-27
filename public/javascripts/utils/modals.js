@@ -2,6 +2,9 @@
  * Created by erinci on 27.01.2015.
  */
 // Modal Functions =======================================================
+/**
+ * On Models Hidden Event
+ */
 $('.modal').on('hidden.bs.modal', function(){
     $(this).find('form')[0].reset();
 
@@ -13,6 +16,10 @@ $('.modal').on('hidden.bs.modal', function(){
         $("#refreshProjectBtn").trigger("click");
     }
 });
+
+/**
+ * Edit File Modal Shown Event
+ */
 $('#editFileModal').on('shown.bs.modal', function () {
     // Adjust Edit File Modal Size
     $('#editFileModal .modal-body').css({'overflow-y': 'auto', 'height': $(window).height() * 0.7});
@@ -31,6 +38,10 @@ function CtrlSListener(e) {
         $('#applyFileBtn').click();
     }
 }
+
+/**
+ * Edit Project Modal Shown Event
+ */
 $('#editProjectModal').on('shown.bs.modal', function () {
     // Fill edit form with project data on modalShown
     var selectedItem = $('.list-group-item.active')[0];
@@ -56,18 +67,34 @@ $('#editProjectModal').on('shown.bs.modal', function () {
         $('#editProjectModal').modal('hide');
     }
 });
+
+/**
+ * View File Modal Shown Event
+ */
 $('#viewFileModal').on('shown.bs.modal', function () {
     // Adjust ViewFile Modal Size
     $('#viewFileModal .modal-body').css({'height': $(window).height() * 0.7});
     $('#logView').css({'height': $(window).height() * 0.68});
 });
+
+/**
+ * View File Modal Hidden Event
+ */
 $('#viewFileModal').on('hidden.bs.modal', function () {
     // End file tail command on modal hidden
     logSocket.emit('exitTail', {});
 });
+
+/**
+ * Add Project Env Modal Shown Event
+ */
 $('#addProjectEnvModal').on('shown.bs.modal', function () {
     $('#projectIdEnv').val($('.list-group-item.active')[0].id);
 });
+
+/**
+ * Add Project Task Modal Shown Event
+ */
 $('#addProjectTaskModal').on('shown.bs.modal', function () {
     $('#projectIdTask').val($('.list-group-item.active')[0].id);
 });

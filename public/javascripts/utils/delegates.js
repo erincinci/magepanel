@@ -3,7 +3,7 @@
  */
 // Element Delegates =============================================================
 /**
- * Projects - Project list group item on select action
+ * Projects Page - Project list group item on select action
  */
 $(document).delegate('#projectsList .list-group-item', 'click', function(e) {
     var previous = $(this).closest(".list-group").children(".active");
@@ -23,7 +23,7 @@ $(document).delegate('#projectsList .list-group-item', 'click', function(e) {
 });
 
 /**
- * MageLogs - Project list group item on select action
+ * MageLogs Page - Project list group item on select action
  */
 $(document).delegate('#projectsListLogs .list-group-item', 'click', function(e) {
     var previous = $(this).closest(".list-group").children(".active");

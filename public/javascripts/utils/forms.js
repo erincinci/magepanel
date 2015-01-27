@@ -1,7 +1,7 @@
 /**
  * Created by erinci on 27.01.2015.
  */
-// Form onSubmit Events =============================================================
+// System Setup Page - Form onSubmit Events =============================================================
 /**
  * Submit setup form
  */
@@ -18,6 +18,7 @@ $('#saveSettingsForm').submit(function(event) {
     });
 });
 
+// Projects Page - Form onSubmit Events =============================================================
 /**
  * Submit add project form
  */
