@@ -241,12 +241,12 @@ exports.gitSwitchBranch = function(req, res) {
             project.dir = Common.path.normalize(project.dir);
 
             // Send git checkout branch command on project directory
-            console.debug("GIT checkout branch on dir " + project.dir + " with branch " + checkoutBranch);
+            console.debug("GIT checkout branch on dir " + project.dir + ".. new branch '" + checkoutBranch + "'");
             gitTools.checkoutBranch(project.dir, checkoutBranch, function (err, consoleOutput) {
                 if (err) {
-                    res.send({ "warn": true, "message": "Error: " + err + " | Output: " + consoleOutput });
+                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
                 } else {
-                    res.send({ "warn": false, "message": "GIT switch branch success! : " + consoleOutput });
+                    res.send({ "warn": false, "message": "GIT switch branch : " + consoleOutput });
                 }
             });
         });

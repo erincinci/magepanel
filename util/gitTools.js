@@ -28,6 +28,8 @@ exports.currentBranch = function resolveGitBranch(dir, cb) {
  * @param cb
  */
 exports.checkoutBranch = function checkoutBranch(dir, branchName, cb) {
+//    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git checkout -b ' + branchNameLocal + " " + branchNameRemote, function (err, stdout, stderr) {
+    console.debug('cd ' + path.resolve(__dirname, dir) + ' && git checkout ' + branchName);
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git checkout ' + branchName, function (err, stdout, stderr) {
         if (err) return cb(err.stack);
         if (stderr) return cb(stderr);
@@ -52,7 +54,7 @@ exports.remoteBranches = function remoteBranches(dir, cb) {
         for(var i in branchList) {
             var branch = branchList[i].trim();
             if(branch.indexOf("->") == -1)
-                branches.push(branch);
+                branches.push(branch.replace(/origin\//g, "")); // TODO: Remote name assumes as 'origin'!
         }
 
         cb(null, branches);

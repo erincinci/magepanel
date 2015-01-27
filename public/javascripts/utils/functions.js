@@ -314,3 +314,26 @@ function deleteProjectFile(fileToDel) {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
 }
+
+/**
+ * Switch to Selected GIT Branch
+ * @param branchName
+ */
+function switchGitBranch(branchName) {
+    var selectedProject = $('.list-group-item.active')[0];
+
+    // jQuery AJAX call for project refresh
+    $.post( '/projects/gitSwitchBranch?id=' + selectedProject.id + "&branch=" + branchName, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            $('#'+selectedProject.id).text($('#'+selectedProject.id).text().replace(/\[.*\]/g, "[" + branchName + "]"));
+            $('#refreshProjectBtn').trigger("click");
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+    $('#gitSwitchBranchProjectBtn').popover('hide');
+};

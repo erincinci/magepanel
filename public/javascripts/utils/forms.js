@@ -142,35 +142,3 @@ $('#editFileForm').submit(function(event) {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
 });
-
-/**
- * Submit GIT switch branch form
- */
-$('#switchGitBranchForm').submit(function(event) {
-    // TODO: Switch GIT branch of project on submit
-    event.preventDefault();
-    var formData = $(this).serialize();
-    console.debug(formData);
-    var selectedItem = $('.list-group-item.active')[0];
-
-    // Cancel if selection is not valid
-    if (selectedItem == null) {
-        toastr.warning("Select a project first", 'MagePanel Projects');
-        return;
-    }
-
-    // jQuery AJAX call for project refresh
-    toastr.info('/projects/gitSwitchBranch?id=' + selectedItem.id + "&branch=" + $('#switchBranchPicker').val(), 'DEBUG');
-    /*$.post( '/projects/gitSwitchBranch?id=' + selectedItem.id + "&branch=" + $('#switchBranchPicker').val(), function(result) {
-     // Check if we have warning
-     if(result["warn"]) {
-     toastr.warning(result["message"], 'MagePanel Projects');
-     } else {
-     $('#'+selectedItem.id).trigger("click");
-     $('#refreshProjectBtn').click();
-     toastr.success(result["message"], 'MagePanel Projects');
-     }
-     }).error(function() {
-     toastr.error('Something went wrong ', 'MagePanel Projects');
-     });*/
-});

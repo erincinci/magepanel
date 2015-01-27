@@ -107,40 +107,6 @@ $("#applyFileBtn").click(function() {
 });
 
 /**
- * GIT Switch branch modal button onClick
- */
-$('#gitSwitchBranchProjectBtn').on('click', function() {
-    // TODO: Adjust popover content style
-
-    var selectedItem = $('.list-group-item.active')[0];
-    el = $(this);
-
-    $.post( '/projects/gitRemoteBranches?id=' + selectedItem.id, function(result) {
-        var content_header = '<form class="form-inline" id="switchGitBranchForm" role="form" style="width:400px"><div class="form-group">' +
-            '<select id="switchBranchPicker" name="newBranchName" data-width="150px" data-size="8" class="selectpicker">';
-        var content_footer = '</select> <button class="btn btn-primary" type="submit">Switch &raquo;</button></div></form>';
-        var options = '';
-        var branches = result["message"];
-        $.each(branches, function(i, val) {
-            options += '<option data-icon="ion-fork-repo">' + val + '</option>';
-        });
-        var content = content_header + options + content_footer;
-
-        //el.unbind('click').popover({
-        el.popover({
-            content: content,
-            title: 'Switch Branch',
-            html: true,
-            delay: {show: 400, hide: 100}
-        }).popover('show');
-    });
-});
-$('#gitSwitchBranchProjectBtn').on('shown.bs.popover', function () {
-    // Set style for selectpicker on popover content shown event
-    $('.selectpicker').selectpicker('refresh');
-});
-
-/**
  * Delete project button onClick
  */
 $('#delProjectBtn').on('click', function() {
@@ -224,6 +190,41 @@ $('#gitPullProjectBtn').on('click', function() {
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
+});
+
+/**
+ * GIT Switch Branch button onClick
+ */
+$('#gitSwitchBranchProjectBtn').on('click', function() {
+    // TODO: Adjust popover content style
+
+    var selectedItem = $('.list-group-item.active')[0];
+    el = $(this);
+
+    $.post( '/projects/gitRemoteBranches?id=' + selectedItem.id, function(result) {
+        var content_header = '<form class="form-inline" id="switchGitBranchForm" role="form" style="width:400px"><div class="form-group">' +
+            '<select id="switchBranchPicker" name="newBranchName" data-width="160px" data-size="8" class="selectpicker">';
+        var content_footer = '</select> <button class="btn btn-primary" id="switchToSelectedBranchBtn" type="button" onclick="switchGitBranch(switchBranchPicker.value);">Switch &raquo;</button>' +
+            '</div></form>';
+        var options = '';
+        var branches = result["message"];
+        $.each(branches, function(i, val) {
+            options += '<option data-icon="ion-fork-repo">' + val + '</option>';
+        });
+        var content = content_header + options + content_footer;
+
+        //el.unbind('click').popover({
+        el.popover({
+            content: content,
+            title: 'Switch Branch',
+            html: true,
+            delay: {show: 400, hide: 100}
+        }).popover('show');
+    });
+});
+$('#gitSwitchBranchProjectBtn').on('shown.bs.popover', function () {
+    // Set style for selectpicker on popover content shown event
+    $('.selectpicker').selectpicker('refresh');
 });
 
 // Mage Logs Page - Button onClick Events =============================================================
