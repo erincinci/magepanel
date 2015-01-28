@@ -3,7 +3,7 @@
  */
 // Mage Console Page - Button onClick Events =============================================================
 /**
- * Console Button click events
+ * Tail latest log button
  */
 $("#tailLatestLog").click(function() {
     // Check if any project is selected
@@ -35,39 +35,54 @@ $("#tailLatestLog").click(function() {
     }
 });
 
+/**
+ * Clear console button
+ */
 $("#clearConsole").click(function() {
     $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i><br>");
 });
 
+/**
+ * Mage Version button
+ */
 $("#mageinfo").click(function() {
-    appendToConsole('version');
+    cmdQueue.enqueue({ projectId: $('#activeProject').find(":selected").val(), cmd: 'version' });
+    appendToConsole();
 });
 
+/**
+ * List Mage Releases button
+ */
 $("#mageReleases").click(function() {
-    var selectedItem = $('#activeEnvironment').val();
-    // Cancel if selection is not valid
-    if (selectedItem == 'null') {
-        toastr.warning("Please select an active environment", 'MagePanel Console');
-        return;
-    }
+    var selectedId = $('#activeProject').find(":selected").val();
+    var selectedEnv = $('#activeEnvironment').val();
 
-    appendToConsole('releases list to:' + selectedItem);
+    // Add list releases command to queue
+    var cmd = 'releases list to:' + selectedEnv;
+    cmdQueue.enqueue({ projectId: selectedId, cmd: cmd });
+    appendToConsole();
 });
 
+/**
+ * Mage Deploy Button
+ */
 $("#mageDeploy").click(function() {
-    var selectedItem = $('#activeEnvironment').val();
-    // Cancel if selection is not valid
-    if (selectedItem == 'null') {
-        toastr.warning("Please select an active environment", 'MagePanel Console');
-        return;
-    }
+    var selectedId = $('#activeProject').find(":selected").val();
+    var selectedEnv = $('#activeEnvironment').val();
 
-    if(confirm("Do you really want to deploy to " + selectedItem + " ?")) {
-        appendToConsole('deploy to:' + selectedItem);
+    if(confirm("Do you really want to deploy to " + selectedEnv + " ?")) {
+        // Add deploy command to queue
+        var cmd = 'deploy to:' + selectedEnv;
+        cmdQueue.enqueue({ projectId: selectedId, cmd: cmd });
+        appendToConsole();
     }
 });
 
+/**
+ * Mage Rollback Button
+ */
 $("#mageRollback").click(function() {
+    var selectedId = $('#activeProject').find(":selected").val();
     var selectedItem = $('#activeRelease option:selected');
     var selectedItemVal = selectedItem.val();
     var selectedItemText = selectedItem.text();
@@ -79,8 +94,77 @@ $("#mageRollback").click(function() {
     }
 
     if(confirm("Do you really want to rollback to " + selectedItemText + " release?")) {
-        appendToConsole('releases rollback --release=' + selectedItemVal + " to:" + selectedEnvironment);
+        // Add list releases command to queue
+        var cmd = 'releases rollback --release=' + selectedItemVal + " to:" + selectedEnvironment;
+        cmdQueue.enqueue({ projectId: selectedId, cmd: cmd });
+        appendToConsole();
     }
+});
+
+/**
+ * Add to Deploy Workflow button
+ */
+var workflowPanel = null;
+$("#mageAddToFlow").click(function() {
+    // Check if panel already exists
+    if (workflowPanel == null) {
+        // Prepare content
+        var content = "<p class='clearfix'></p>";
+
+        // Create jsPanel
+        workflowPanel = $.jsPanel({
+            size:           { width: 260, height: 450 },
+            position:       { top: 240, right: 120 },
+            title:          "Workflow",
+            autoclose:      false,
+            overflow:       { horizontal: 'hidden', vertical: 'auto' },
+            bootstrap:      'info',
+            controls:       { close: 'disable', maximize: 'disable' },
+            content:        function() { return content; },
+            toolbarFooter:  [
+                {
+                    item:     "<button type='button' />",
+                    event:    "click",
+                    btnclass: "btn btn-sm btn-danger ion-close",
+                    btntext:  " Cancel",
+                    callback: function( event ){
+                        // Reset state
+                        workflowPanel.close();
+                        workflowPanel = null;
+                        cmdQueue = new Queue();
+                    }
+                },
+                {
+                    item:     "<button type='button' />",
+                    event:    "click",
+                    btnclass: "btn btn-sm btn-success ion-paper-airplane",
+                    btntext:  " Start Flow",
+                    callback: function(event){
+                        if(confirm("Do you really want to execute workflow?")) {
+                            $("#clearConsole").trigger('click');
+                            appendToConsole();
+                        }
+                    }
+                }
+            ]
+        });
+    }
+
+    // Add command to existing workflow
+    var selectedProjectId = $('#activeProject').find(":selected").val();
+    var selectedProjectName = $('#activeProject').find(":selected").text();
+    var selectedEnv = $('#activeEnvironment').find(":selected").val();
+    workflowPanel.content.append(
+            "<h4 style='text-align: center;'>" +
+                "<span class='label label-success'>" +
+                    selectedProjectName +
+                    "&nbsp;&nbsp;<span class='ion-arrow-right-c'></span>&nbsp;&nbsp;" +
+                    selectedEnv +
+                "</span>" +
+            "</h4>"
+    );
+    var deployCmd = 'deploy to:' + selectedEnv;
+    cmdQueue.enqueue({ projectId: selectedProjectId, cmd: deployCmd });
 });
 
 // Projects Page - Button onClick Events =============================================================
@@ -182,6 +266,7 @@ $('#gitPullProjectBtn').on('click', function() {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
             $('#'+selectedItem.id).trigger("click");
+            $('#refreshProjectBtn').trigger("click");
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {

@@ -31,19 +31,20 @@ function updateAjaxLoader() {
 
 /**
  * Append output to console
- * @param cmd
  */
-function appendToConsole(cmd) {
-    var selectedItem = $('#activeProject').find(":selected").val();
-    // Cancel if selection is not valid
-    if (selectedItem == 'null') {
-        toastr.warning("Please select an active project", 'MagePanel Console');
+function appendToConsole() {
+    // Check if queue is empty
+    if (cmdQueue.isEmpty()) {
+        toastr.warning("Command queue is empty!", 'MagePanel Console');
         return;
     }
 
     // Use Socket.IO for getting live command response
     consoleSocket = io.connect();
-    consoleSocket.emit('mageCommand', { cmd: cmd, id: selectedItem });
+    //console.log("Queue length: " + cmdQueue.getLength());
+    var currentCmd = cmdQueue.dequeue();
+    //console.log("Current Command: " + JSON.stringify(currentCmd));
+    consoleSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId });
     showAjaxLoader();
 
     // Get live response
@@ -67,6 +68,11 @@ function appendToConsole(cmd) {
                     break;
                 case "exit":
                     hideAjaxLoader();
+                    // If we have another command in queue, continue..
+                    if (cmdQueue.peek() != null) {
+                        mageConsole.append("-------------------------------------------------------------------<br>");
+                        appendToConsole();
+                    }
                     break;
             }
 

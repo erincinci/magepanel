@@ -7,6 +7,7 @@ var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
 var logSocket = null;
 var consoleSocket = null;
+var cmdQueue;
 
 // DOM Ready =============================================================
 $(window).load(function() {
@@ -15,6 +16,7 @@ $(window).load(function() {
 });
 $(document).ready(function() {
     $('[rel=tooltip]').tooltip();
+    cmdQueue = new Queue();
 
     /**
      * Hide popovers on random clicks

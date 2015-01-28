@@ -10,7 +10,7 @@ block content
         .col-lg-6
             ul.list-group#projectsListLogs
                 for project in projects
-                    li.list-group-item(id= project.id) #{project.name}
+                    li.list-group-item.ion-briefcase(id= project.id)  #{project.name}
                 else
                     .panel.panel-primary
                         .panel-heading

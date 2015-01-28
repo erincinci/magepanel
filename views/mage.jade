@@ -35,16 +35,21 @@ block content
                             option(value='-1') Previous
                 td
                     //button#tailLatestLog.btn.btn-default.btn-success(type='button', style='margin-right:10px', data-toggle='modal') Log
-                    button#clearConsole.btn.btn-default.btn-warning(type='button', style='margin-right:10px') Clear
-                    button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
-                    button#mageReleases.btn.btn-default.btn-info(type='button',style='margin-right:10px',disabled) Releases List
-                    button#mageRollback.btn.btn-default.btn-info(type='button',style='margin-right:10px',disabled) Rollback
-                    button#mageDeploy.btn.btn-default.btn-info(type='button',title='Deploy project to selected environment',disabled) Deploy
+                    button#clearConsole.btn.btn-default.btn-warning.ion-ios7-trash-outline(type='button', style='margin-right:10px')  Clear
+                    //button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
+                    button#mageReleases.btn.btn-default.btn-info.ion-navicon-round(type='button',style='margin-right:10px',disabled)  Releases List
+                    button#mageRollback.btn.btn-default.btn-info.ion-reply-all(type='button',style='margin-right:10px',disabled)  Rollback
+                    button#mageAddToFlow.btn.btn-default.btn-success.ion-gear-a(type='button',title='Add to workflow', style='margin-right:10px')  Add to Flow
+                    button#mageDeploy.btn.btn-default.btn-success.ion-paper-airplane(type='button',title='Deploy project to selected environment',disabled)  Deploy
     //.well
     .bs-callout.bs-callout-info#consoleFrame(Style='height: 65%; overflow: auto;')
         p#console!= content
     .spacer
         br
+
+    // ----------------
+    // Workflow jsPanel
+    div#workflowPanel
 
     // -------------
     // Modal Windows
