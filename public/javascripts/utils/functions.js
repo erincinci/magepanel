@@ -90,10 +90,12 @@ function activateCommandButtons () {
     if (selectedItem != 'null') {
         $("#mageReleases").prop("disabled",false);
         $("#mageDeploy").prop("disabled",false);
+        $("#mageAddToFlow").prop("disabled",false);
         $("#activeRelease").prop("disabled",false);
     }else{
         $("#mageReleases").prop("disabled",true);
         $("#mageDeploy").prop("disabled",true);
+        $("#mageAddToFlow").prop("disabled",true);
         $("#activeRelease").val("null");
         $("#activeRelease").prop("disabled",true);
         $("#mageRollback").prop("disabled",true);
