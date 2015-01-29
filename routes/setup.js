@@ -63,7 +63,7 @@ exports.checkUpdates = function(req) {
     // Check for GIT branch status
     gitTools.branchUpToDate(Common.path.join(__dirname, '../'), function (err, isUpToDate) {
         if (err) {
-            console.error("Error while checking for app updated on GIT! " + err.message);
+            console.error("Error while checking for app updated on GIT: " + err.message);
             req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while checking for updates ' + err.message });
         } else {
             // Check if up to date
