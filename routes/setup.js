@@ -64,7 +64,7 @@ exports.checkUpdates = function(req) {
     gitTools.branchUpToDate(Common.path.join(__dirname, '../'), function (err, isUpToDate) {
         if (err) {
             console.error("Error while checking for app updated on GIT! " + err.message);
-            req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while checking for updates' });
+            req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while checking for updates ' + err.message });
         } else {
             // Check if up to date
             if (isUpToDate) {
@@ -76,10 +76,10 @@ exports.checkUpdates = function(req) {
                 gitTools.pull(__dirname, function (err, consoleOutput) {
                     if (err) {
                         console.error("Error while getting the update! " + err.message);
-                        req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while getting updates' });
+                        req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while getting updates ' + err.message });
                     } else {
                         console.debug("Application updated successfully. " + consoleOutput);
-                        req.io.emit('updateCheck', { status: "ok", err: false, msg: 'Application updated successfully' });
+                        req.io.emit('updateCheck', { status: "updated", err: false, msg: 'Application updated successfully' });
                         // TODO: Restart application after update
                     }
                 });

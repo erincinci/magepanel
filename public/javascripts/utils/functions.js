@@ -412,10 +412,17 @@ function checkForUpdates() {
                     $('#checkingUpdates').hide();
                     $('#updateOk').show();
                     break;
+                case "updated":
+                    // Update status icon
+                    $('#checkingUpdates').hide();
+                    $('#updateOk').show();
+                    toastr.success(data.msg, 'MagePanel Auto-Updater');
+                    break;
                 case "err":
                     // Update status icon
                     $('#checkingUpdates').hide();
                     $('#updateError').show();
+                    toastr.error(data.msg, 'MagePanel Auto-Updater');
                     break;
             }
         });
