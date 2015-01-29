@@ -137,9 +137,9 @@ $("#mageAddToFlow").click(function() {
         // Create jsPanel
         workflowPanel = $.jsPanel({
             size:           { width: 280, height: 300 },
-            position:       "bottom right",
+            position:       "top right",
             title:          "Workflow",
-            //selector:       "#consoleFrame",
+            selector:       "#mainContainer",
             autoclose:      false,
             overflow:       { horizontal: 'hidden', vertical: 'auto' },
             bootstrap:      'info',
