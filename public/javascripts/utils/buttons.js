@@ -139,7 +139,7 @@ $("#mageAddToFlow").click(function() {
             size:           { width: 280, height: 300 },
             position:       "bottom right",
             title:          "Workflow",
-            selector:       "#consoleFrame",
+            //selector:       "#consoleFrame",
             autoclose:      false,
             overflow:       { horizontal: 'hidden', vertical: 'auto' },
             bootstrap:      'info',
