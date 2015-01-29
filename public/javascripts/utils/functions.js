@@ -402,6 +402,8 @@ function checkForUpdates() {
 
     // Update status icons
     $('#checkingUpdates').show();
+    $('#updateOk').hide();
+    $('#updateError').hide();
 
     // Get live response from socket
     updateSocket.on('connect', function () {

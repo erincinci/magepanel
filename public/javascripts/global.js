@@ -67,6 +67,7 @@ $(document).ready(function() {
     /**
      * Check for application updates on GIT
      */
+    // TODO: Do update check based on cookie for updating less frequently!
     checkForUpdates();
 });
 

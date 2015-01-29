@@ -55,9 +55,25 @@ html
                                 a.icon.ion-settings(href='/setup')  Application Setup
                     ul.nav.navbar-nav(style='float:right;')
                         li
-                            a.icon.ion-refreshing#checkingUpdates(href='#', rel='tooltip', data-original-title='Checking updates..', data-placement="bottom")
-                            a.icon.ion-close-circled#updateError(href='#', rel='tooltip', data-original-title='Error while updating', data-placement="bottom", style="display: none;")
-                            a.icon.ion-checkmark-circled#updateOk(href='#', rel='tooltip', data-original-title='MagePanel up-to-date', data-placement="bottom", style="display: none;")
+                            a.icon.ion-refreshing#checkingUpdates(
+                                href='#',
+                                rel='tooltip',
+                                data-original-title='Checking updates..',
+                                data-placement="bottom")
+                            a.icon.ion-close-circled#updateError(
+                                href='#',
+                                rel='tooltip',
+                                data-original-title='Error while updating',
+                                data-placement="bottom",
+                                style="display: none;",
+                                onclick="checkForUpdates();")
+                            a.icon.ion-checkmark-circled#updateOk(
+                                href='#',
+                                rel='tooltip',
+                                data-original-title='MagePanel up-to-date',
+                                data-placement="bottom",
+                                style="display: none;",
+                                onclick="checkForUpdates();")
                         li
                             a.icon.ion-person(href='#')= username
 
