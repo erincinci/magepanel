@@ -51,8 +51,8 @@ function appendToConsole() {
     // If it is a workflow, mark the active command that is being executed
     if (currentCmd.multi) {
         if (currentCmd.queueId > 0)
-            $('#queueCmd' + (currentCmd.queueId-1)).removeClass('label-warning').addClass('label-success');
-        $('#queueCmd' + currentCmd.queueId).removeClass('label-success').addClass('label-warning');
+            $('#queueCmd' + (currentCmd.queueId-1)).unblink();
+        $('#queueCmd' + currentCmd.queueId).blink({ delay: 100 });
     }
 
     // Get live response
@@ -429,3 +429,51 @@ function checkForUpdates() {
         });
     });
 }
+
+/**
+ * jQuery Blink Effect
+ */
+// Source: http://www.antiyes.com/jquery-blink-plugin
+// http://www.antiyes.com/jquery-blink/jquery-blink.js
+(function($)
+{
+    $.fn.blink = function(options)
+    {
+        var defaults = { delay:500 };
+        var options = $.extend(defaults, options);
+
+        return this.each(function()
+        {
+            var obj = $(this);
+            if (obj.attr("timerid") > 0) return;
+            var timerid=setInterval(function()
+            {
+                if($(obj).css("visibility") == "visible")
+                {
+                    $(obj).css('visibility','hidden');
+                }
+                else
+                {
+                    $(obj).css('visibility','visible');
+                }
+            }, options.delay);
+            obj.attr("timerid", timerid);
+        });
+    }
+    $.fn.unblink = function(options)
+    {
+        var defaults = { visible:true };
+        var options = $.extend(defaults, options);
+
+        return this.each(function()
+        {
+            var obj = $(this);
+            if (obj.attr("timerid") > 0)
+            {
+                clearInterval(obj.attr("timerid"));
+                obj.attr("timerid", 0);
+                obj.css('visibility', options.visible?'visible':'hidden');
+            }
+        });
+    }
+}(jQuery))
