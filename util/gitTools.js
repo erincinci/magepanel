@@ -5,6 +5,19 @@
 var path = require('path');
 var getRepoInfo = require('git-repo-info');
 
+exports.branchUpToDate = function branchUpToDate(dir, cb) {
+    //console.debug('cd ' + path.resolve(__dirname, dir) + ' && git remote update && git status -s -u no');
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git status -s -u no', function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+        if (stderr) return cb(stderr);
+
+        if (stdout.trim() == '')
+            cb(null, true);
+        else
+            cb(null, false);
+    });
+};
+
 /**
  * Runs git command for finding current branch (ASync)
  * @name resolveGitBranch

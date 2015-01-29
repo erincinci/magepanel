@@ -7,6 +7,7 @@ var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
 var logSocket = null;
 var consoleSocket = null;
+var updateSocket = null;
 var cmdQueue;
 
 // DOM Ready =============================================================
@@ -62,6 +63,11 @@ $(document).ready(function() {
     } else if(typeof setupStatus !== 'undefined' && setupStatus == 'complete') {
         toastr.success('Settings saved', 'MagePanel Setup');
     }
+
+    /**
+     * Check for application updates on GIT
+     */
+    checkForUpdates();
 });
 
 // DOM Change ============================================================

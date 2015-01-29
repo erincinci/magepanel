@@ -390,3 +390,34 @@ function toggleProjectsPageButtons(mode, target) {
         $("#gitSwitchBranchProjectBtn").prop('disabled', true);
     }
 };
+
+/**
+ * Check for Application updates
+ */
+function checkForUpdates() {
+    // Use Socket.IO for getting live application updates
+    // TODO: Check for updates every x minutes: setTimeout(function(){ alert("Hello"); }, 3000);
+    updateSocket = io.connect();
+    updateSocket.emit('checkUpdates');
+
+    // Update status icons
+    $('#checkingUpdates').show();
+
+    // Get live response from socket
+    updateSocket.on('connect', function () {
+        updateSocket.on('updateCheck', function(data) {
+            switch(data.status) {
+                case "ok":
+                    // Update status icon
+                    $('#checkingUpdates').hide();
+                    $('#updateOk').show();
+                    break;
+                case "err":
+                    // Update status icon
+                    $('#checkingUpdates').hide();
+                    $('#updateError').show();
+                    break;
+            }
+        });
+    });
+}
