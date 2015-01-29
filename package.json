@@ -20,7 +20,7 @@
   "version": "1.2.0",
   "scripts": {
     "prestart": "npm install",
-    "start": "pm2 start app.js --name MagePanel",
+    "start": "pm2 start app.js --name MagePanel --watch",
     "stop": "pm2 stop MagePanel",
     "restart": "pm2 restart MagePanel",
     "install-windows-service": "winser -i",
