@@ -68,7 +68,7 @@ exports.checkUpdates = function(req) {
         } else {
             // Check if up to date
             if (isUpToDate) {
-                console.info("Application is up to date.");
+                //console.info("Application is up to date.");
                 req.io.emit('updateCheck', { status: "ok", err: false, msg: 'Application already up to date' });
             } else {
                 console.info("Updating application..");
