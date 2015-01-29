@@ -396,7 +396,6 @@ function toggleProjectsPageButtons(mode, target) {
  */
 function checkForUpdates() {
     // Use Socket.IO for getting live application updates
-    // TODO: Check for updates every x minutes: setTimeout(function(){ alert("Hello"); }, 3000);
     updateSocket = io.connect();
     updateSocket.emit('checkUpdates');
 

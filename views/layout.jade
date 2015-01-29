@@ -59,7 +59,8 @@ html
                                 href='#',
                                 rel='tooltip',
                                 data-original-title='Checking updates..',
-                                data-placement="bottom")
+                                data-placement="bottom",
+                                style="display: none;")
                             a.icon.ion-close-circled#updateError(
                                 href='#',
                                 rel='tooltip',
@@ -72,7 +73,6 @@ html
                                 rel='tooltip',
                                 data-original-title='MagePanel up-to-date',
                                 data-placement="bottom",
-                                style="display: none;",
                                 onclick="checkForUpdates();")
                         li
                             a.icon.ion-person(href='#')= username
@@ -100,6 +100,8 @@ html
         script(src='/javascripts/jquery-ui.js')
         script(src='/javascripts/jquery.ui.touch-punch.js')
         script(src='/javascripts/mobile-detect.js')
+        // jQuery Cookies
+        script(src='/javascripts/jquery.cookie.js')
         // Twitter Bootstrap
         script(src='/javascripts/bootstrap.min.js')
         script(src='/javascripts/bootstrap-select.min.js')

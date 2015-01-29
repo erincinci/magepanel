@@ -67,8 +67,15 @@ $(document).ready(function() {
     /**
      * Check for application updates on GIT
      */
-    // TODO: Do update check based on cookie for updating less frequently!
-    checkForUpdates();
+    // Do update check based on cookie for updating less frequently
+    if ($.cookie('updateCheck') == null) {
+        // Create cookie & check of updates
+        checkForUpdates();
+        $.cookie('updateCheck', 'done', { expires: 1, path: '/' });
+    } else {
+        $('#checkingUpdates').hide();
+        $('#updateOk').show();
+    }
 });
 
 // DOM Change ============================================================
