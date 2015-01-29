@@ -46,7 +46,12 @@ $("#clearConsole").click(function() {
  * Mage Version button
  */
 $("#mageinfo").click(function() {
-    cmdQueue.enqueue({ projectId: $('#activeProject').find(":selected").val(), cmd: 'version' });
+    cmdQueue.enqueue({
+        projectId: $('#activeProject').find(":selected").val(),
+        cmd: 'version',
+        multi: false,
+        desc: 'Mage Version'
+    });
     appendToConsole();
 });
 
@@ -54,12 +59,18 @@ $("#mageinfo").click(function() {
  * List Mage Releases button
  */
 $("#mageReleases").click(function() {
+    var selectedProjectName = $('#activeProject').find(":selected").text();
     var selectedId = $('#activeProject').find(":selected").val();
     var selectedEnv = $('#activeEnvironment').val();
 
     // Add list releases command to queue
     var cmd = 'releases list to:' + selectedEnv;
-    cmdQueue.enqueue({ projectId: selectedId, cmd: cmd });
+    cmdQueue.enqueue({
+        projectId: selectedId,
+        cmd: cmd,
+        multi: false,
+        desc: selectedProjectName + ' releases on ' + selectedEnv
+    });
     appendToConsole();
 });
 
@@ -67,13 +78,19 @@ $("#mageReleases").click(function() {
  * Mage Deploy Button
  */
 $("#mageDeploy").click(function() {
+    var selectedProjectName = $('#activeProject').find(":selected").text();
     var selectedId = $('#activeProject').find(":selected").val();
     var selectedEnv = $('#activeEnvironment').val();
 
     if(confirm("Do you really want to deploy to " + selectedEnv + " ?")) {
         // Add deploy command to queue
         var cmd = 'deploy to:' + selectedEnv;
-        cmdQueue.enqueue({ projectId: selectedId, cmd: cmd });
+        cmdQueue.enqueue({
+            projectId: selectedId,
+            cmd: cmd,
+            multi: false,
+            desc: 'Deploy ' + selectedProjectName + ' to ' + selectedEnv
+        });
         appendToConsole();
     }
 });
@@ -82,6 +99,7 @@ $("#mageDeploy").click(function() {
  * Mage Rollback Button
  */
 $("#mageRollback").click(function() {
+    var selectedProjectName = $('#activeProject').find(":selected").text();
     var selectedId = $('#activeProject').find(":selected").val();
     var selectedItem = $('#activeRelease option:selected');
     var selectedItemVal = selectedItem.val();
@@ -96,7 +114,12 @@ $("#mageRollback").click(function() {
     if(confirm("Do you really want to rollback to " + selectedItemText + " release?")) {
         // Add list releases command to queue
         var cmd = 'releases rollback --release=' + selectedItemVal + " to:" + selectedEnvironment;
-        cmdQueue.enqueue({ projectId: selectedId, cmd: cmd });
+        cmdQueue.enqueue({
+            projectId: selectedId,
+            cmd: cmd,
+            multi: false,
+            desc: 'Rollback ' + selectedProjectName + ' environment ' + selectedEnvironment + ' to ' + selectedItemText
+        });
         appendToConsole();
     }
 });
@@ -113,9 +136,10 @@ $("#mageAddToFlow").click(function() {
 
         // Create jsPanel
         workflowPanel = $.jsPanel({
-            size:           { width: 260, height: 450 },
-            position:       { top: 240, right: 120 },
+            size:           { width: 280, height: 300 },
+            position:       "bottom right",
             title:          "Workflow",
+            selector:       "#consoleFrame",
             autoclose:      false,
             overflow:       { horizontal: 'hidden', vertical: 'auto' },
             bootstrap:      'info',
@@ -128,10 +152,7 @@ $("#mageAddToFlow").click(function() {
                     btnclass: "btn btn-sm btn-danger ion-close",
                     btntext:  " Cancel",
                     callback: function( event ){
-                        // Reset state
-                        workflowPanel.close();
-                        workflowPanel = null;
-                        cmdQueue = new Queue();
+                        resetWorkflowPanel();
                     }
                 },
                 {
@@ -154,17 +175,24 @@ $("#mageAddToFlow").click(function() {
     var selectedProjectId = $('#activeProject').find(":selected").val();
     var selectedProjectName = $('#activeProject').find(":selected").text();
     var selectedEnv = $('#activeEnvironment').find(":selected").val();
+    var deployCmd = 'deploy to:' + selectedEnv;
+    // TODO: Queue commands other than deploy to the workflow
+    cmdQueue.enqueue({
+        projectId: selectedProjectId,
+        cmd: deployCmd,
+        multi: true,
+        queueId: cmdQueue.getLength() + 1,
+        desc: 'Deploy ' + selectedProjectName + ' to ' + selectedEnv
+    });
     workflowPanel.content.append(
             "<h4 style='text-align: center;'>" +
-                "<span class='label label-success'>" +
+                "<span class='label label-success' id='queueCmd" + cmdQueue.getLength() + "'>" +
                     selectedProjectName +
                     "&nbsp;&nbsp;<span class='ion-arrow-right-c'></span>&nbsp;&nbsp;" +
                     selectedEnv +
                 "</span>" +
             "</h4>"
     );
-    var deployCmd = 'deploy to:' + selectedEnv;
-    cmdQueue.enqueue({ projectId: selectedProjectId, cmd: deployCmd });
 });
 
 // Projects Page - Button onClick Events =============================================================
@@ -278,8 +306,6 @@ $('#gitPullProjectBtn').on('click', function() {
  * GIT Switch Branch button onClick
  */
 $('#gitSwitchBranchProjectBtn').on('click', function() {
-    // TODO: Adjust popover content style
-
     var selectedItem = $('.list-group-item.active')[0];
     el = $(this);
 

@@ -15,7 +15,7 @@ block content
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-briefcase
-                        select#activeProject.selectpicker(name='activeProject', data-width='auto',onchange='loadEnvs()')
+                        select#activeProject.selectpicker(name='activeProject', data-width='150px',onchange='loadEnvs()')
                             option(value='null', selected) Select Project
                             for project in projects
                                 option(value= project.id)= project.name
@@ -23,7 +23,7 @@ block content
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-cloud
-                        select#activeEnvironment.selectpicker(name='activeEnvironment', data-width='auto',onchange='activateCommandButtons()', disabled)
+                        select#activeEnvironment.selectpicker(name='activeEnvironment', data-width='150px',onchange='activateCommandButtons()', disabled)
                             option(value='null', selected) Select Environment
                 td
                     .input-group(style='margin-right:10px')
@@ -37,9 +37,9 @@ block content
                     //button#tailLatestLog.btn.btn-default.btn-success(type='button', style='margin-right:10px', data-toggle='modal') Log
                     button#clearConsole.btn.btn-default.btn-warning.ion-ios7-trash-outline(type='button', style='margin-right:10px')  Clear
                     //button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
-                    button#mageReleases.btn.btn-default.btn-info.ion-navicon-round(type='button',style='margin-right:10px',disabled)  Releases List
+                    button#mageReleases.btn.btn-default.btn-info.ion-navicon-round(type='button',style='margin-right:10px',disabled)  Releases
                     button#mageRollback.btn.btn-default.btn-info.ion-reply-all(type='button',style='margin-right:10px',disabled)  Rollback
-                    button#mageAddToFlow.btn.btn-default.btn-success.ion-gear-a(type='button',title='Add to workflow', style='margin-right:10px', disabled)  Add to Flow
+                    button#mageAddToFlow.btn.btn-default.btn-success.ion-gear-a(type='button',title='Add to workflow', style='margin-right:10px', disabled)  Queue
                     button#mageDeploy.btn.btn-default.btn-success.ion-paper-airplane(type='button',title='Deploy project to selected environment',disabled)  Deploy
     //.well
     .bs-callout.bs-callout-info#consoleFrame(Style='height: 65%; overflow: auto;')

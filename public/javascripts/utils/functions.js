@@ -41,15 +41,21 @@ function appendToConsole() {
 
     // Use Socket.IO for getting live command response
     consoleSocket = io.connect();
-    //console.log("Queue length: " + cmdQueue.getLength());
+    var mageConsole = $('#console');
+    var mageConsoleFrame = $('#consoleFrame');
     var currentCmd = cmdQueue.dequeue();
-    //console.log("Current Command: " + JSON.stringify(currentCmd));
+    mageConsole.append("<span class='console-pointer'>&gt;&gt; </span><b>" + currentCmd.desc + "</b><br>");
     consoleSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId });
     showAjaxLoader();
 
+    // If it is a workflow, mark the active command that is being executed
+    if (currentCmd.multi) {
+        if (currentCmd.queueId > 0)
+            $('#queueCmd' + (currentCmd.queueId-1)).removeClass('label-warning').addClass('label-success');
+        $('#queueCmd' + currentCmd.queueId).removeClass('label-success').addClass('label-warning');
+    }
+
     // Get live response
-    var mageConsole = $('#console');
-    var mageConsoleFrame = $('#consoleFrame');
     consoleSocket.on('connect', function () {
         //console.log('Connected to backend!');
         consoleSocket.on('cmdResponse', function(data) {
@@ -72,6 +78,8 @@ function appendToConsole() {
                     if (cmdQueue.peek() != null) {
                         mageConsole.append("-------------------------------------------------------------------<br>");
                         appendToConsole();
+                    } else {
+                        resetWorkflowPanel();
                     }
                     break;
             }
@@ -80,6 +88,18 @@ function appendToConsole() {
             updateAjaxLoader();
         });
     });
+}
+
+/**
+ * Reset state of workflow panel
+ */
+function resetWorkflowPanel() {
+    if (workflowPanel != null) {
+        // Reset state
+        workflowPanel.close();
+        workflowPanel = null;
+        cmdQueue = new Queue();
+    }
 }
 
 /**
