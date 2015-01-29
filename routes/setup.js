@@ -68,12 +68,12 @@ exports.checkUpdates = function(req) {
         } else {
             // Check if up to date
             if (isUpToDate) {
-                //console.info("Application is up to date.");
                 req.io.emit('updateCheck', { status: "ok", err: false, msg: 'Application already up to date' });
             } else {
                 console.info("Updating application..");
+
                 // Update app from GIT
-                gitTools.pull(__dirname, function (err, consoleOutput) {
+                gitTools.pull(Common.path.join(__dirname, '../'), function (err, consoleOutput) {
                     if (err) {
                         console.error("Error while getting the update! " + err.message);
                         req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while getting updates ' + err.message });

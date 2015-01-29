@@ -7,14 +7,21 @@ var getRepoInfo = require('git-repo-info');
 
 exports.branchUpToDate = function branchUpToDate(dir, cb) {
     // Execute fetch & status commands for checking if there's any commits to pull from remote
-    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git fetch && git status -s -u no', function (err, stdout, stderr) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git fetch && git status -b -s', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
-        if (stderr) return cb(stderr);
 
-        if (stdout.trim() == '')
-            cb(null, true);
+        // Get output (TODO: Somehow comes as stderr!)
+        var output;
+        if (stderr)
+            output = stderr.trim();
         else
+            output = stdout.trim();
+
+        // Return result
+        if (output.indexOf('[behind') > -1)
             cb(null, false);
+        else
+            cb(null, true);
     });
 };
 
