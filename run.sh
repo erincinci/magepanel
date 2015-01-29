@@ -109,22 +109,18 @@ echo -e "${clear_screen}"
 printTitle
 
 # Check if NodeJS is installed in system
-command -v node >/dev/null 2>&1 || {
-    echo -e >&2 `date +"%d %b %T"`" - ${light_red}[runner] This application requires NodeJS, please install it using your package manager first.${default}";
+command -v npm >/dev/null 2>&1 || {
+    echo -e >&2 `date +"%d %b %T"`" - ${light_red}[runner] This application requires NodeJS & NPM, please install it using your package manager first.${default}";
     exit 1;
 }
 
-# Install node package dependencies
-echo -e `date +"%d %b %T"`" - ${magenta}[runner] Installing node dependencies if necessary..${default}\n"
-npm install
-
-# Check if nodemon command exists in system
-command -v nodemon >/dev/null 2>&1 || {
-    echo >&2 "\n"`date +"%d %b %T"`" - ${magenta}[runner] This script requires nodemon, installing..${default}";
-    sudo npm install nodemon -g;
+# Check if pm2 exists in system
+command -v pm2 >/dev/null 2>&1 || {
+    echo >&2 "\n"`date +"%d %b %T"`" - ${magenta}[runner] This script requires pm2, installing..${default}";
+    sudo npm install pm2 -g;
 }
 
 # Start app
 echo -e "\n"`date +"%d %b %T"`" - ${cyan}[runner] Starting MagePanel using nodemon & Launching browser..${default}\n"
 #openUrlInBrowser ${url}
-nodemon -i logs/ ./app.js ${port}
+npm start
