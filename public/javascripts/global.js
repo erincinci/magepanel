@@ -5,9 +5,7 @@
 var codeMirror = null;
 var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
-var logSocket = null;
-var consoleSocket = null;
-var updateSocket = null;
+var ioSocket = null;
 var cmdQueue;
 
 // DOM Ready =============================================================
@@ -64,11 +62,16 @@ $(document).ready(function() {
         toastr.success('Settings saved', 'MagePanel Setup');
     }
 
-    /**
-     * Check for application updates on GIT
-     */
-    // Do update check based on cookie for updating less frequently
+    // Connect to backend with Socket.IO
+    ioSocket = io.connect();
+    ioSocket.on('connect', function () {
+        console.log('Connected to backend with Socket.IO!');
+    });
+
+    // Get revision version for app
     getRevisionVersion();
+
+    // Do update check based on cookie for updating less frequently
     if ($.cookie('updateCheck') == null) {
         // Create cookie & check of updates
         checkForUpdates();

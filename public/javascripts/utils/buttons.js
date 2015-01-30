@@ -20,7 +20,6 @@ $("#tailLatestLog").click(function() {
             if (logJson != 'null') {
                 if (logJson["status"] == "success") {
                     $('#viewFileModal').modal('show');
-                    // TODO: Fix mixing of tail log and tail console sockets
                     tailLogFile(logJson.logFile, logJson.logDate, logJson.logTime);
                 }else{
                     toastr.warning(logJson["message"], 'MagePanel Logs');
@@ -337,12 +336,12 @@ $('#gitSwitchBranchProjectBtn').on('click', function() {
  * Pause & Resume Tail file buttons onClick Events
  */
 $("#pauseTailFileBtn").click(function() {
-    logSocket.emit('pauseTail', {});
+    ioSocket.emit('pauseTail', {});
     $('#pauseTailFileBtn').hide();
     $('#resumeTailFileBtn').show();
 });
 $("#resumeTailFileBtn").click(function() {
-    logSocket.emit('resumeTail', {});
+    ioSocket.emit('resumeTail', {});
     $('#pauseTailFileBtn').show();
     $('#resumeTailFileBtn').hide();
 });

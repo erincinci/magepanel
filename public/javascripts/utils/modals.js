@@ -82,7 +82,7 @@ $('#viewFileModal').on('shown.bs.modal', function () {
  */
 $('#viewFileModal').on('hidden.bs.modal', function () {
     // End file tail command on modal hidden
-    logSocket.emit('exitTail', {});
+    ioSocket.emit('exitTail', {});
 });
 
 /**

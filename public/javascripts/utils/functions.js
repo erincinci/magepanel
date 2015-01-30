@@ -39,13 +39,14 @@ function appendToConsole() {
         return;
     }
 
+    // TODO: Remove other sockets, use only one socket in all app!
+
     // Use Socket.IO for getting live command response
-    consoleSocket = io.connect();
     var mageConsole = $('#console');
     var mageConsoleFrame = $('#consoleFrame');
     var currentCmd = cmdQueue.dequeue();
     mageConsole.append("<span class='console-pointer'>&gt;&gt; </span><b>" + currentCmd.desc + "</b><br>");
-    consoleSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId });
+    ioSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId });
     showAjaxLoader();
 
     // If it is a workflow, mark the active command that is being executed
@@ -56,37 +57,34 @@ function appendToConsole() {
     }
 
     // Get live response
-    consoleSocket.on('connect', function () {
-        //console.log('Connected to backend!');
-        consoleSocket.on('cmdResponse', function(data) {
-            switch(data.status) {
-                case "stdout":
-                    // Append results to console tag
-                    mageConsole.append(data.result);
-                    mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
-                    break;
-                case "stderr":
-                    // TODO: Show error in MageConsole in different style
-                    break;
-                case "warning":
-                    // Show warning toast to user
-                    toastr.warning(data.result, 'MagePanel Console');
-                    break;
-                case "exit":
-                    hideAjaxLoader();
-                    // If we have another command in queue, continue..
-                    if (cmdQueue.peek() != null) {
-                        mageConsole.append("-------------------------------------------------------------------<br>");
-                        appendToConsole();
-                    } else {
-                        resetWorkflowPanel();
-                    }
-                    break;
-            }
+    ioSocket.on('cmdResponse', function(data) {
+        switch(data.status) {
+            case "stdout":
+                // Append results to console tag
+                mageConsole.append(data.result);
+                mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
+                break;
+            case "stderr":
+                // TODO: Show error in MageConsole in different style
+                break;
+            case "warning":
+                // Show warning toast to user
+                toastr.warning(data.result, 'MagePanel Console');
+                break;
+            case "exit":
+                hideAjaxLoader();
+                // If we have another command in queue, continue..
+                if (cmdQueue.peek() != null) {
+                    mageConsole.append("-------------------------------------------------------------------<br>");
+                    appendToConsole();
+                } else {
+                    resetWorkflowPanel();
+                }
+                break;
+        }
 
-            // Readjust ajax loader div
-            updateAjaxLoader();
-        });
+        // Readjust ajax loader div
+        updateAjaxLoader();
     });
 }
 
@@ -269,33 +267,30 @@ function tailLogFile(orgFile, logDate, logTime) {
     showAjaxLoader();
 
     // Use Socket.IO for tailing log file
-    logSocket = io.connect();
-    logSocket.emit('tailLog', { file: orgFile, tailStatus: 'running' });
+    ioSocket.emit('tailLog', { file: orgFile, tailStatus: 'running' });
 
     // Get tail data from socket
-    logSocket.on('connect', function () {
-        logSocket.on('logTailContent', function(data) {
-            hideAjaxLoader();
+    ioSocket.on('logTailContent', function(data) {
+        hideAjaxLoader();
 
-            // Update data or show toast according to data status
-            switch(data.status) {
-                case 'running':
-                    logView.append(data.line).scrollTop(logView[0].scrollHeight);
-                    break;
-                case 'paused':
-                    toastr.warning(data.line, 'MagePanel Logs');
-                    break;
-                case 'resumed':
-                    toastr.success(data.line, 'MagePanel Logs');
-                    break;
-                case 'closed':
-                    toastr.info(data.line, 'MagePanel Logs');
-                    break;
-                case 'error':
-                    toastr.error(data.line, 'MagePanel Logs');
-                    break;
-            }
-        });
+        // Update data or show toast according to data status
+        switch(data.status) {
+            case 'running':
+                logView.append(data.line).scrollTop(logView[0].scrollHeight);
+                break;
+            case 'paused':
+                toastr.warning(data.line, 'MagePanel Logs');
+                break;
+            case 'resumed':
+                toastr.success(data.line, 'MagePanel Logs');
+                break;
+            case 'closed':
+                toastr.info(data.line, 'MagePanel Logs');
+                break;
+            case 'error':
+                toastr.error(data.line, 'MagePanel Logs');
+                break;
+        }
     });
 }
 
@@ -397,7 +392,7 @@ function toggleProjectsPageButtons(mode, target) {
 function checkForUpdates() {
     // Use Socket.IO for getting live application updates
     //updateSocket = io.connect();
-    updateSocket.emit('checkUpdates');
+    ioSocket.emit('checkUpdates');
 
     // Update status icons
     $('#checkingUpdates').show();
@@ -405,29 +400,27 @@ function checkForUpdates() {
     $('#updateError').hide();
 
     // Get live response from socket
-    //updateSocket.on('connect', function () {
-        updateSocket.on('updateCheck', function(data) {
-            switch(data.status) {
-                case "ok":
-                    // Update status icon
-                    $('#checkingUpdates').hide();
-                    $('#updateOk').show();
-                    break;
-                case "updated":
-                    // Update status icon
-                    $('#checkingUpdates').hide();
-                    $('#updateOk').show();
-                    toastr.success(data.msg, 'MagePanel Auto-Updater');
-                    break;
-                case "err":
-                    // Update status icon
-                    $('#checkingUpdates').hide();
-                    $('#updateError').show();
-                    toastr.error(data.msg, 'MagePanel Auto-Updater');
-                    break;
-            }
-        });
-    //});
+    ioSocket.on('updateCheck', function(data) {
+        switch(data.status) {
+            case "ok":
+                // Update status icon
+                $('#checkingUpdates').hide();
+                $('#updateOk').show();
+                break;
+            case "updated":
+                // Update status icon
+                $('#checkingUpdates').hide();
+                $('#updateOk').show();
+                toastr.success(data.msg, 'MagePanel Auto-Updater');
+                break;
+            case "err":
+                // Update status icon
+                $('#checkingUpdates').hide();
+                $('#updateError').show();
+                toastr.error(data.msg, 'MagePanel Auto-Updater');
+                break;
+        }
+    });
 }
 
 /**
@@ -435,17 +428,14 @@ function checkForUpdates() {
  */
 function getRevisionVersion() {
     // Use Socket.IO for getting live application revision version
-    updateSocket = io.connect();
-    updateSocket.emit('revisionVersion');
+    ioSocket.emit('revisionVersion');
 
     // Get live response from socket
-    updateSocket.on('connect', function () {
-        updateSocket.on('revisionVersion', function(data) {
-            // Show revision number on tooltip
-            if (! data.err) {
-                $('#updateOk').attr('data-original-title', 'MagePanel ' + data.version);
-            }
-        });
+    ioSocket.on('revisionVersion', function(data) {
+        // Show revision number on tooltip
+        if (! data.err) {
+            $('#updateOk').attr('data-original-title', 'MagePanel ' + data.version);
+        }
     });
 }
 
