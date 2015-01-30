@@ -8,7 +8,6 @@ var ajaxTimeout = 600;
 var logSocket = null;
 var consoleSocket = null;
 var updateSocket = null;
-var revisionSocket = null;
 var cmdQueue;
 
 // DOM Ready =============================================================

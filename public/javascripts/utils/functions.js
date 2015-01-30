@@ -396,7 +396,7 @@ function toggleProjectsPageButtons(mode, target) {
  */
 function checkForUpdates() {
     // Use Socket.IO for getting live application updates
-    updateSocket = io.connect();
+    //updateSocket = io.connect();
     updateSocket.emit('checkUpdates');
 
     // Update status icons
@@ -405,7 +405,7 @@ function checkForUpdates() {
     $('#updateError').hide();
 
     // Get live response from socket
-    updateSocket.on('connect', function () {
+    //updateSocket.on('connect', function () {
         updateSocket.on('updateCheck', function(data) {
             switch(data.status) {
                 case "ok":
@@ -427,7 +427,7 @@ function checkForUpdates() {
                     break;
             }
         });
-    });
+    //});
 }
 
 /**
@@ -435,12 +435,12 @@ function checkForUpdates() {
  */
 function getRevisionVersion() {
     // Use Socket.IO for getting live application revision version
-    revisionSocket = io.connect();
-    revisionSocket.emit('revisionVersion');
+    updateSocket = io.connect();
+    updateSocket.emit('revisionVersion');
 
     // Get live response from socket
-    revisionSocket.on('connect', function () {
-        revisionSocket.on('revisionVersion', function(data) {
+    updateSocket.on('connect', function () {
+        updateSocket.on('revisionVersion', function(data) {
             // Show revision number on tooltip
             if (! data.err) {
                 $('#updateOk').attr('data-original-title', 'MagePanel ' + data.version);
