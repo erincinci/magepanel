@@ -32,6 +32,53 @@ exports.index = function(req, res) {
 };
 
 /**
+ * Get project's latest log file
+ * @param req
+ * @param res
+ */
+exports.projectLatestLog = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send("ID not found!");
+        return;
+    } else {
+        // Get project from DB
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(err);
+                res.send("There was an error getting project logs!");
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.S(project.dir).replaceAll("\\", "/").s;
+
+            // Get project logs from dir
+            var projectLogs = getProjectLogsFromDir(project.dir).sort().reverse();
+
+            if (Common._.size(projectLogs) > 0) {
+                // First log is the latest log, prepare JSON data to send
+                var latestLog = projectLogs[0];
+                var logDateTime = Common.S(latestLog).chompLeft('log-').chompRight('.log');
+                var latestLogJson = {
+                    "status" : "success",
+                    "logFile": project.dir + '/.mage/logs/' + latestLog,
+                    "logDate": logDateTime.substr(0, 4) + "/" + logDateTime.substr(4, 2) + "/" + logDateTime.substr(6, 2),
+                    "logTime": logDateTime.substr(9, 2) + ":" + logDateTime.substr(11, 2) + ":" + logDateTime.substr(13, 2)
+                }
+                res.json(latestLogJson);
+            }else{
+                res.json({"status" : "warning","message":"No log file found"});
+            }
+
+
+        });
+    }
+}
+
+/**
  * Get project logs
  * @param req
  * @param res

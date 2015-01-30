@@ -1,0 +1,34 @@
+// Edit Project Modal
+#editProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+    .modal-dialog
+        .modal-content
+            form#editProjectForm(method='POST', action='/projects/edit')
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span(aria-hidden='true') ×
+                        span.sr-only Close
+                    h4#modalLabel.modal-title.icon.ion-edit  Edit Project
+                .modal-body
+                    // Add project form contents
+                    input#projectEditId(type='hidden', name='projectId', value='')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-folder
+                        input.form-control#projectEditDir(name='projectDir', type='text', placeholder='Enter project directory')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-android-information
+                        input.form-control#projectEditName(name='projectName', type='text', placeholder='Enter project name')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-android-mail
+                        input.form-control#projectEditMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-speakerphone
+                        select.selectpicker#projectEditReportingSwitch(name='projectReportingEnabled', data-width='auto')
+                            option(value='On') On
+                            option(value='Off') Off
+                .modal-footer
+                    button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Discard
+                    button.btn.btn-primary.glyphicon.glyphicon-floppy-disk(type='submit') Update

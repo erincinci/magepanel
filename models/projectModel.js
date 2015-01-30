@@ -9,6 +9,7 @@ module.exports = ProjectModel = model("Project")
     .attr('id')
     .attr('name')
     .attr('dir')
+    .attr('branch')
     .attr('mailAddress')
     .attr('reportingEnabled')
     .attr('envs')
@@ -25,6 +26,7 @@ ProjectModel.init = function(instance) {
 exports.toString = toString = function(project) {
     var str = "<b>Name: </b>" + project.name +
         "<br><b>Dir: </b>" + project.dir +
+        "<br><b>Branch: </b>" + project.branch +
         "<br><b>Environments: </b>" + project.envs +
         "<br><b>Custom Tasks: </b>" + project.tasks +
         "<br><b>E-Mail: </b>" + project.mailAddress +

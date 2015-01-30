@@ -4,10 +4,34 @@
 var Common = require('../common');
 var fs = require('fs');
 var tempWrite = require('../util/temp-write');
+var gitTools = require('../util/gitTools');
 
 // Vars
 var settings = Common.SettingsModel.create();
 var title = "Projects";
+
+/**
+ * [Backward Compatibility]
+ * Refresh old project with adding new info
+ * @param projects
+ */
+function fixProject(project) {
+    project = Common.dbUtils.cleanResult(project);
+    project.dir = Common.path.normalize(project.dir);
+
+    // Create refreshed project
+    var refreshedProject = Common.ProjectModel.create();
+    refreshedProject.id(project.id);
+    refreshedProject.dir(project.dir);
+    refreshedProject.branch(gitTools.currentBranchSync(project.dir));
+    refreshedProject.name(project.name);
+    refreshedProject.envs(getProjectEnvs(project.dir));
+    refreshedProject.tasks(getProjectTasks(project.dir));
+    refreshedProject.mailAddress(project.mailAddress);
+    refreshedProject.reportingEnabled(project.reportingEnabled);
+
+    return refreshedProject;
+}
 
 /**
  * Get projects index
@@ -18,7 +42,23 @@ exports.index = function(req, res) {
     // Get all projects from DB
     Common.projectsDB.all(function(err, projects) {
         if (err)
-            console.error(err);
+            console.error(err.message);
+
+        // [Backward compatibility] Check if current projects has branch info
+        Common._.each(projects, function(project) {
+            if (project.branch == null) {
+                console.debug("Project before fix: " + Common.util.inspect(project, false, null));
+                var dirtyProject = fixProject(project);
+                project = Common.dbUtils.cleanResult(dirtyProject);
+                console.debug("Project after fix: " + Common.util.inspect(project, false, null));
+
+                // Refresh project at DB
+                Common.projectsDB.save(project.id, project, function(err) {
+                    if (err)
+                        console.error(err.message);
+                });
+            }
+        });
 
         res.render('projects', {
             username: Common.username,
@@ -54,6 +94,7 @@ exports.add = function(req, res) {
     var project = Common.ProjectModel.create();
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
+    project.branch(gitTools.currentBranchSync(data['projectDir']));
     project.name(data['projectName']);
     project.mailAddress(data['projectMail']);
     if (data['projectReportingEnabled'] == 'On')
@@ -106,7 +147,7 @@ exports.refresh = function(req, res) {
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
-                console.error(selectedId + ": " + err);
+                console.error(selectedId + ": " + err.message);
                 res.send({"warn": true, "message": "There was an error getting project from DB!"});
                 return;
             }
@@ -119,6 +160,7 @@ exports.refresh = function(req, res) {
             var refreshedProject = Common.ProjectModel.create();
             refreshedProject.id(project.id);
             refreshedProject.dir(project.dir);
+            refreshedProject.branch(gitTools.currentBranchSync(project.dir));
             refreshedProject.name(project.name);
             refreshedProject.envs(getProjectEnvs(project.dir));
             refreshedProject.tasks(getProjectTasks(project.dir));
@@ -134,6 +176,114 @@ exports.refresh = function(req, res) {
                 }
 
                 res.send({"warn": false, "message": "Project successfully refreshed"});
+            });
+        });
+    }
+};
+
+/**
+ * GIT Remote Branch Names
+ * @param req
+ * @param res
+ */
+exports.gitRemoteBranches = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // Send git branch -r command on project directory
+            gitTools.remoteBranches(project.dir, function (err, branches) {
+                if (err) {
+                    res.send({ "warn": true, "message": "Error: " + err });
+                } else {
+                    res.send({ "warn": false, "message": branches });
+                }
+            });
+        });
+    }
+};
+
+/**
+ * GIT Checkout Branch
+ * @param req
+ * @param res
+ */
+exports.gitSwitchBranch = function(req, res) {
+    var selectedId = req.query.id;
+    var checkoutBranch = req.query.branch;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // Send git checkout branch command on project directory
+            console.debug("GIT checkout branch on dir " + project.dir + ".. new branch '" + checkoutBranch + "'");
+            gitTools.checkoutBranch(project.dir, checkoutBranch, function (err, consoleOutput) {
+                if (err) {
+                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
+                } else {
+                    res.send({ "warn": false, "message": "GIT switch branch : " + consoleOutput });
+                }
+            });
+        });
+    }
+};
+
+/**
+ * GIT Pull Project
+ * @param req
+ * @param res
+ */
+exports.gitPull = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // Send git pull command on project directory
+            console.debug("GIT pull on dir " + project.dir);
+            gitTools.pull(project.dir, function (err, consoleOutput) {
+                if (err) {
+                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
+                } else {
+                    res.send({ "warn": false, "message": "GIT Pull Success! : " + consoleOutput });
+                }
             });
         });
     }
@@ -219,9 +369,17 @@ exports.addEnvFile = function(req, res) {
  */
 exports.addTaskFile = function(req, res) {
     // Get task name from form data
-    var templateFile = "public/file-templates/Task.php";
     var selectedId = req.body['projectId'];
     var newFileName = req.body['taskName'];
+    var rollbackAware = req.body['rollbackAware'];
+    var templatePath = "public/file-templates/";
+    var templateFile;
+
+    if (rollbackAware == "on") {
+        var templateFile = templatePath + "Task-RollbackAware.php";
+    }else{
+        var templateFile = templatePath + "Task.php";
+    }
 
     Common.projectsDB.get(selectedId, function (err, project) {
         if (err) {
@@ -304,7 +462,24 @@ exports.saveFile = function(req, res) {
     var code = data['code'];
     var fileName = Common.path.basename(orgFile);
 
-    // Overwrite environment YAML file
+    // Overwrite project file
+    fs.writeFileSync(orgFile, code);
+
+    res.send({"warn": false, "message": "<strong>" + fileName + "</strong> file successfully saved"});
+};
+
+/**
+ * Apply Edited File
+ * @param req
+ * @param res
+ */
+exports.applyFile = function(req, res) {
+    // Get data
+    var orgFile = req.body.orgFile;
+    var code = req.body.code;
+    var fileName = Common.path.basename(orgFile);
+
+    // Overwrite project file
     fs.writeFileSync(orgFile, code);
 
     res.send({"warn": false, "message": "<strong>" + fileName + "</strong> file successfully saved"});
@@ -397,4 +572,3 @@ function getProjectTasks(projectDir) {
 
     return projectTasks;
 }
-

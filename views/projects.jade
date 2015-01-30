@@ -20,7 +20,7 @@ block content
                 data-target='#initProjectModal',
                 type='button',
                 style='margin-right:10px')
-        | |&nbsp;
+        | &nbsp;
         button#editProjectBtn.btn.btn-default.btn-info.icon.ion-edit(
                 rel='tooltip',
                 data-original-title='Edit project',
@@ -39,6 +39,22 @@ block content
                 rel='tooltip',
                 data-original-title='Refresh project',
                 type='button',
+                style='margin-right:10px',
+                disabled)
+        | &nbsp;
+        button#gitPullProjectBtn.btn.btn-default.btn-success.icon.ion-arrow-down-c(
+                rel='tooltip',
+                data-original-title='GIT Pull project',
+                type='button',
+                style='margin-right:10px',
+                disabled)
+        button#gitSwitchBranchProjectBtn.btn.btn-warning.btn-success.icon.ion-fork-repo(
+                rel='tooltip',
+                data-original-title='GIT Switch Branch',
+                type='button',
+                data-placement='bottom',
+                data-toggle='popover',
+                data-html='true',
                 disabled)
 
     // Columns
@@ -47,8 +63,12 @@ block content
         .col-lg-6
             div#projectListContainer
                 ul.list-group#projectsList
-                    for project in projects
-                        li.list-group-item(id= project.id) #{project.name}
+                    if projects
+                        for project in projects
+                            if project.branch != 'N/A'
+                                li.list-group-item(id= project.id).ion-fork-repo  [#{project.branch}] - #{project.name}
+                            else
+                                li.list-group-item(id= project.id).ion-briefcase  [Local] - #{project.name}
                     else
                         .panel.panel-primary
                             .panel-heading
@@ -65,168 +85,9 @@ block content
 
     // -------------
     // Modal Windows
-
-    // Init Project Modal
-    #initProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
-        .modal-dialog
-            .modal-content
-                form#initProjectForm(method='POST', action='/projects/init')
-                    .modal-header
-                        button.close(type='button', data-dismiss='modal')
-                            span(aria-hidden='true') ×
-                            span.sr-only Close
-                        h4#modalLabel.modal-title.icon.ion-android-star  Init Project
-                    .modal-body
-                        // Init project form contents
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-folder
-                            input.form-control#projectInitDir(name='projectDir', type='text', placeholder='Enter project directory')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-android-information
-                            input.form-control#projectInitName(name='projectName', type='text', placeholder='Enter project name')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-android-mail
-                            input.form-control#projectInitMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-speakerphone
-                            select.selectpicker#projectInitReportingSwitch(name='projectReportingEnabled', data-width='auto')
-                                option(value='On', selected) On
-                                option(value='Off') Off
-                    .modal-footer
-                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Initialize
-
-    // Add Project Modal
-    #addProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
-        .modal-dialog
-            .modal-content
-                form#addProjectForm(method='POST', action='/projects/add')
-                    .modal-header
-                        button.close(type='button', data-dismiss='modal')
-                            span(aria-hidden='true') ×
-                            span.sr-only Close
-                        h4#modalLabel.modal-title.icon.ion-android-add  Add Project
-                    .modal-body
-                        // Add project form contents
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-folder
-                            //span.btn.btn-primary.btn-file Browse // Disabled because of security reasons
-                                //input(type='file')
-                            input.form-control#projectDir(name='projectDir', type='text', placeholder='Enter project directory')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-android-information
-                            input.form-control#projectName(name='projectName', type='text', placeholder='Enter project name')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-android-mail
-                            input.form-control#projectMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-speakerphone
-                            select.selectpicker#projectReportingSwitch(name='projectReportingEnabled', data-width='auto')
-                                option(value='On', selected) On
-                                option(value='Off') Off
-                    .modal-footer
-                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save
-
-    // Edit Project Modal
-    #editProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
-        .modal-dialog
-            .modal-content
-                form#editProjectForm(method='POST', action='/projects/edit')
-                    .modal-header
-                        button.close(type='button', data-dismiss='modal')
-                            span(aria-hidden='true') ×
-                            span.sr-only Close
-                        h4#modalLabel.modal-title.icon.ion-edit  Edit Project
-                    .modal-body
-                        // Add project form contents
-                        input#projectEditId(type='hidden', name='projectId', value='')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-folder
-                            input.form-control#projectEditDir(name='projectDir', type='text', placeholder='Enter project directory')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-android-information
-                            input.form-control#projectEditName(name='projectName', type='text', placeholder='Enter project name')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-android-mail
-                            input.form-control#projectEditMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-speakerphone
-                            select.selectpicker#projectEditReportingSwitch(name='projectReportingEnabled', data-width='auto')
-                                option(value='On') On
-                                option(value='Off') Off
-                    .modal-footer
-                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Discard
-                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Update
-
-    // Add Project Env Modal
-    #addProjectEnvModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
-        .modal-dialog
-            .modal-content
-                form#addProjectEnvForm(method='POST', action='/projects/addEnvFile')
-                    .modal-header
-                        button.close(type='button', data-dismiss='modal')
-                            span(aria-hidden='true') ×
-                            span.sr-only Close
-                        h4#addProjectEnvModalLabel.modal-title.icon.ion-cloud  Add New Environment
-                    .modal-body
-                        // Add project env form contents
-                        input#projectIdEnv(type='hidden', name='projectId', value='')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-cloud
-                            input.form-control#envName(name='envName', type='text', placeholder='Enter environment name')
-                    .modal-footer
-                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Create
-
-    // Add Project Task Modal
-    #addProjectTaskModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
-        .modal-dialog
-            .modal-content
-                form#addProjectTaskForm(method='POST', action='/projects/addTaskFile')
-                    .modal-header
-                        button.close(type='button', data-dismiss='modal')
-                            span(aria-hidden='true') ×
-                            span.sr-only Close
-                        h4#addProjectTaskModalLabel.modal-title.icon.ion-gear-a  Create Custom Task
-                    .modal-body
-                        // Add project task form contents
-                        input#projectIdTask(type='hidden', name='projectId', value='')
-                        p.input-group
-                            span.input-group-addon
-                                i.icon.ion-ios7-gear
-                            input.form-control#taskName(name='taskName', type='text', placeholder='Enter custom task name')
-                    .modal-footer
-                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Create
-
-    // Edit File Modal
-    #editFileModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
-        .modal-dialog
-            .modal-content
-                form#editFileForm(method='POST')
-                    .modal-header
-                        button.close(type='button', data-dismiss='modal')
-                            span(aria-hidden='true') ×
-                            span.sr-only Close
-                        h4#editFileModalLabel.modal-title Edit File
-                    .modal-body
-                        // WYSIWYG Editor
-                        input#orgFile(type='hidden', name='orgFile', value='')
-                        textarea#code(name='code', autocapitalize='off', autocorrect='off', wrap='off')
-                    .modal-footer
-                        button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                        button.btn.btn-primary.glyphicon.glyphicon-save(type='submit') Save
+    include modals/initProject
+    include modals/addProject
+    include modals/editProject
+    include modals/addProjectEnv
+    include modals/addProjectTask
+    include modals/editProjectFile

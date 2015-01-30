@@ -73,6 +73,7 @@ app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 // MagePanel App Setup
 app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
+app.io.route('checkUpdates', setup.checkUpdates); // Execute check for app updates with Socket.IO
 
 // Mage Projects
 app.get('/projects', projects.index); // Projects page
@@ -81,8 +82,12 @@ app.post('/projects/add', projects.add); // Add new project
 app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project environment file
 app.post('/projects/addTaskFile', projects.addTaskFile); // Add new project task file
 app.post('/projects/refresh', projects.refresh); // Refresh project
+app.post('/projects/gitPull', projects.gitPull); // GIT Pull project
+app.post('/projects/gitRemoteBranches', projects.gitRemoteBranches); // GIT Remote Branches of project
+app.post('/projects/gitSwitchBranch', projects.gitSwitchBranch); // GIT Checkout branch project
 app.post('/projects/delete', projects.delete); // Delete projects
 app.post('/projects/deleteFile', projects.deleteFile); // Delete project file
+app.post('/projects/applyFile', projects.applyFile); // Apply project file
 app.post('/projects/saveFile', projects.saveFile); // Save project file
 app.get('/projects/detail', projects.detail); // Get project detail
 app.get('/projects/envs', projects.envs); // Get environments of selected project
@@ -95,6 +100,7 @@ app.io.route('mageCommand', mage.command); // Execute mage command with Socket.I
 // Mage Logs
 app.get('/mageLogs', mageLogs.index); // Mage logs
 app.get('/mageLogs/project', mageLogs.projectLogs); // Get logs for project
+app.get('/mageLogs/projectLatestLog', mageLogs.projectLatestLog); // Get project's latest log file
 app.io.route('tailLog', mageLogs.tailLog); // Tail project log with Socket.IO
 app.io.route('exitTail', mageLogs.exitTail); // Exit tail log with Socket.IO
 app.io.route('pauseTail', mageLogs.pauseTail); // Pause tail log with Socket.IO

@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 var Common = require('../common');
+var fsExtra = require('fs-extra');
 var Convert = require('ansi-to-html');
 var ansiTrim = require('cli-color/trim');
 var exec = require('child_process').exec;
@@ -26,6 +27,8 @@ exports.index = function(req, res) {
         var pathWarning = false;
 
         if(Common.os == 'win32') {
+            settings.sshPageantSupport(Common.settings.get("sshPageantSupport"));
+
             var fs = require('fs');
             if (! fs.existsSync(settings.cygwinBin())) {
                 console.warn("Folder '%s' doesn't exists!", settings.cygwinBin());
@@ -52,8 +55,11 @@ exports.index = function(req, res) {
 exports.init = function(req, res) {
     var data = req.body;
     var projectDir = data['projectDir'];
+    var projectDirOrg = projectDir;
     var projectName = data['projectName'];
     var projectMail = data['projectMail'];
+    var selectedProjectDir = data['projectInitImport'];
+    var importResponse;
 
     // Init variables
     settings.cygwinBin(Common.settings.get("cygwinBin"));
@@ -82,8 +88,34 @@ exports.init = function(req, res) {
         }
 
         console.debug("STDOUT during mage init of project: " + projectName + " - " + stdout);
-        res.send({"warn": false, "message": "Successfully initialized project '" + projectName + "', please edit environments and tasks.."});
+        if (selectedProjectDir != "null") {
+            importProject(projectDirOrg, selectedProjectDir);
+            res.send({"warn": false, "message": "Successfully initialized project '" + projectName + "' and imported environments and tasks.."});
+        } else {
+            res.send({"warn": false, "message": "Successfully initialized project '" + projectName + "', please edit environments and tasks.."});
+        }
+
     });
+}
+
+/**
+ * Import project to new created one
+ * @param projectDir
+ * @param selectedProjectDir
+ * @returns {Array}
+ */
+function importProject(projectDir, selectedProjectDir) {
+    projectDir = Common.path.normalize(projectDir);
+    selectedProjectDir = Common.path.normalize(selectedProjectDir);
+
+    fsExtra.copySync(
+        Common.path.join(selectedProjectDir, "/.mage/config/environment"),
+        Common.path.join(projectDir, "/.mage/config/environment")
+    );
+    fsExtra.copySync(
+        Common.path.join(selectedProjectDir, "/.mage/tasks"),
+        Common.path.join(projectDir, "/.mage/tasks")
+    );
 }
 
 /**
@@ -100,7 +132,11 @@ exports.command = function(req) {
         }
 
         // Init variables
-        var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
+        console.debug("SSH-Pageant support: " + settings.sshPageantSupport());
+        if (settings.sshPageantSupport() == 'true')
+            var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c 'eval $(/usr/bin/ssh-pageant -ra /tmp/.ssh-pageant); keychain -q -Q; . ~/.keychain/`hostname`-sh; ";
+        else
+            var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
         var cygwin_post = "'";
         project = Common.dbUtils.cleanResult(project);
         var projectDir = project.dir;
@@ -118,7 +154,7 @@ exports.command = function(req) {
             mageCommand = cygwin_pre + mageCommand + cygwin_post;
 
         // Use spawn instead of exec to get live stout data
-        req.io.emit('cmdResponse', { result: Common.config.html.consolePointer, status: 'stdout' });
+        req.io.emit('cmdResponse', { result: Common.config.html.consolePointer, status: Common.eCmdStatus.success });
         var util  = require('util'),
             spawn = require('child_process').spawn;
 
@@ -134,11 +170,11 @@ exports.command = function(req) {
         mageCmd.stdout.on('data', function (data) {
             console.debug(data.toString());
             consoleOutput += ansiTrim(data.toString());
-            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stdout' });
+            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: Common.eCmdStatus.success });
         });
         mageCmd.stderr.on('data', function (data) {
             console.error(data.toString());
-            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: 'stderr' });
+            req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: Common.eCmdStatus.error });
         });
 
         // On process exit
@@ -165,6 +201,7 @@ exports.command = function(req) {
 
                             // Get mail parameters from project
                             Common.mailUtils.sendSuccessMail(
+                                req.io,
                                 project.mailAddress,
                                 project.name,
                                 environment,
@@ -176,7 +213,7 @@ exports.command = function(req) {
                         } else {
                             // E-mail address is not valid, show warning..
                             console.warn("Project's e-mail address is invalid!");
-                            req.io.emit('cmdResponse', { result: "Failed sending report mail, project's e-mail address is invalid..", status: 'warning' });
+                            req.io.emit('cmdResponse', { result: "Failed sending report mail, project's e-mail address is invalid..", status: Common.eCmdStatus.warning });
                         }
                     }
                 }
@@ -184,7 +221,7 @@ exports.command = function(req) {
 
             // Emit exit code to frontend
             console.log('Mage command exited with code ' + code);
-            req.io.emit('cmdResponse', { result: code, status: 'exit' });
+            req.io.emit('cmdResponse', { result: code, status: Common.eCmdStatus.exit });
         });
 
         // If not on windows, wait some time and send command after connecting to bash shell

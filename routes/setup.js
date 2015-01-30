@@ -2,6 +2,7 @@
  * GET setup page
  */
 var Common = require('../common');
+var gitTools = require('../util/gitTools');
 
 /**
  * Index
@@ -13,6 +14,7 @@ exports.index = function(req, res) {
     var settings = Common.SettingsModel.create();
     settings.setupCompleted(Common.setupCompleted);
 
+    settings.sshPageantSupport(Common.settings.get("sshPageantSupport"));
     settings.cygwinBin(Common.settings.get("cygwinBin"));
     if(typeof(settings.cygwinBin()) === 'undefined')
         settings.cygwinBin(Common.config.setup.defaultCygwinBin);
@@ -51,4 +53,37 @@ exports.save = function(req, res) {
     Common.setupCompleted = true;
 
     res.send("Settings successfully saved");
+};
+
+/**
+ * Check for application updates on GIT
+ * @param req
+ */
+exports.checkUpdates = function(req) {
+    // Check for GIT branch status
+    gitTools.branchUpToDate(Common.path.join(__dirname, '../'), function (err, isUpToDate) {
+        if (err) {
+            console.error("Error while checking for app updated on GIT: " + err.message);
+            req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while checking for updates ' + err.message });
+        } else {
+            // Check if up to date
+            if (isUpToDate) {
+                req.io.emit('updateCheck', { status: "ok", err: false, msg: 'Application already up to date' });
+            } else {
+                console.info("Updating application..");
+
+                // Update app from GIT
+                gitTools.pull(Common.path.join(__dirname, '../'), function (err, consoleOutput) {
+                    if (err) {
+                        console.error("Error while getting the update! " + err.message);
+                        req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while getting updates ' + err.message });
+                    } else {
+                        console.debug("Application updated successfully. " + consoleOutput);
+                        req.io.emit('updateCheck', { status: "updated", err: false, msg: 'Application updated successfully' });
+                        // TODO: Restart application after update
+                    }
+                });
+            }
+        }
+    });
 };

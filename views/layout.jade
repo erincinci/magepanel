@@ -3,11 +3,18 @@ html
     head
         title MagePanel | #{title}
         meta(charset='utf-8')
+        // jQuery UI
+        link(rel='stylesheet', href='/stylesheets/jquery-ui.css')
+        link(rel='stylesheet', href='/stylesheets/jquery-ui.structure.css')
+        link(rel='stylesheet', href='/stylesheets/jquery-ui.theme.css')
         // Twitter Bootstrap
         link(rel='stylesheet', href='/stylesheets/bootstrap.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-theme.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-select.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-toggle.css')
+        // Bootstrap jsPanel
+        link(rel='stylesheet', href='/stylesheets/jquery.jsPanel.css')
+        link(rel='stylesheet', href='/stylesheets/jsglyph.css')
         // MagePanel Styles
         link(rel='stylesheet', href='/stylesheets/magepanel.css')
         // IonIcons
@@ -44,21 +51,34 @@ html
                                 a.icon.ion-document(href='/mageLogs')  Logs
                             li(class=(menu === 'projects' ? 'active' : ''))
                                 a.icon.ion-briefcase(href='/projects')  Projects
-                            li.dropdown
-                                a.icon.ion-wrench.dropdown-toggle(href='#', data-toggle='dropdown')
-                                    |  Tools
-                                    span.caret
-                                ul.dropdown-menu(role='menu')
-                                    li
-                                        a.icon.ion-document-text(href='/log', target='_blank')  MagePanel Logs
-                                    li
-                                        a.icon.ion-settings(href='/setup')  Application Setup
+                            li(class=(menu === 'setup' ? 'active' : ''))
+                                a.icon.ion-settings(href='/setup')  Settings
                     ul.nav.navbar-nav(style='float:right;')
+                        li
+                            a.icon.ion-refreshing#checkingUpdates(
+                                href='#',
+                                rel='tooltip',
+                                data-original-title='Checking updates..',
+                                data-placement="bottom",
+                                style="display: none;")
+                            a.icon.ion-close-circled#updateError(
+                                href='#',
+                                rel='tooltip',
+                                data-original-title='Error while updating',
+                                data-placement="bottom",
+                                style="display: none;",
+                                onclick="checkForUpdates();")
+                            a.icon.ion-checkmark-circled#updateOk(
+                                href='#',
+                                rel='tooltip',
+                                data-original-title='MagePanel up-to-date',
+                                data-placement="bottom",
+                                onclick="checkForUpdates();")
                         li
                             a.icon.ion-person(href='#')= username
 
         // Main div
-        .container.main-container(role='main')
+        .container.main-container#mainContainer(role='main')
             // Page Content
             block content
 
@@ -76,10 +96,18 @@ html
         // jQuery
         script(src='/javascripts/jquery.min.js')
         script(defer, src='/socket.io/socket.io.js')
+        // jQuery UI
+        script(src='/javascripts/jquery-ui.js')
+        script(src='/javascripts/jquery.ui.touch-punch.js')
+        script(src='/javascripts/mobile-detect.js')
+        // jQuery Cookies
+        script(src='/javascripts/jquery.cookie.js')
         // Twitter Bootstrap
         script(src='/javascripts/bootstrap.min.js')
         script(src='/javascripts/bootstrap-select.min.js')
         script(src='/javascripts/bootstrap-toggle.js')
+        // Bootstrap jsPanel
+        script(src='/javascripts/jquery.jspanel.js')
         // Toastr Notifications
         script(src='/javascripts/toastr.min.js')
         // CodeMirror Editor
@@ -99,3 +127,9 @@ html
         script(src='https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js')
         // MagePanel Scripts
         script(src='/javascripts/global.js')
+        script(src='/javascripts/utils/buttons.js')
+        script(src='/javascripts/utils/delegates.js')
+        script(src='/javascripts/utils/forms.js')
+        script(src='/javascripts/utils/functions.js')
+        script(src='/javascripts/utils/modals.js')
+        script(src='/javascripts/Queue.js')
