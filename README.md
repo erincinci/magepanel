@@ -18,6 +18,7 @@ Enjoy!
 >> git clone https://github.com/erincinci/magepanel.git MagePanel
 >> cd MagePanel
 >> npm start
+```
 
 ## Prerequisites ##
 
