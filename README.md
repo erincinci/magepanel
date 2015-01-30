@@ -1,12 +1,23 @@
-# ![Alt text](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
+# ![MagePanel Logo](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
 
-This project is a web-based user interface for [Magallanes Project](http://magephp.com/).
+Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 
 Enjoy!
 
-![Alt text](http://s30.postimg.org/ugokqktlt/Main_Page.png)
+![Console](http://s4.postimg.org/to4px58m5/console.png)
+
+![Projects](http://s4.postimg.org/x6gptj9i5/projects.png)
+
+![File Editor](http://s4.postimg.org/dakqdzsgt/editor.png)
 
 *(Requires [Node](http://nodejs.org/) v0.10.2 or newer)*
+
+## Recommended Installation ##
+
+```bash
+>> git clone https://github.com/erincinci/magepanel.git MagePanel
+>> cd MagePanel
+>> npm start
 
 ## Prerequisites ##
 
@@ -20,13 +31,10 @@ Enjoy!
 ```
 Rest of the requirements will be automatically installed with installers provided..
 
-## Installers (Latest - v1.1) ##
+## Installers ##
 
-- [![alt text](http://s11.postimg.org/w7biouren/windows.png) Windows Installer](https://github.com/erincinci/magepanel/releases/download/v1.1/MagePanelSetup-v1.1.exe)
-- [![alt text](http://s11.postimg.org/hzlu07epr/deb.png) Linux DEB Package](https://github.com/erincinci/magepanel/releases/download/v1.1/magepanel-v1.1.deb)
-- [![alt text](http://s11.postimg.org/cmwzm2qtb/rpm.png) Linux RPM Package](https://github.com/erincinci/magepanel/releases/download/v1.1/magepanel-v1.1.i386.rpm)
-- [![alt text](http://s13.postimg.org/9oskv0dnn/mac.png) Mac OS X Package](https://github.com/erincinci/magepanel/releases/download/v1.1/MagePanel-v1.1.pkg)
- 
+- [![installers](http://s11.postimg.org/e3jzqgcn3/installer.png) Installers](https://github.com/erincinci/magepanel/releases/latest)
+
 ## Running Magallanes on Cygwin (Windows) ##
 
 * Install **cygwin** *(Will be automatically installed with MagePanel Windows Installer)* → [**Here**](https://cygwin.com/install.html)
@@ -41,16 +49,3 @@ Rest of the requirements will be automatically installed with installers provide
 >> chmod +x /usr/bin/mage
 ```
 * Run `mage version` command on **cygwin** to test if **Magallanes** is working correctly
-
-## Starting Application from Source ##
-
-```bash
->> git clone https://github.com/erincinci/magepanel.git MagePanel
->> cd MagePanel
-
-# On Unix
->> ./run.sh
-
-# On Windows
->> run.bat
-```
