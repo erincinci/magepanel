@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Magepanel by erincinci</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Magepanel</h1>
+          <h2>Node JS User Interface for Magallanes Deployment Tool</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/erincinci/magepanel/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/erincinci/magepanel/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/erincinci/magepanel" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="-magepanel" class="anchor" href="#-magepanel" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<img src="http://s23.postimg.org/t7m6upgzb/magepanel.png" alt="Alt text"> MagePanel</h1>
+
+<p>This project is a web-based user interface for <a href="http://magephp.com/">Magallanes Project</a>.</p>
+
+<p>Enjoy!</p>
+
+<p><img src="http://s30.postimg.org/ugokqktlt/Main_Page.png" alt="Alt text"></p>
+
+<p><em>(Requires <a href="http://nodejs.org/">Node</a> v0.10.2 or newer)</em></p>
+
+<h2>
+<a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
+
+<ul>
+<li>For Debian Based Linux (Ubuntu, ...):</li>
+</ul>
+
+<div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> sudo apt-get install php5-cli</pre></div>
+
+<ul>
+<li>For RedHat Based Linux (CentOS, ...):</li>
+</ul>
+
+<div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> sudo yum install php-cli</pre></div>
+
+<p>Rest of the requirements will be automatically installed with installers provided..</p>
+
+<h2>
+<a id="installers-latest---v11" class="anchor" href="#installers-latest---v11" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installers (Latest - v1.1)</h2>
+
+<ul>
+<li><a href="https://github.com/erincinci/magepanel/releases/download/v1.1/MagePanelSetup-v1.1.exe"><img src="http://s11.postimg.org/w7biouren/windows.png" alt="alt text"> Windows Installer</a></li>
+<li><a href="https://github.com/erincinci/magepanel/releases/download/v1.1/magepanel-v1.1.deb"><img src="http://s11.postimg.org/hzlu07epr/deb.png" alt="alt text"> Linux DEB Package</a></li>
+<li><a href="https://github.com/erincinci/magepanel/releases/download/v1.1/magepanel-v1.1.i386.rpm"><img src="http://s11.postimg.org/cmwzm2qtb/rpm.png" alt="alt text"> Linux RPM Package</a></li>
+<li><a href="https://github.com/erincinci/magepanel/releases/download/v1.1/MagePanel-v1.1.pkg"><img src="http://s13.postimg.org/9oskv0dnn/mac.png" alt="alt text"> Mac OS X Package</a></li>
+</ul>
+
+<h2>
+<a id="running-magallanes-on-cygwin-windows" class="anchor" href="#running-magallanes-on-cygwin-windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running Magallanes on Cygwin (Windows)</h2>
+
+<ul>
+<li>Install <strong>cygwin</strong> <em>(Will be automatically installed with MagePanel Windows Installer)</em> → <a href="https://cygwin.com/install.html"><strong>Here</strong></a>
+</li>
+<li>Download &amp; Extract latest <strong>Magallanes</strong> release → <a href="https://github.com/andres-montanez/Magallanes/releases/latest"><strong>Here</strong></a>
+</li>
+<li>Download &amp; Setup your keys in <strong>Putty Pageant</strong> → <a href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/download.html"><strong>Here</strong></a>
+</li>
+<li>Download &amp; Copy <strong>ssh-pageant</strong> binary in cygwin <code>/usr/bin/</code> directory as described → <a href="https://github.com/cuviper/ssh-pageant"><strong>Here</strong></a>
+</li>
+<li>Start <strong>cygwin</strong> and change dir to extracted <strong>Magallanes</strong> <code>bin/</code> dir → <em>ex:</em> <code>cd /cygdrive/c/Downloads/magallanes/bin/</code>
+</li>
+<li>Run commands →</li>
+</ul>
+
+<div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> ./mage compile
+<span class="pl-k">&gt;&gt;</span> cp mage.phar /usr/bin/mage
+<span class="pl-k">&gt;&gt;</span> chmod +x /usr/bin/mage</pre></div>
+
+<ul>
+<li>Run <code>mage version</code> command on <strong>cygwin</strong> to test if <strong>Magallanes</strong> is working correctly</li>
+</ul>
+
+<h2>
+<a id="starting-application-from-source" class="anchor" href="#starting-application-from-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>Starting Application from Source</h2>
+
+<div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> git clone https://github.com/erincinci/magepanel.git MagePanel
+<span class="pl-k">&gt;&gt;</span> <span class="pl-s3">cd</span> MagePanel
+
+<span class="pl-c"># On Unix</span>
+<span class="pl-k">&gt;&gt;</span> ./run.sh
+
+<span class="pl-c"># On Windows</span>
+<span class="pl-k">&gt;&gt;</span> run.bat</pre></div>
+        </section>
+
+        <footer>
+          Magepanel is maintained by <a href="https://github.com/erincinci">erincinci</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
