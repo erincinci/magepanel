@@ -3,45 +3,53 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
     <title>Magepanel by erincinci</title>
   </head>
 
   <body>
-    <div id="container">
+    <header>
       <div class="inner">
+        <h1>Magepanel</h1>
+        <h2>Node JS User Interface for Magallanes Deployment Tool</h2>
+        <a href="https://github.com/erincinci/magepanel" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
 
-        <header>
-          <h1>Magepanel</h1>
-          <h2>Node JS User Interface for Magallanes Deployment Tool</h2>
-        </header>
-
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/erincinci/magepanel/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/erincinci/magepanel/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/erincinci/magepanel" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
-
-        <hr>
-
-        <section id="main_content">
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
           <h1>
 <a id="-magepanel" class="anchor" href="#-magepanel" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<img src="http://s23.postimg.org/t7m6upgzb/magepanel.png" alt="Alt text"> MagePanel</h1>
+<img src="http://s23.postimg.org/t7m6upgzb/magepanel.png" alt="MagePanel Logo"> MagePanel</h1>
 
-<p>This project is a web-based user interface for <a href="http://magephp.com/">Magallanes Project</a>.</p>
+<p>Web-based user interface for <a href="http://magephp.com/">Magallanes Deployment Tool</a>.</p>
 
 <p>Enjoy!</p>
 
-<p><img src="http://s30.postimg.org/ugokqktlt/Main_Page.png" alt="Alt text"></p>
+<p><img src="http://s4.postimg.org/to4px58m5/console.png" alt="Console"></p>
+
+<p><img src="http://s4.postimg.org/x6gptj9i5/projects.png" alt="Projects"></p>
+
+<p><img src="http://s4.postimg.org/dakqdzsgt/editor.png" alt="File Editor"></p>
 
 <p><em>(Requires <a href="http://nodejs.org/">Node</a> v0.10.2 or newer)</em></p>
+
+<h2>
+<a id="recommended-installation" class="anchor" href="#recommended-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recommended Installation</h2>
+
+<div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> git clone https://github.com/erincinci/magepanel.git MagePanel
+<span class="pl-k">&gt;&gt;</span> <span class="pl-s3">cd</span> MagePanel
+<span class="pl-k">&gt;&gt;</span> npm start</pre></div>
 
 <h2>
 <a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
@@ -61,13 +69,10 @@
 <p>Rest of the requirements will be automatically installed with installers provided..</p>
 
 <h2>
-<a id="installers-latest---v11" class="anchor" href="#installers-latest---v11" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installers (Latest - v1.1)</h2>
+<a id="installers" class="anchor" href="#installers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installers</h2>
 
 <ul>
-<li><a href="https://github.com/erincinci/magepanel/releases/download/v1.1/MagePanelSetup-v1.1.exe"><img src="http://s11.postimg.org/w7biouren/windows.png" alt="alt text"> Windows Installer</a></li>
-<li><a href="https://github.com/erincinci/magepanel/releases/download/v1.1/magepanel-v1.1.deb"><img src="http://s11.postimg.org/hzlu07epr/deb.png" alt="alt text"> Linux DEB Package</a></li>
-<li><a href="https://github.com/erincinci/magepanel/releases/download/v1.1/magepanel-v1.1.i386.rpm"><img src="http://s11.postimg.org/cmwzm2qtb/rpm.png" alt="alt text"> Linux RPM Package</a></li>
-<li><a href="https://github.com/erincinci/magepanel/releases/download/v1.1/MagePanel-v1.1.pkg"><img src="http://s13.postimg.org/9oskv0dnn/mac.png" alt="alt text"> Mac OS X Package</a></li>
+<li><a href="https://github.com/erincinci/magepanel/releases/latest"><img src="http://s11.postimg.org/e3jzqgcn3/installer.png" alt="installers"> Installers</a></li>
 </ul>
 
 <h2>
@@ -94,27 +99,35 @@
 <ul>
 <li>Run <code>mage version</code> command on <strong>cygwin</strong> to test if <strong>Magallanes</strong> is working correctly</li>
 </ul>
-
-<h2>
-<a id="starting-application-from-source" class="anchor" href="#starting-application-from-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>Starting Application from Source</h2>
-
-<div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> git clone https://github.com/erincinci/magepanel.git MagePanel
-<span class="pl-k">&gt;&gt;</span> <span class="pl-s3">cd</span> MagePanel
-
-<span class="pl-c"># On Unix</span>
-<span class="pl-k">&gt;&gt;</span> ./run.sh
-
-<span class="pl-c"># On Windows</span>
-<span class="pl-k">&gt;&gt;</span> run.bat</pre></div>
         </section>
 
-        <footer>
-          Magepanel is maintained by <a href="https://github.com/erincinci">erincinci</a><br>
-          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
+        <aside id="sidebar">
+          <a href="https://github.com/erincinci/magepanel/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/erincinci/magepanel/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
 
-        
+          <p class="repo-owner"><a href="https://github.com/erincinci/magepanel"></a> is maintained by <a href="https://github.com/erincinci">erincinci</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
       </div>
     </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-59155449-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
