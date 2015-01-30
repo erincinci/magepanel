@@ -5,6 +5,11 @@
 var path = require('path');
 var getRepoInfo = require('git-repo-info');
 
+/**
+ * Check if current branch is up-to-date (Needs any pull operation)
+ * @param dir
+ * @param cb
+ */
 exports.branchUpToDate = function branchUpToDate(dir, cb) {
     // Execute fetch & status commands for checking if there's any commits to pull from remote
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git fetch && git status -b -s', function (err, stdout, stderr) {
@@ -22,6 +27,26 @@ exports.branchUpToDate = function branchUpToDate(dir, cb) {
             cb(null, false);
         else
             cb(null, true);
+    });
+};
+
+/**
+ * Get revision version for the latest commit of project
+ * @param dir
+ * @param cb
+ */
+exports.revisionVersion = function revisionVersion(dir, cb) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git describe', function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+
+        // Get output (TODO: Somehow comes as stderr!)
+        var output;
+        if (stderr)
+            output = stderr.trim();
+        else
+            output = stdout.trim();
+
+        cb(null, output);
     });
 };
 

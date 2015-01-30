@@ -56,6 +56,22 @@ exports.save = function(req, res) {
 };
 
 /**
+ * Get Revision Version for the application
+ * @param req
+ */
+exports.revisionVersion = function(req) {
+    // Get revision version number form the GIT
+    gitTools.revisionVersion(Common.path.join(__dirname, '../'), function (err, revVersion) {
+        if (err) {
+            console.error("Error while checking for app updated on GIT: " + err.message);
+            req.io.emit('revisionVersion', { err: true, version: err.message });
+        } else {
+            req.io.emit('revisionVersion', { err: false, version: revVersion });
+        }
+    });
+};
+
+/**
  * Check for application updates on GIT
  * @param req
  */
@@ -80,7 +96,6 @@ exports.checkUpdates = function(req) {
                     } else {
                         console.debug("Application updated successfully. " + consoleOutput);
                         req.io.emit('updateCheck', { status: "updated", err: false, msg: 'Application updated successfully' });
-                        // TODO: Restart application after update
                     }
                 });
             }

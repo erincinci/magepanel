@@ -74,6 +74,7 @@ app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
 app.io.route('checkUpdates', setup.checkUpdates); // Execute check for app updates with Socket.IO
+app.io.route('revisionVersion', setup.revisionVersion); // Get revision version for app with Socket.IO
 
 // Mage Projects
 app.get('/projects', projects.index); // Projects page

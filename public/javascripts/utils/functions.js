@@ -431,6 +431,25 @@ function checkForUpdates() {
 }
 
 /**
+ * Get Application Revision Version
+ */
+function getRevisionVersion() {
+    // Use Socket.IO for getting live application revision version
+    revisionSocket = io.connect();
+    revisionSocket.emit('revisionVersion');
+
+    // Get live response from socket
+    revisionSocket.on('connect', function () {
+        revisionSocket.on('revisionVersion', function(data) {
+            // Show revision number on tooltip
+            if (! data.err) {
+                $('#updateOk').attr('data-original-title', 'MagePanel ' + data.version);
+            }
+        });
+    });
+}
+
+/**
  * jQuery Blink Effect
  */
 // Source: http://www.antiyes.com/jquery-blink-plugin

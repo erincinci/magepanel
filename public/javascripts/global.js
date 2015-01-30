@@ -8,6 +8,7 @@ var ajaxTimeout = 600;
 var logSocket = null;
 var consoleSocket = null;
 var updateSocket = null;
+var revisionSocket = null;
 var cmdQueue;
 
 // DOM Ready =============================================================
@@ -68,6 +69,7 @@ $(document).ready(function() {
      * Check for application updates on GIT
      */
     // Do update check based on cookie for updating less frequently
+    getRevisionVersion();
     if ($.cookie('updateCheck') == null) {
         // Create cookie & check of updates
         checkForUpdates();
