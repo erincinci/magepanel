@@ -67,6 +67,7 @@ $(document).ready(function() {
     ioSocket.on('connect', function () {
         console.log('Connected to backend with Socket.IO!');
     });
+    getSocketIOMessages();
 
     // Get revision version for app
     getRevisionVersion();
