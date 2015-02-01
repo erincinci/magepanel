@@ -10,8 +10,31 @@ $("#tailLatestLog").click(function() {
     var selectedId = $('#activeProject').val();
     if (selectedId == 'null') {
         toastr.warning("Please select an active project first", 'MagePanel Console');
-        $('#viewFileModal').modal('hide');
         return;
+    }
+
+    // Check if panel already exists
+    if (latestLogPanel == null) {
+        // Prepare content
+        var content = '<div class="clearfix" style="margin: 15px;"></div>';
+
+        // Create jsPanel
+        latestLogPanel = $.jsPanel({
+            size: {
+                width: function(){ return $(window).width()*1/2 },
+                height: 100
+            },
+            position:       "bottom center",
+            title:          "Latest Log File",
+            autoclose:      false,
+            draggable:      "disabled",
+            resizable:      "disabled",
+            overflow:       { horizontal: 'hidden', vertical: 'auto' },
+            bootstrap:      'info',
+            //theme:          'autumnred',
+            controls:       { close: 'disable', maximize: 'disable' },
+            content:        function() { return content; }
+        });
     }
 
     // Find latest log file and tail it
@@ -19,8 +42,7 @@ $("#tailLatestLog").click(function() {
         $.get( '/mageLogs/projectLatestLog?id=' + selectedId, function(logJson) {
             if (logJson != 'null') {
                 if (logJson["status"] == "success") {
-                    $('#viewFileModal').modal('show');
-                    tailLogFile(logJson.logFile, logJson.logDate, logJson.logTime);
+                    tailLogPanel(logJson.logFile, logJson.logDate, logJson.logTime);
                 }else{
                     toastr.warning(logJson["message"], 'MagePanel Logs');
                 }
@@ -126,7 +148,6 @@ $("#mageRollback").click(function() {
 /**
  * Add to Deploy Workflow button
  */
-var workflowPanel = null;
 $("#mageAddToFlow").click(function() {
     // Check if panel already exists
     if (workflowPanel == null) {

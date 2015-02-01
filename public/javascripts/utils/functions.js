@@ -88,6 +88,9 @@ function getSocketIOMessages() {
                     break;
             }
 
+            // TODO: Show latest log file if the tail log option is enabled
+            $("#tailLatestLog").trigger('click');
+
             // Readjust ajax loader div
             updateAjaxLoader();
         });
@@ -114,6 +117,26 @@ function getSocketIOMessages() {
                     break;
                 case 'closed':
                     toastr.info(data.line, 'MagePanel Logs');
+                    break;
+                case 'error':
+                    toastr.error(data.line, 'MagePanel Logs');
+                    break;
+            }
+        });
+    }
+
+    // Get live response for Latest Log tail
+    if ($('#tailLatestLog').length) {
+        console.debug("Latest Log Tail Socket.IO activated..");
+        // Get tail data from socket
+        ioSocket.on('logTailContent', function(data) {
+            // Update data or show toast according to data status
+            switch(data.status) {
+                case 'running':
+                    latestLogPanel.content.append("<p>" + data.line + "</p>").scrollTop(latestLogPanel.content[0].scrollHeight);
+                    break;
+                case 'closed':
+                    latestLogPanel.content.append("<br>File closed: " + data.line).scrollTop(latestLogPanel.content[0].scrollHeight);
                     break;
                 case 'error':
                     toastr.error(data.line, 'MagePanel Logs');
@@ -333,6 +356,21 @@ function tailLogFile(orgFile, logDate, logTime) {
     $('#pauseTailFileBtn').show();
     $('#resumeTailFileBtn').hide();
     showAjaxLoader();
+
+    // Use Socket.IO for tailing log file
+    ioSocket.emit('tailLog', { file: orgFile, tailStatus: 'running' });
+}
+
+/**
+ * Tail log file in jsPanel using Socket.IO
+ * @param orgFile
+ * @param logDate
+ * @param logTime
+ */
+function tailLogPanel(orgFile, logDate, logTime) {
+    // Update UI
+    latestLogPanel.title('<i class="icon ion-document"/> Log File : <i>' + logDate + " - " + logTime + "</i>");
+    //latestLogPanel.content.clear(); // TODO: Clear content
 
     // Use Socket.IO for tailing log file
     ioSocket.emit('tailLog', { file: orgFile, tailStatus: 'running' });

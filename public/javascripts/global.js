@@ -1,12 +1,14 @@
 /**
  * Created by erincinci on 7/9/14.
  */
-// Data
+// Global Variables
 var codeMirror = null;
 var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
 var ioSocket = null;
 var cmdQueue;
+var workflowPanel = null;
+var latestLogPanel = null;
 
 // DOM Ready =============================================================
 $(window).load(function() {
