@@ -1,6 +1,4 @@
 # ![MagePanel Logo](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
-[![Build Status](https://snap-ci.com/erincinci/magepanel/branch/master/build_image)](https://snap-ci.com/erincinci/magepanel/branch/master)
-
 Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 
 Enjoy!
@@ -36,6 +34,9 @@ Rest of the requirements will be automatically installed with installers provide
 ## Installers ##
 
 - [![installers](http://s11.postimg.org/e3jzqgcn3/installer.png) Installers](https://github.com/erincinci/magepanel/releases/latest)
+
+## Build Status ##
+[![Build Status](https://snap-ci.com/erincinci/magepanel/branch/master/build_image)](https://snap-ci.com/erincinci/magepanel/branch/master)
 
 ## Running Magallanes on Cygwin (Windows) ##
 
