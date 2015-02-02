@@ -1,4 +1,5 @@
 # ![MagePanel Logo](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
+[![Build Status](https://snap-ci.com/erincinci/magepanel/branch/master/build_image)](https://snap-ci.com/erincinci/magepanel/branch/master)
 
 Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 
