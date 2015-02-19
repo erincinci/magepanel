@@ -67,7 +67,7 @@ exports.init = function(req, res) {
     var cygwin_post = "'";
 
     // Prepare mage binary location
-    var mageBin = Common.path.resolve(Common.path.join(process.cwd(), "magallanes/bin/mage"));
+    var mageBin = "php " + Common.path.resolve(Common.path.join(process.cwd(), "magallanes/bin/mage"));
 
     // Replace cygwin dir if Windows
     if (Common.os == 'win32') {
@@ -168,7 +168,7 @@ exports.command = function(req) {
         var projectDir = project.dir;
 
         // Prepare mage binary location
-        var mageBin = Common.path.resolve(Common.path.join(process.cwd(), "magallanes/bin/mage"));
+        var mageBin = "php " + Common.path.resolve(Common.path.join(process.cwd(), "magallanes/bin/mage"));
 
         // Replace cygwin dir if Windows
         if (Common.os == 'win32') {
