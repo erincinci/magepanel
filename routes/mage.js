@@ -66,15 +66,21 @@ exports.init = function(req, res) {
     var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
     var cygwin_post = "'";
 
+    // Prepare mage binary location
+    var mageBin = Common.path.resolve(Common.path.join(process.cwd(), "magallanes/bin/mage"));
+
     // Replace cygwin dir if Windows
     if (Common.os == 'win32') {
         projectDir = projectDir.replace("C:", "/cygdrive/c");
         projectDir = projectDir.replace(/\\/g, "/");
+
+        mageBin = mageBin.replace("C:", "/cygdrive/c");
+        mageBin = mageBin.replace(/\\/g, "/");
     }
 
     // Prepare init command
     var cdCommand = "cd " + projectDir + "; "
-    var mageInitCommand = cdCommand + "mage init --name=\"" + projectName + "\" --email=\"" + projectMail + "\"";
+    var mageInitCommand = cdCommand + mageBin + " init --name=\"" + projectName + "\" --email=\"" + projectMail + "\"";
     if (Common.os == 'win32')
         mageInitCommand = cygwin_pre + mageInitCommand + cygwin_post;
 
@@ -119,6 +125,25 @@ function importProject(projectDir, selectedProjectDir) {
 }
 
 /**
+ * Prepare Console Messages
+ * Error: #f99792, rgba(249, 151, 146, 0.3)
+ * Warning: #fff48d, rgba(255, 244, 141, 0.3)
+ * Success: NULL
+ * @param msg
+ */
+function prepareConsoleMsg(status, msg) {
+    // Prepare message according to the status of the message
+    switch (status) {
+        case Common.eCmdStatus.error:
+            return Common.config.html.consolePointerErr + " <span style='background-color: rgba(249, 151, 146, 0.3);'>" + msg + "</span><br>";
+        case Common.eCmdStatus.warning:
+            return Common.config.html.consolePointerWarn + " <span style='background-color: rgba(255, 244, 141, 0.3);'>" + msg + "</span><br>";
+        case Common.eCmdStatus.success:
+            return msg;
+    }
+}
+
+/**
  * IO mage command output
  */
 exports.command = function(req) {
@@ -127,7 +152,8 @@ exports.command = function(req) {
     // Get project from DB
     Common.projectsDB.get(selectedId, function (err, project) {
         if (err) {
-            console.error(err);
+            console.error(err.message);
+            req.io.emit('cmdResponse', { result: prepareConsoleMsg(Common.eCmdStatus.error, err.message), status: Common.eCmdStatus.error });
             return;
         }
 
@@ -141,15 +167,21 @@ exports.command = function(req) {
         project = Common.dbUtils.cleanResult(project);
         var projectDir = project.dir;
 
+        // Prepare mage binary location
+        var mageBin = Common.path.resolve(Common.path.join(process.cwd(), "magallanes/bin/mage"));
+
         // Replace cygwin dir if Windows
         if (Common.os == 'win32') {
             projectDir = projectDir.replace("C:", "/cygdrive/c");
             projectDir = projectDir.replace(/\\/g, "/");
+
+            mageBin = mageBin.replace("C:", "/cygdrive/c");
+            mageBin = mageBin.replace(/\\/g, "/");
         }
 
         // Prepare command
         var cdCommand = "cd " + projectDir + "; "
-        var mageCommand = cdCommand + "mage " + req.data.cmd;
+        var mageCommand = cdCommand + mageBin + " " + req.data.cmd;
         if (Common.os == 'win32')
             mageCommand = cygwin_pre + mageCommand + cygwin_post;
 

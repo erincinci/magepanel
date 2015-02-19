@@ -70,7 +70,10 @@ function getSocketIOMessages() {
                     mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
                     break;
                 case "stderr":
-                    // TODO: Show error in MageConsole in different style
+                    // Show error in MageConsole in different style
+                    mageConsole.append(data.result);
+                    mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
+                    hideAjaxLoader();
                     break;
                 case "warning":
                     // Show warning toast to user
