@@ -80,7 +80,7 @@ exports.init = function(req, res) {
 
     // Prepare init command
     var cdCommand = "cd " + projectDir + "; "
-    var mageInitCommand = cdCommand + mageBin + " init --name=\"" + projectName + "\" --email=\"" + projectMail + "\"";
+    var mageInitCommand = cdCommand + mageBin + " Init --name=\"" + projectName + "\" --email=\"" + projectMail + "\"";
     if (Common.os == 'win32')
         mageInitCommand = cygwin_pre + mageInitCommand + cygwin_post;
 
