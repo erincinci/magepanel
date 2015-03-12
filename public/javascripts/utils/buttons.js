@@ -46,7 +46,7 @@ $("#clearConsole").click(function() {
  */
 $("#mageinfo").click(function() {
     cmdQueue.enqueue({
-        projectId: $('#activeProject').find(":selected").val(),
+        projectId: -1,
         cmd: 'version',
         multi: false,
         desc: 'Mage Version'
