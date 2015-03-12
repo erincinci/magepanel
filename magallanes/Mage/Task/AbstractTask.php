@@ -20,7 +20,6 @@ use Exception;
  * Abstract Class for a Magallanes Task
  *
  * @author Andrés Montañez <andres@andresmontanez.com>
- * @editor Erinç İnci <erincinci@gmail.com>
  */
 abstract class AbstractTask
 {
@@ -200,14 +199,9 @@ abstract class AbstractTask
         // if general.yml includes "ssy_needs_tty: true", then add "-t" to the ssh command
         $needs_tty = ($this->getConfig()->general('ssh_needs_tty', false) ? '-t' : '');
 
-        // If enabled, add SSH key path to the command
-        if ($this->getConfig()->deployment('sshKey'))
-            $ssh_key = '-t -i ' . $this->getConfig()->deployment('sshKey');
-        else
-            $ssh_key = '';
-
-        $localCommand = 'ssh ' . $this->getConfig()->getHostIdentityFileOption() . $ssh_key . $needs_tty . ' -p ' . $this->getConfig()->getHostPort() . ' '
+        $localCommand = 'ssh ' . $this->getConfig()->getHostIdentityFileOption() . $needs_tty . ' -p ' . $this->getConfig()->getHostPort() . ' '
             . '-q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no '
+            . $this->getConfig()->getConnectTimeoutOption()
             . $this->getConfig()->deployment('user') . '@' . $this->getConfig()->getHostName();
 
         $remoteCommand = str_replace('"', '\"', $command);
