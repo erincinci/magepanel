@@ -17,6 +17,7 @@ Enjoy!
 ```bash
 >> git clone https://github.com/erincinci/magepanel.git MagePanel
 >> cd MagePanel
+>> sudo npm install pm2 -g
 >> npm start
 ```
 
