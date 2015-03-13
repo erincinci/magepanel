@@ -196,7 +196,7 @@ exports.pull = function performPull(dir, cb) {
 exports.commit = function performCommit(dir, msg, cb) {
     if (! msg)
         msg = 'Auto-commit from MagePanel..';
-    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git commit -m "' + msg + '"', function (err, stdout, stderr) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git add . && git commit -m "' + msg + '"', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
 
         // Get output (TODO: Somehow comes as stderr!)

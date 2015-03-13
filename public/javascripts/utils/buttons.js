@@ -325,6 +325,7 @@ $('#gitCommitPushProjectBtn').on('click', function() {
             // Continue with valid message
             if (commitMsg) {
                 // Commit & Push
+                showAjaxLoader();
                 $.post( '/projects/gitCommitPush?id=' + selectedItem.id + '&commitMsg=' + commitMsg, function(result) {
                     // Check if we have warning
                     if(result["warn"]) {
@@ -332,6 +333,7 @@ $('#gitCommitPushProjectBtn').on('click', function() {
                     } else {
                         toastr.success(result["message"], 'MagePanel Projects');
                     }
+                    hideAjaxLoader();
                 }).error(function() {
                     toastr.error('Something went wrong ', 'MagePanel Projects');
                 });
