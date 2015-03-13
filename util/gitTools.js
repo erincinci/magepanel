@@ -198,9 +198,14 @@ exports.commit = function performCommit(dir, msg, cb) {
         msg = 'Auto-commit from MagePanel..';
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git commit -m "' + msg + '"', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
-        if (stderr) return cb(stderr);
 
-        cb(null, stdout.trim());
+        // Get output (TODO: Somehow comes as stderr!)
+        var output;
+        if (stderr)
+            output = stderr.trim();
+        else
+            output = stdout.trim();
+        cb(null, output);
     });
 };
 
@@ -212,8 +217,13 @@ exports.commit = function performCommit(dir, msg, cb) {
 exports.push = function performPush(dir, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git push', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
-        if (stderr) return cb(stderr);
 
-        cb(null, stdout.trim());
+        // Get output (TODO: Somehow comes as stderr!)
+        var output;
+        if (stderr)
+            output = stderr.trim();
+        else
+            output = stdout.trim();
+        cb(null, output);
     });
 };

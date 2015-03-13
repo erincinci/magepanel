@@ -88,7 +88,7 @@ $(document).ready(function() {
             var $this = $(this),
                 tooltip = $this.next(".tooltip");
             tooltip.find(".tooltip-inner").css({
-                width: "350px",
+                width: "300px",
                 backgroundColor: "#3c85c4"
             });
         });

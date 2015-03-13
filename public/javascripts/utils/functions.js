@@ -418,9 +418,11 @@ function toggleProjectsPageButtons(mode, target) {
         $("#refreshProjectBtn").prop('disabled', false);
         if (target.hasClass('ion-fork-repo')) {
             $("#gitPullProjectBtn").prop('disabled', false);
+            $("#gitCommitPushProjectBtn").prop('disabled', false);
             $("#gitSwitchBranchProjectBtn").prop('disabled', false);
         } else {
             $("#gitPullProjectBtn").prop('disabled', true);
+            $("#gitCommitPushProjectBtn").prop('disabled', true);
             $("#gitSwitchBranchProjectBtn").prop('disabled', true);
         }
     } else {
@@ -429,6 +431,7 @@ function toggleProjectsPageButtons(mode, target) {
         $("#delProjectBtn").prop('disabled', true);
         $("#refreshProjectBtn").prop('disabled', true);
         $("#gitPullProjectBtn").prop('disabled', true);
+        $("#gitCommitPushProjectBtn").prop('disabled', true);
         $("#gitSwitchBranchProjectBtn").prop('disabled', true);
     }
 };

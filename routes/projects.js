@@ -244,7 +244,7 @@ exports.gitSwitchBranch = function(req, res) {
             console.debug("GIT checkout branch on dir " + project.dir + ".. new branch '" + checkoutBranch + "'");
             gitTools.checkoutBranch(project.dir, checkoutBranch, function (err, consoleOutput) {
                 if (err) {
-                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
+                    res.send({ "warn": true, "message": err }); // TODO: GIT success result outputs as error?
                 } else {
                     res.send({ "warn": false, "message": "GIT switch branch : " + consoleOutput });
                 }
@@ -276,13 +276,61 @@ exports.gitIsDirty = function(req, res) {
             project = Common.dbUtils.cleanResult(project);
             project.dir = Common.path.normalize(project.dir);
 
-            // Send git pull command on project directory
-            console.debug("GIT pull on dir " + project.dir);
-            gitTools.pull(project.dir, function (err, consoleOutput) {
+            // Check if project GIT directory is dirty
+            console.debug("GIT isDirty on dir " + project.dir);
+            gitTools.isDirty(project.dir, function (err, isDirty) {
                 if (err) {
-                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
+                    res.send({ "warn": true, "message": err });
                 } else {
-                    res.send({ "warn": false, "message": "GIT Pull Success! : " + consoleOutput });
+                    if (isDirty)
+                        res.send({ "warn": false, "message": "ok" });
+                    else
+                        res.send({ "warn": true, "message": "No changes to commit & push!" });
+                }
+            });
+        });
+    }
+};
+
+/**
+ * GIT Commit & Push Project
+ * @param req
+ * @param res
+ */
+exports.gitCommitPush = function(req, res) {
+    var selectedId = req.query.id;
+    var commitMsg = req.query.commitMsg;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // First GIT Commit
+            console.debug("GIT commit on dir " + project.dir + " with msg: " + commitMsg);
+            gitTools.commit(project.dir, commitMsg, function (err, commitConsoleOutput) {
+                if (err) {
+                    res.send({ "warn": true, "message": err });
+                } else {
+                    // Then GIT Push
+                    console.debug("GIT push on dir " + project.dir);
+                    gitTools.push(project.dir, function (err, pushConsoleOutput) {
+                        if (err) {
+                            res.send({ "warn": true, "message": err });
+                        } else {
+                            res.send({ "warn": false, "message": "GIT Commit & Push Success! : " + commitConsoleOutput + "<br>" + pushConsoleOutput });
+                        }
+                    });
                 }
             });
         });

@@ -77,6 +77,12 @@ html
                                 data-html="true",
                                 onclick="checkForUpdates();")
                         li
+                            a.icon.ion-ios7-time#SystemLogsBtn(
+                                href='/log',
+                                rel='tooltip',
+                                data-original-title='System Logs',
+                                data-placement="bottom")
+                        li
                             a.icon.ion-person(href='#')= username
 
         // Main div

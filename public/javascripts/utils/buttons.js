@@ -319,9 +319,23 @@ $('#gitCommitPushProjectBtn').on('click', function() {
         if(result["warn"]) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
-            $('#'+selectedItem.id).trigger("click");
-            $('#refreshProjectBtn').trigger("click");
-            toastr.success(result["message"], 'MagePanel Projects');
+            // Get user commit message
+            var commitMsg = prompt("Please enter a commit message", "");
+
+            // Continue with valid message
+            if (commitMsg) {
+                // Commit & Push
+                $.post( '/projects/gitCommitPush?id=' + selectedItem.id + '&commitMsg=' + commitMsg, function(result) {
+                    // Check if we have warning
+                    if(result["warn"]) {
+                        toastr.warning(result["message"], 'MagePanel Projects');
+                    } else {
+                        toastr.success(result["message"], 'MagePanel Projects');
+                    }
+                }).error(function() {
+                    toastr.error('Something went wrong ', 'MagePanel Projects');
+                });
+            }
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
