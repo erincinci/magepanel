@@ -46,7 +46,51 @@ exports.revisionVersion = function revisionVersion(dir, cb) {
         else
             output = stdout.trim();
 
+        cb(null, output.replace(/(-[A-Za-z]).*/g, ''));
+    });
+};
+
+/**
+ * Get latest commit message for the project
+ * @param dir
+ * @param cb
+ */
+exports.latestCommitMsg = function latestCommitMsg(dir, cb) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git log -1 --pretty=%B', function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+
+        // Get output (TODO: Somehow comes as stderr!)
+        var output;
+        if (stderr)
+            output = stderr.trim();
+        else
+            output = stdout.trim();
+
         cb(null, output);
+    });
+};
+
+/**
+ * Check if the specified project's GIT repo is dirty or not (If there are any uncommitted or not-added files locally)
+ * @param dir
+ * @param cb
+ */
+exports.isDirty = function isDirty(dir, cb) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git status -s', function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+
+        // Get output (TODO: Somehow comes as stderr!)
+        var output;
+        if (stderr)
+            output = stderr.trim();
+        else
+            output = stdout.trim();
+
+        // If there's any output, repo is assumed to be dirty
+        if (output)
+            cb(null, true);
+        else
+            cb(null, false);
     });
 };
 
@@ -136,6 +180,37 @@ exports.currentBranchSync = function resolveGitBranchSync(dir) {
  */
 exports.pull = function performPull(dir, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git pull', function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+        if (stderr) return cb(stderr);
+
+        cb(null, stdout.trim());
+    });
+};
+
+/**
+ * Perform GIT Commit command on project dir with user message
+ * @param dir
+ * @param msg
+ * @param cb
+ */
+exports.commit = function performCommit(dir, msg, cb) {
+    if (! msg)
+        msg = 'Auto-commit from MagePanel..';
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git commit -m "' + msg + '"', function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+        if (stderr) return cb(stderr);
+
+        cb(null, stdout.trim());
+    });
+};
+
+/**
+ * Perform GIT Push command on project dir
+ * @param dir
+ * @param cb
+ */
+exports.push = function performPush(dir, cb) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git push', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
         if (stderr) return cb(stderr);
 

@@ -66,7 +66,14 @@ exports.revisionVersion = function(req) {
             console.error("Error while checking for app updated on GIT: " + err.message);
             req.io.emit('revisionVersion', { err: true, version: err.message });
         } else {
-            req.io.emit('revisionVersion', { err: false, version: revVersion });
+            gitTools.latestCommitMsg(Common.path.join(__dirname, '../'), function (err, commitMsg) {
+                if (err) {
+                    console.error("Error while checking latest commit message on GIT: " + err.message);
+                    req.io.emit('revisionVersion', { err: true, version: err.message });
+                } else {
+                    req.io.emit('revisionVersion', { err: false, version: revVersion + ": " + commitMsg });
+                }
+            });
         }
     });
 };
