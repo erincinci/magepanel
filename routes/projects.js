@@ -254,6 +254,42 @@ exports.gitSwitchBranch = function(req, res) {
 };
 
 /**
+ * Check if Project GIT is dirty?
+ * @param req
+ * @param res
+ */
+exports.gitIsDirty = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // Send git pull command on project directory
+            console.debug("GIT pull on dir " + project.dir);
+            gitTools.pull(project.dir, function (err, consoleOutput) {
+                if (err) {
+                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
+                } else {
+                    res.send({ "warn": false, "message": "GIT Pull Success! : " + consoleOutput });
+                }
+            });
+        });
+    }
+};
+
+/**
  * GIT Pull Project
  * @param req
  * @param res

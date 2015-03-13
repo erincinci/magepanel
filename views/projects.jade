@@ -6,6 +6,10 @@ block content
 
     // Buttons
     p
+        .label.label-default
+            | Create &nbsp;
+            i.icon.ion-arrow-right-a
+        | &nbsp;
         button.btn.btn-default.btn-primary.icon.ion-android-add(
                 rel='tooltip',
                 data-original-title='Add project',
@@ -20,6 +24,9 @@ block content
                 data-target='#initProjectModal',
                 type='button',
                 style='margin-right:10px')
+        .label.label-default
+            | Edit &nbsp;
+            i.icon.ion-arrow-right-a
         | &nbsp;
         button#editProjectBtn.btn.btn-default.btn-info.icon.ion-edit(
                 rel='tooltip',
@@ -41,14 +48,23 @@ block content
                 type='button',
                 style='margin-right:10px',
                 disabled)
+        .label.label-default
+            | GIT &nbsp;
+            i.icon.ion-arrow-right-a
         | &nbsp;
         button#gitPullProjectBtn.btn.btn-default.btn-success.icon.ion-arrow-down-c(
                 rel='tooltip',
-                data-original-title='GIT Pull project',
+                data-original-title='GIT Pull',
                 type='button',
                 style='margin-right:10px',
                 disabled)
-        button#gitSwitchBranchProjectBtn.btn.btn-warning.btn-success.icon.ion-fork-repo(
+        button#gitCommitPushProjectBtn.btn.btn-default.btn-success.icon.ion-arrow-up-c(
+                rel='tooltip',
+                data-original-title='GIT Commit & Push',
+                type='button',
+                style='margin-right:10px',
+                disabled)
+        button#gitSwitchBranchProjectBtn.btn.btn-warning.btn-success.icon.ion-network(
                 rel='tooltip',
                 data-original-title='GIT Switch Branch',
                 type='button',

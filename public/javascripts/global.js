@@ -81,6 +81,18 @@ $(document).ready(function() {
         $('#checkingUpdates').hide();
         $('#updateOk').show();
     }
+
+    // Change app update tooltip width
+    $(function () {
+        $('#updateOk').tooltip().on("mouseenter", function () {
+            var $this = $(this),
+                tooltip = $this.next(".tooltip");
+            tooltip.find(".tooltip-inner").css({
+                width: "350px",
+                backgroundColor: "#3c85c4"
+            });
+        });
+    });
 });
 
 // DOM Change ============================================================

@@ -302,6 +302,33 @@ $('#gitPullProjectBtn').on('click', function() {
 });
 
 /**
+ * GIT Commit & Push button onClick
+ */
+$('#gitCommitPushProjectBtn').on('click', function() {
+    var selectedItem = $('.list-group-item.active')[0];
+
+    // Cancel if selection is not valid
+    if (selectedItem == null) {
+        toastr.warning("Select a project first", 'MagePanel Projects');
+        return;
+    }
+
+    // jQuery AJAX call for project refresh
+    $.post( '/projects/gitIsDirty?id=' + selectedItem.id, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            $('#'+selectedItem.id).trigger("click");
+            $('#refreshProjectBtn').trigger("click");
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+});
+
+/**
  * GIT Switch Branch button onClick
  */
 $('#gitSwitchBranchProjectBtn').on('click', function() {

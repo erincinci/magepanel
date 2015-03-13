@@ -71,7 +71,7 @@ exports.revisionVersion = function(req) {
                     console.error("Error while checking latest commit message on GIT: " + err.message);
                     req.io.emit('revisionVersion', { err: true, version: err.message });
                 } else {
-                    req.io.emit('revisionVersion', { err: false, version: revVersion + ": " + commitMsg });
+                    req.io.emit('revisionVersion', { err: false, version: "<b>" + revVersion + "</b><br>" + commitMsg });
                 }
             });
         }

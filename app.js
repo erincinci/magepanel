@@ -84,6 +84,7 @@ app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project enviro
 app.post('/projects/addTaskFile', projects.addTaskFile); // Add new project task file
 app.post('/projects/refresh', projects.refresh); // Refresh project
 app.post('/projects/gitPull', projects.gitPull); // GIT Pull project
+app.post('/projects/gitIsDirty', projects.gitIsDirty); // GIT Is Dirty?
 app.post('/projects/gitRemoteBranches', projects.gitRemoteBranches); // GIT Remote Branches of project
 app.post('/projects/gitSwitchBranch', projects.gitSwitchBranch); // GIT Checkout branch project
 app.post('/projects/delete', projects.delete); // Delete projects
