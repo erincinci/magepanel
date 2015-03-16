@@ -82,9 +82,13 @@ block content
                     if projects
                         for project in projects
                             if project.branch != 'N/A'
-                                li.list-group-item(id= project.id).ion-fork-repo  [#{project.branch}] - #{project.name}
+                                li.list-group-item(id= project.id, style="cursor: pointer;")
+                                    h5.list-group-item-heading.ion-fork-repo  <b>[#{project.branch}] - #{project.name}</b>
+                                    p.list-group-item-text <i>#{project.dir}</i>
                             else
-                                li.list-group-item(id= project.id).ion-briefcase  [Local] - #{project.name}
+                                li.list-group-item(id= project.id, style="cursor: pointer;")
+                                    h5.list-group-item-heading.ion-briefcase  <b>#{project.name}</b>
+                                    p.list-group-item-text <i>Local project</i>
                     else
                         .panel.panel-primary
                             .panel-heading

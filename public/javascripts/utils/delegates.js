@@ -8,10 +8,14 @@
 $(document).delegate('#projectsList .list-group-item', 'click', function(e) {
     var previous = $(this).closest(".list-group").children(".active");
     previous.removeClass('active'); // previous list-item
-    $(e.target).addClass('active'); // activated list-item
-    toggleProjectsPageButtons('on', $(e.target)); // enable buttons
+
+    var selected = $(this)[0];
+    var isGit = $(this).children("h5").hasClass("ion-fork-repo");
+    $(this).addClass('active'); // activated list-item
+
+    toggleProjectsPageButtons('on', isGit); // enable buttons
     // jQuery AJAX call for project detail
-    $.get( '/projects/detail?id=' + e.target.id, function(output) {
+    $.get( '/projects/detail?id=' + selected.id, function(output) {
         $('#projectDetail').html(output);
     });
 });

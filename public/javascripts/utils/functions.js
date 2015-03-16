@@ -410,13 +410,13 @@ function switchGitBranch(branchName) {
  * @param mode
  * @param target
  */
-function toggleProjectsPageButtons(mode, target) {
+function toggleProjectsPageButtons(mode, isGit) {
     if (mode == 'on') {
         // Enabled
         $("#editProjectBtn").prop('disabled', false);
         $("#delProjectBtn").prop('disabled', false);
         $("#refreshProjectBtn").prop('disabled', false);
-        if (target.hasClass('ion-fork-repo')) {
+        if (isGit) {
             $("#gitPullProjectBtn").prop('disabled', false);
             $("#gitCommitPushProjectBtn").prop('disabled', false);
             $("#gitSwitchBranchProjectBtn").prop('disabled', false);
