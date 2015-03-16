@@ -1,5 +1,9 @@
 # ![MagePanel Logo](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
 
+[![Release](http://img.shields.io/github/release/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/releases)
+[![Issues](http://img.shields.io/github/issues/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/issues?q=is%3Aopen)
+[![Issues](http://img.shields.io/badge/license-GNU-red.svg)](https://github.com/erincinci/magepanel/blob/master/LICENSE)
+
 Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 
 Enjoy!
@@ -36,18 +40,3 @@ Rest of the requirements will be automatically installed with installers provide
 ## Installers ##
 
 - [![installers](http://s11.postimg.org/e3jzqgcn3/installer.png) Installers](https://github.com/erincinci/magepanel/releases/latest)
-
-## Running Magallanes on Cygwin (Windows) ##
-
-* Install **cygwin** *(Will be automatically installed with MagePanel Windows Installer)* → [**Here**](https://cygwin.com/install.html)
-* Download & Extract latest **Magallanes** release → [**Here**](https://github.com/andres-montanez/Magallanes/releases/latest)
-* Download & Setup your keys in **Putty Pageant** → [**Here**](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html)
-* Download & Copy **ssh-pageant** binary in cygwin `/usr/bin/` directory as described → [**Here**](https://github.com/cuviper/ssh-pageant)
-* Start **cygwin** and change dir to extracted **Magallanes** `bin/` dir → *ex:* `cd /cygdrive/c/Downloads/magallanes/bin/`
-* Run commands →
-```bash
->> ./mage compile
->> cp mage.phar /usr/bin/mage
->> chmod +x /usr/bin/mage
-```
-* Run `mage version` command on **cygwin** to test if **Magallanes** is working correctly
