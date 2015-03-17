@@ -373,6 +373,38 @@ $('#gitSwitchBranchProjectBtn').on('click', function() {
     });
 });
 
+// Tags Page - Button onClick Events =============================================================
+
+/**
+ * Delete tag button onClick
+ */
+$('#delTagBtn').on('click', function() {
+    var selectedItem = $('.list-group-item.active')[0];
+
+    // Cancel if selection is not valid
+    if (selectedItem == null) {
+        toastr.warning("Select a tag first", 'MagePanel Tags');
+        return;
+    }
+
+    // Confirm tag deletion
+    if(confirm("Are you sure to delete tag?")) {
+        // jQuery AJAX call for tag deletion
+        $.post( '/tags/delete?id=' + selectedItem.id, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Tags');
+            } else {
+                $('#tagsList').load(document.URL +  ' #tagsList');
+                toggleTagsPageButtons('off'); // disable buttons
+                toastr.success(result["message"], 'MagePanel Tags');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Tags');
+        });
+    }
+});
+
 // Mage Logs Page - Button onClick Events =============================================================
 
 /**

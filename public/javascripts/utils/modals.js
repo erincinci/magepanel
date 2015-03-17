@@ -69,6 +69,33 @@ $('#editProjectModal').on('shown.bs.modal', function () {
 });
 
 /**
+ * Edit Tag Modal Shown Event
+ */
+$('#editTagModal').on('shown.bs.modal', function () {
+    // Fill edit form with tag data on modalShown
+    var selectedItem = $('.list-group-item.active')[0];
+
+    if (selectedItem != null) {
+        $.get( '/tags/get?id=' + selectedItem.id, function(tag) {
+            if (tag != 'null') {
+                console.log($('#tagName').val());
+                $('#tagEditId').val(tag.id);
+                $('#tagEditName').val(tag.name);
+                $('#tagEditIcon').iconpicker('setIcon', tag.icon);
+                $('#tagEditIconName').val(tag.icon);
+            } else {
+                toastr.error('There was a problem getting tag details', 'MagePanel Tags');
+                $('#editTagModal').modal('hide');
+            }
+        });
+    } else {
+        // Selected tag ID is invalid
+        toastr.error('There was a problem getting tag details', 'MagePanel Tags');
+        $('#editTagModal').modal('hide');
+    }
+});
+
+/**
  * View File Modal Shown Event
  */
 $('#viewFileModal').on('shown.bs.modal', function () {

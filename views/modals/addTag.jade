@@ -1,0 +1,23 @@
+// Add Tag Modal
+#addTagModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+    .modal-dialog
+        .modal-content
+            form#addTagForm(method='POST', action='/tags/add')
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span(aria-hidden='true') ×
+                        span.sr-only Close
+                    h4#modalLabel.modal-title.icon.ion-android-add  Add Project Tag
+                .modal-body
+                    // Add tag form contents
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-android-information
+                        input.form-control#tagName(name='tagName', type='text', placeholder='Enter tag name')
+                    p.input-group
+                        span.input-group-btn
+                            button.btn.btn-default#tagIcon(data-iconset="ionicon", data-icon="ion-briefcase", role="iconpicker", name="tagIcon")
+                        input.form-control#tagIconName(name='tagIconName', type="text", value="ion-briefcase", readonly)
+                .modal-footer
+                    button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Discard
+                    button.btn.btn-primary.glyphicon.glyphicon-floppy-disk(type='submit') Save

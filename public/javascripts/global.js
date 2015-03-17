@@ -93,6 +93,14 @@ $(document).ready(function() {
             });
         });
     });
+
+    // Tag icon picker on change event
+    $('#tagIcon').on('change', function(e) {
+        $('#tagIconName').val(e.icon);
+    });
+    $('#tagEditIcon').on('change', function(e) {
+        $('#tagEditIconName').val(e.icon);
+    });
 });
 
 // DOM Change ============================================================

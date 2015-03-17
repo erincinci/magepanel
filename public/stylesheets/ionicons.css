@@ -21,8 +21,6 @@
   100% { transform: rotate(359deg); } }
 .ion-loading-a { -webkit-animation-timing-function: steps(8, start); -moz-animation-timing-function: steps(8, start); animation-timing-function: steps(8, start); }
 
-.ion-magepanel:before { content: url("../images/magepanel-16.png"); }
-
 .ion-alert:before { content: "\f101"; }
 
 .ion-alert-circled:before { content: "\f100"; }

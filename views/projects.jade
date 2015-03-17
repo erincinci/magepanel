@@ -78,23 +78,30 @@ block content
         // Available projects
         .col-lg-6
             div#projectListContainer
-                ul.list-group#projectsList
-                    if projects
-                        for project in projects
-                            if project.branch != 'N/A'
-                                li.list-group-item(id= project.id, style="cursor: pointer;")
-                                    h5.list-group-item-heading.ion-fork-repo  <b>[#{project.branch}] - #{project.name}</b>
-                                    p.list-group-item-text <i>#{project.dir}</i>
-                            else
-                                li.list-group-item(id= project.id, style="cursor: pointer;")
-                                    h5.list-group-item-heading.ion-briefcase  <b>#{project.name}</b>
-                                    p.list-group-item-text <i>Local project</i>
-                    else
-                        .panel.panel-primary
-                            .panel-heading
-                                h3.panel-title Projects
-                            .panel-body
-                                p No projects added yet..
+                if projects
+                    .panel-group
+                        .panel.panel-default
+                            a.list-group-item(data-toggle="collapse", href="#collapse1")
+                                span.badge #{projects.length}
+                                i.ion-briefcase  Projects
+                            .panel-collapse.collapse.in(id="collapse1")
+                                .panel-body
+                                    ul.list-group#projectsList
+                                        for project in projects
+                                            if project.branch != 'N/A'
+                                                li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                    h5.list-group-item-heading.ion-fork-repo  <b>[#{project.branch}] - #{project.name}</b>
+                                                    p.list-group-item-text <i>#{project.dir}</i>
+                                            else
+                                                li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                    h5.list-group-item-heading.ion-briefcase  <b>#{project.name}</b>
+                                                    p.list-group-item-text <i>Local project</i>
+                else
+                    .panel.panel-primary
+                        .panel-heading
+                            h3.panel-title Projects
+                        .panel-body
+                            p No projects added yet..
         // Selected project details
         .col-lg-6
             .panel.panel-primary

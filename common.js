@@ -31,9 +31,11 @@ Common = {
     // Models
     SettingsModel: require('./models/settingsModel'),
     ProjectModel: require('./models/projectModel'),
+    TagsModel: require('./models/tagsModel'),
 
     // DBs
     projectsDB: nStore.new('dbs/projects.db'),
+    tagsDB: nStore.new('dbs/tags.db'),
 
     // Enums
     eCmdStatus: { error: 'stderr', success: 'stdout', warning: 'warning', exit: 'exit' }

@@ -16,6 +16,8 @@ html
         // Bootstrap jsPanel
         link(rel='stylesheet', href='/stylesheets/jquery.jsPanel.css')
         link(rel='stylesheet', href='/stylesheets/jsglyph.css')
+        // Bootstrap IconPicker
+        link(rel='stylesheet', href='/stylesheets/bootstrap-iconpicker.css')
         // MagePanel Styles
         link(rel='stylesheet', href='/stylesheets/magepanel.css')
         // IonIcons
@@ -52,6 +54,8 @@ html
                                 a.icon.ion-document(href='/mageLogs')  Logs
                             li(class=(menu === 'projects' ? 'active' : ''))
                                 a.icon.ion-briefcase(href='/projects')  Projects
+                            li(class=(menu === 'tags' ? 'active' : ''))
+                                a.icon.ion-pricetags(href='/tags')  Tags
                             li(class=(menu === 'setup' ? 'active' : ''))
                                 a.icon.ion-settings(href='/setup')  Settings
                     ul.nav.navbar-nav(style='float:right;')
@@ -117,6 +121,9 @@ html
         script(src='/javascripts/bootstrap-switch.js')
         // Bootstrap jsPanel
         script(src='/javascripts/jquery.jspanel.js')
+        // Bootstrap IconPicker
+        script(src='/javascripts/iconset/iconset-ionicon-1.5.2.js')
+        script(src='/javascripts/bootstrap-iconpicker.js')
         // Toastr Notifications
         script(src='/javascripts/toastr.min.js')
         // CodeMirror Editor

@@ -363,6 +363,26 @@ function addProjectToDB(formData) {
 }
 
 /**
+ * Add new tag to DB using form data
+ * @param formData
+ */
+function addTagToDB(formData) {
+    $.post( '/tags/add', formData, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Tags');
+        } else {
+            $('.modal').modal('hide');
+            $('#tagsListContainer').load(document.URL +  ' #tagsList');
+            toggleTagsPageButtons('off'); //disable buttons
+            toastr.success(result["message"], 'MagePanel Tags');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Tags');
+    });
+}
+
+/**
  * Delete project file click event
  * @param fileToDel
  */
@@ -433,6 +453,22 @@ function toggleProjectsPageButtons(mode, isGit) {
         $("#gitPullProjectBtn").prop('disabled', true);
         $("#gitCommitPushProjectBtn").prop('disabled', true);
         $("#gitSwitchBranchProjectBtn").prop('disabled', true);
+    }
+};
+
+/**
+ * Toggle disabled/enabled states for Tags Page Buttons
+ * @param mode
+ */
+function toggleTagsPageButtons(mode) {
+    if (mode == 'on') {
+        // Enabled
+        $("#editTagBtn").prop('disabled', false);
+        $("#delTagBtn").prop('disabled', false);
+    } else {
+        // Disabled
+        $("#editTagBtn").prop('disabled', true);
+        $("#delTagBtn").prop('disabled', true);
     }
 };
 

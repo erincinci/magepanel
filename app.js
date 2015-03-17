@@ -7,6 +7,7 @@ var routes = require('./routes');
 var projects = require('./routes/projects');
 var mage = require('./routes/mage');
 var mageLogs = require('./routes/mageLogs');
+var tags = require('./routes/tags');
 var setup = require('./routes/setup');
 var http = require('http');
 var path = require('path');
@@ -108,6 +109,12 @@ app.io.route('tailLog', mageLogs.tailLog); // Tail project log with Socket.IO
 app.io.route('exitTail', mageLogs.exitTail); // Exit tail log with Socket.IO
 app.io.route('pauseTail', mageLogs.pauseTail); // Pause tail log with Socket.IO
 app.io.route('resumeTail', mageLogs.resumeTail); // Resume tail log with Socket.IO
+
+// Project Tags
+app.get('/tags', tags.index); // Project Tags
+app.get('/tags/get', tags.getTag); // Get tag from DB with ID
+app.post('/tags/add', tags.add); // Add new tag
+app.post('/tags/delete', tags.delete); // Delete tag
 
 /**
  * Start Server
