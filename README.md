@@ -40,3 +40,7 @@ Rest of the requirements will be automatically installed with installers provide
 ## Installers ##
 
 - [![installers](http://s11.postimg.org/e3jzqgcn3/installer.png) Installers](https://github.com/erincinci/magepanel/releases/latest)
+
+## NPM Status
+
+[![NPM](https://nodei.co/npm/magepanel.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/magepanel/)
