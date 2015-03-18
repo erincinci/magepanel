@@ -56,6 +56,8 @@ $('#editProjectModal').on('shown.bs.modal', function () {
                 var reportingEnabled = (project.reportingEnabled ? "On" : "Off");
                 $('#projectEditReportingSwitch').val(reportingEnabled);
                 $('#projectEditReportingSwitch').selectpicker('refresh');
+                $('#projectEditTagId').val(project.tagId);
+                $('#projectEditTagId').selectpicker('refresh');
             } else {
                 toastr.error('There was a problem getting project details', 'MagePanel Projects');
                 $('#editProjectModal').modal('hide');

@@ -79,24 +79,74 @@ block content
         .col-lg-6
             div#projectListContainer
                 if projects
-                    .panel-group
-                        .panel.panel-default
-                            a.list-group-item(data-toggle="collapse", href="#collapse1")
-                                span.badge #{projects.length}
-                                i.ion-briefcase  Projects
-                            .panel-collapse.collapse.in(id="collapse1")
+                    .panel-group#projectsPanel
+                        // Tag counter for div collapse IDs & Untagged projects
+                        - var tagIdArray = [];
+                        - var tagCount = 0;
+                        - var untaggedCount = 0;
+
+                        // For each tag
+                        for tag in tags
+                            // Count number of projects for specific tag (For use in number badge)
+                            - var projectCountInTag = 0;
+                            - tagIdArray.push(tag.id);
+                            for project in projects
+                                if project.tagId == tag.id
+                                    - projectCountInTag++;
+
+                            // Collapsable Panel
+                            .panel.panel-info
+                                // Panel Header
+                                a.list-group-item(data-toggle="collapse", href='#collapse' + tagCount)
+                                    span.badge #{projectCountInTag}
+                                    i(class= tag.icon)  #{tag.name}
+                                // Collapsable Panel Body
+                                .panel-collapse.collapse(id='collapse' + tagCount++)
+                                    .panel-body
+                                        // Projects List
+                                        ul.list-group#projectsList
+                                            // For each project
+                                            for project in projects
+                                                // Check if project belongs to the specific tag
+                                                if project.tagId == tag.id
+                                                    if project.branch != 'N/A'
+                                                        li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                            h5.list-group-item-heading.ion-fork-repo  <b>[#{project.branch}] - #{project.name}</b>
+                                                            p.list-group-item-text <i>#{project.dir}</i>
+                                                    else
+                                                        li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                            h5.list-group-item-heading.ion-briefcase  <b>#{project.name}</b>
+                                                            p.list-group-item-text <i>Local project</i>
+
+                        // Count untagged projects (For use in number badge)
+                        for project in projects
+                            if tagIdArray.indexOf(project.tagId) < 0
+                                - untaggedCount++;
+
+                        // List untagged projects at last
+                        .panel.panel-info
+                            // Panel Header
+                            a.list-group-item(data-toggle="collapse", href='#collapseNA')
+                                span.badge #{untaggedCount}
+                                i.ion-more  Untagged Projects
+                            // Collapsable Panel Body
+                            .panel-collapse.collapse(id='collapseNA')
                                 .panel-body
+                                    // Projects List
                                     ul.list-group#projectsList
+                                        // For each project
                                         for project in projects
-                                            if project.branch != 'N/A'
-                                                li.list-group-item(id= project.id, style="cursor: pointer;")
-                                                    h5.list-group-item-heading.ion-fork-repo  <b>[#{project.branch}] - #{project.name}</b>
-                                                    p.list-group-item-text <i>#{project.dir}</i>
-                                            else
-                                                li.list-group-item(id= project.id, style="cursor: pointer;")
-                                                    h5.list-group-item-heading.ion-briefcase  <b>#{project.name}</b>
-                                                    p.list-group-item-text <i>Local project</i>
+                                            if tagIdArray.indexOf(project.tagId) < 0
+                                                if project.branch != 'N/A'
+                                                    li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                        h5.list-group-item-heading.ion-fork-repo  <b>[#{project.branch}] - #{project.name}</b>
+                                                        p.list-group-item-text <i>#{project.dir}</i>
+                                                else
+                                                    li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                        h5.list-group-item-heading.ion-briefcase  <b>#{project.name}</b>
+                                                        p.list-group-item-text <i>Local project</i>
                 else
+                    // If there are no projects added in DB
                     .panel.panel-primary
                         .panel-heading
                             h3.panel-title Projects

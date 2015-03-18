@@ -352,7 +352,7 @@ function addProjectToDB(formData) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
             $('.modal').modal('hide');
-            $('#projectListContainer').load(document.URL +  ' #projectsList');
+            $('#projectListContainer').load(document.URL +  ' #projectsPanel');
             $('#projectDetail').html("Select a project..");
             toggleProjectsPageButtons('off', null); // disable buttons
             toastr.success(result["message"], 'MagePanel Projects');

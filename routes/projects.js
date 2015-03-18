@@ -24,6 +24,7 @@ function fixProject(project) {
     refreshedProject.id(project.id);
     refreshedProject.dir(project.dir);
     refreshedProject.branch(gitTools.currentBranchSync(project.dir));
+    refreshedProject.tagId(project.tagId);
     refreshedProject.name(project.name);
     refreshedProject.envs(getProjectEnvs(project.dir));
     refreshedProject.tasks(getProjectTasks(project.dir));
@@ -60,12 +61,19 @@ exports.index = function(req, res) {
             }
         });
 
-        res.render('projects', {
-            username: Common.username,
-            menu: 'projects',
-            title: title,
-            setupCompleted: Common.setupCompleted,
-            projects: Common.dbUtils.cleanResults(projects)
+        // Get all tags from DB
+        Common.tagsDB.all(function(err, tags) {
+            if (err)
+                console.error(err.message);
+
+            res.render('projects', {
+                username: Common.username,
+                menu: 'projects',
+                title: title,
+                setupCompleted: Common.setupCompleted,
+                projects: Common.dbUtils.cleanResults(projects),
+                tags: Common.dbUtils.cleanResults(tags)
+            });
         });
     });
 
@@ -95,6 +103,7 @@ exports.add = function(req, res) {
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
     project.branch(gitTools.currentBranchSync(data['projectDir']));
+    project.tagId(data['projectTagId']);
     project.name(data['projectName']);
     project.mailAddress(data['projectMail']);
     if (data['projectReportingEnabled'] == 'On')
@@ -161,6 +170,7 @@ exports.refresh = function(req, res) {
             refreshedProject.id(project.id);
             refreshedProject.dir(project.dir);
             refreshedProject.branch(gitTools.currentBranchSync(project.dir));
+            refreshedProject.tagId(project.tagId);
             refreshedProject.name(project.name);
             refreshedProject.envs(getProjectEnvs(project.dir));
             refreshedProject.tasks(getProjectTasks(project.dir));
