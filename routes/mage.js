@@ -36,14 +36,21 @@ exports.index = function(req, res) {
             }
         }
 
-        res.render('mage', {
-            username: Common.username,
-            menu: 'mage',
-            title: title,
-            setupCompleted: Common.setupCompleted,
-            pathWarning: pathWarning,
-            content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b><br>",
-            projects: Common.dbUtils.cleanResults(projects)
+        // Get all tags from DB
+        Common.tagsDB.all(function(err, tags) {
+            if (err)
+                console.error(err.message);
+
+            res.render('mage', {
+                username: Common.username,
+                menu: 'mage',
+                title: title,
+                setupCompleted: Common.setupCompleted,
+                pathWarning: pathWarning,
+                content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b><br>",
+                projects: Common.dbUtils.cleanResults(projects),
+                tags: Common.dbUtils.cleanResults(tags)
+            });
         });
     });
 };

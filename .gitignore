@@ -2,6 +2,7 @@ node_modules/
 bower_components
 npm-debug.log
 .idea/
+.sonar/
 *.db
 .DS_Store
 .fseventsd

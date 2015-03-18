@@ -12,14 +12,26 @@ block content
         table
             tr
                 td
+                    // For determining untagged projects
+                    - var tagIdArray = [];
+                    for tag in tags
+                        - tagIdArray.push(tag.id);
+
                     // Project selection
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-briefcase
-                        select#activeProject.selectpicker(name='activeProject', onchange='loadEnvs()')
+                        select#activeProject.selectpicker(name='activeProject', onchange='loadEnvs()', data-size="10")
                             option(value='null', selected) Select Project
-                            for project in projects
-                                option(value= project.id)= project.name
+                            for tag in tags
+                                optgroup(label= tag.name, data-icon= tag.icon)
+                                    for project in projects
+                                        if project.tagId == tag.id
+                                            option(value= project.id)= project.name
+                            optgroup(label="Untagged Projects", data-icon="ion-more")
+                                for project in projects
+                                    if tagIdArray.indexOf(project.tagId) < 0
+                                        option(value= project.id)= project.name
                 td
                     // Environment selection
                     .input-group(style='margin-right:10px')
