@@ -30,6 +30,13 @@
                             option(value='Off') Automatic Reporting Off
                     p.input-group
                         span.input-group-addon
+                            i.icon.ion-pricetag
+                        select.selectpicker#projectTagId(name='projectTagId', data-width='auto')
+                            option(value='null', selected) [Optional] Select Project Tag
+                            for tag in tags
+                                option(value= tag.id, data-icon= tag.icon) #{tag.name}
+                    p.input-group
+                        span.input-group-addon
                             i.icon.ion-briefcase
                         select.selectpicker#projectInitImport(name='projectInitImport', data-width='auto')
                             option(value='null', selected) [Optional] Select project to import from
