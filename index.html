@@ -23,6 +23,10 @@
 <a id="-magepanel" class="anchor" href="#-magepanel" aria-hidden="true"><span class="octicon octicon-link"></span></a>
 <img src="http://s23.postimg.org/t7m6upgzb/magepanel.png" alt="MagePanel Logo"> MagePanel</h1>
 
+<p><a href="https://github.com/erincinci/magepanel/releases"><img src="http://img.shields.io/github/release/erincinci/magepanel.svg" alt="Release"></a>
+<a href="https://github.com/erincinci/magepanel/issues?q=is%3Aopen"><img src="http://img.shields.io/github/issues/erincinci/magepanel.svg" alt="Issues"></a>
+<a href="https://github.com/erincinci/magepanel/blob/master/LICENSE"><img src="http://img.shields.io/badge/license-GNU-red.svg" alt="Issues"></a></p>
+
 <p>Web-based user interface for <a href="http://magephp.com/">Magallanes Deployment Tool</a>.</p>
 
 <p>Enjoy!</p>
@@ -40,6 +44,7 @@
 
 <div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> git clone https://github.com/erincinci/magepanel.git MagePanel
 <span class="pl-k">&gt;&gt;</span> <span class="pl-c1">cd</span> MagePanel
+<span class="pl-k">&gt;&gt;</span> sudo npm install pm2 -g
 <span class="pl-k">&gt;&gt;</span> npm start</pre></div>
 
 <h2>
@@ -71,30 +76,7 @@
 
 <p><a href="https://snap-ci.com/erincinci/magepanel/branch/master"><img src="https://snap-ci.com/erincinci/magepanel/branch/master/build_image" alt="Build Status"></a></p>
 
-<h2>
-<a id="running-magallanes-on-cygwin-windows" class="anchor" href="#running-magallanes-on-cygwin-windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running Magallanes on Cygwin (Windows)</h2>
-
-<ul>
-<li>Install <strong>cygwin</strong> <em>(Will be automatically installed with MagePanel Windows Installer)</em> → <a href="https://cygwin.com/install.html"><strong>Here</strong></a>
-</li>
-<li>Download &amp; Extract latest <strong>Magallanes</strong> release → <a href="https://github.com/andres-montanez/Magallanes/releases/latest"><strong>Here</strong></a>
-</li>
-<li>Download &amp; Setup your keys in <strong>Putty Pageant</strong> → <a href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/download.html"><strong>Here</strong></a>
-</li>
-<li>Download &amp; Copy <strong>ssh-pageant</strong> binary in cygwin <code>/usr/bin/</code> directory as described → <a href="https://github.com/cuviper/ssh-pageant"><strong>Here</strong></a>
-</li>
-<li>Start <strong>cygwin</strong> and change dir to extracted <strong>Magallanes</strong> <code>bin/</code> dir → <em>ex:</em> <code>cd /cygdrive/c/Downloads/magallanes/bin/</code>
-</li>
-<li>Run commands →</li>
-</ul>
-
-<div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> ./mage compile
-<span class="pl-k">&gt;&gt;</span> cp mage.phar /usr/bin/mage
-<span class="pl-k">&gt;&gt;</span> chmod +x /usr/bin/mage</pre></div>
-
-<ul>
-<li>Run <code>mage version</code> command on <strong>cygwin</strong> to test if <strong>Magallanes</strong> is working correctly</li>
-</ul>
+<p><a href="https://nodei.co/npm/magepanel/"><img src="https://nodei.co/npm/magepanel.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/erincinci/magepanel">MagePanel</a> is maintained by <a href="https://github.com/erincinci">erincinci</a>.</span>
