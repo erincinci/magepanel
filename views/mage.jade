@@ -12,36 +12,53 @@ block content
         table
             tr
                 td
+                    // For determining untagged projects
+                    - var tagIdArray = [];
+                    for tag in tags
+                        - tagIdArray.push(tag.id);
+
+                    // Project selection
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-briefcase
-                        select#activeProject.selectpicker(name='activeProject', data-width='150px',onchange='loadEnvs()')
+                        select#activeProject.selectpicker(name='activeProject', onchange='loadEnvs()', data-size="10")
                             option(value='null', selected) Select Project
-                            for project in projects
-                                option(value= project.id)= project.name
+                            for tag in tags
+                                optgroup(label= tag.name, data-icon= tag.icon)
+                                    for project in projects
+                                        if project.tagId == tag.id
+                                            option(value= project.id)= project.name
+                            optgroup(label="Untagged Projects", data-icon="ion-more")
+                                for project in projects
+                                    if tagIdArray.indexOf(project.tagId) < 0
+                                        option(value= project.id)= project.name
                 td
+                    // Environment selection
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-cloud
-                        select#activeEnvironment.selectpicker(name='activeEnvironment', data-width='150px',onchange='activateCommandButtons()', disabled)
+                        select#activeEnvironment.selectpicker(name='activeEnvironment', onchange='activateCommandButtons()', width='120px', disabled)
                             option(value='null', selected) Select Environment
                 td
+                    // Release selection
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-android-promotion
-                        select#activeRelease.selectpicker(name='activeRelease', data-width='auto',title='Rollback to selected release',onchange='activateRollbackButton()', disabled)
+                        select#activeRelease.selectpicker(name='activeRelease' ,title='Rollback to selected release',onchange='activateRollbackButton()', width='120px', disabled)
                             option(value='null', selected) Select Release
                             option(value='0') Current
                             option(value='-1') Previous
                 td
-                    //button#tailLatestLog.btn.btn-default.btn-success(type='button', style='margin-right:10px', data-toggle='modal') Log
-                    button#clearConsole.btn.btn-default.btn-warning.ion-ios7-trash-outline(type='button', style='margin-right:10px')  Clear
-                    //button#mageinfo.btn.btn-default.btn-info(type='button', style='margin-right:10px') Mage Version
-                    button#mageReleases.btn.btn-default.btn-info.ion-navicon-round(type='button',style='margin-right:10px',disabled)  Releases
-                    button#mageRollback.btn.btn-default.btn-info.ion-reply-all(type='button',style='margin-right:10px',disabled)  Rollback
-                    button#mageAddToFlow.btn.btn-default.btn-success.ion-gear-a(type='button',title='Add to workflow', style='margin-right:10px', disabled)  Queue
-                    button#mageDeploy.btn.btn-default.btn-success.ion-paper-airplane(type='button',title='Deploy project to selected environment',disabled)  Deploy
-    //.well
+                    .btn-toolbar
+                        // Console related buttons
+                        button#clearConsole.btn.btn-default.btn-warning.ion-ios7-trash-outline(type='button', rel='tooltip', data-original-title='Clear Console')
+                        //button#mageinfo.btn.btn-default.btn-warning.ion-help(type='button', rel='tooltip', data-original-title='Show Info')
+                        button#tailLatestLog.btn.btn-default.btn-primary.ion-document(type='button', title='Tail latest log file of the project', data-toggle='modal')  Log
+                        button#mageReleases.btn.btn-default.btn-info.ion-navicon-round(type='button', disabled)  Releases
+                        button#mageRollback.btn.btn-default.btn-info.ion-reply-all(type='button', disabled)  Rollback
+                        button#mageAddToFlow.btn.btn-default.btn-success.ion-gear-a(type='button', title='Add to workflow', disabled)  Queue
+                        button#mageDeploy.btn.btn-default.btn-success.ion-paper-airplane(type='button', title='Deploy project to selected environment', disabled)  Deploy
+    // Console Window
     .bs-callout.bs-callout-info#consoleFrame(Style='height: 65%; overflow: auto;')
         p#console!= content
     .spacer

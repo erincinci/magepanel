@@ -42,7 +42,7 @@ self.express = {};
 
 var $ = {
     app : "scribe.js",
-    logPath : "./../logs",
+    logPath : "./logs",
     mainUser : username,
     maxTagLength : 50,
     indentation : 2,

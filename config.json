@@ -8,7 +8,9 @@
     },
 
     "html": {
-        "consolePointer": "<span class='console-pointer'>&gt;&gt; </span>"
+        "consolePointer": "<span class='console-pointer'>&gt;&gt; </span>",
+        "consolePointerErr": "<span class='console-pointer' style='color: red;'><b>&gt;&gt; </b></span>",
+        "consolePointerWarn": "<span class='console-pointer' style='color: #d0ca3a;'><b>&gt;&gt; </b></span>"
     },
 
     "setup": {

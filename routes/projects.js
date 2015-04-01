@@ -24,6 +24,7 @@ function fixProject(project) {
     refreshedProject.id(project.id);
     refreshedProject.dir(project.dir);
     refreshedProject.branch(gitTools.currentBranchSync(project.dir));
+    refreshedProject.tagId(project.tagId);
     refreshedProject.name(project.name);
     refreshedProject.envs(getProjectEnvs(project.dir));
     refreshedProject.tasks(getProjectTasks(project.dir));
@@ -60,12 +61,19 @@ exports.index = function(req, res) {
             }
         });
 
-        res.render('projects', {
-            username: Common.username,
-            menu: 'projects',
-            title: title,
-            setupCompleted: Common.setupCompleted,
-            projects: Common.dbUtils.cleanResults(projects)
+        // Get all tags from DB
+        Common.tagsDB.all(function(err, tags) {
+            if (err)
+                console.error(err.message);
+
+            res.render('projects', {
+                username: Common.username,
+                menu: 'projects',
+                title: title,
+                setupCompleted: Common.setupCompleted,
+                projects: Common.dbUtils.cleanResults(projects),
+                tags: Common.dbUtils.cleanResults(tags)
+            });
         });
     });
 
@@ -95,6 +103,7 @@ exports.add = function(req, res) {
     project.id(id);
     project.dir(Common.path.resolve(data['projectDir']));
     project.branch(gitTools.currentBranchSync(data['projectDir']));
+    project.tagId(data['projectTagId']);
     project.name(data['projectName']);
     project.mailAddress(data['projectMail']);
     if (data['projectReportingEnabled'] == 'On')
@@ -161,6 +170,7 @@ exports.refresh = function(req, res) {
             refreshedProject.id(project.id);
             refreshedProject.dir(project.dir);
             refreshedProject.branch(gitTools.currentBranchSync(project.dir));
+            refreshedProject.tagId(project.tagId);
             refreshedProject.name(project.name);
             refreshedProject.envs(getProjectEnvs(project.dir));
             refreshedProject.tasks(getProjectTasks(project.dir));
@@ -244,9 +254,93 @@ exports.gitSwitchBranch = function(req, res) {
             console.debug("GIT checkout branch on dir " + project.dir + ".. new branch '" + checkoutBranch + "'");
             gitTools.checkoutBranch(project.dir, checkoutBranch, function (err, consoleOutput) {
                 if (err) {
-                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
+                    res.send({ "warn": true, "message": err }); // TODO: GIT success result outputs as error?
                 } else {
                     res.send({ "warn": false, "message": "GIT switch branch : " + consoleOutput });
+                }
+            });
+        });
+    }
+};
+
+/**
+ * Check if Project GIT is dirty?
+ * @param req
+ * @param res
+ */
+exports.gitIsDirty = function(req, res) {
+    var selectedId = req.query.id;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // Check if project GIT directory is dirty
+            console.debug("GIT isDirty on dir " + project.dir);
+            gitTools.isDirty(project.dir, function (err, isDirty) {
+                if (err) {
+                    res.send({ "warn": true, "message": err });
+                } else {
+                    if (isDirty)
+                        res.send({ "warn": false, "message": "ok" });
+                    else
+                        res.send({ "warn": true, "message": "No changes to commit & push!" });
+                }
+            });
+        });
+    }
+};
+
+/**
+ * GIT Commit & Push Project
+ * @param req
+ * @param res
+ */
+exports.gitCommitPush = function(req, res) {
+    var selectedId = req.query.id;
+    var commitMsg = req.query.commitMsg;
+
+    if(selectedId === 'undefined') {
+        res.send({"warn": true, "message": "ID not found!"});
+        return;
+    } else {
+        Common.projectsDB.get(selectedId, function (err, project) {
+            if (err) {
+                console.error(selectedId + ": " + err);
+                res.send({"warn": true, "message": "There was an error getting project from DB!"});
+                return;
+            }
+
+            // Clean result object
+            project = Common.dbUtils.cleanResult(project);
+            project.dir = Common.path.normalize(project.dir);
+
+            // First GIT Commit
+            console.debug("GIT commit on dir " + project.dir + " with msg: " + commitMsg);
+            gitTools.commit(project.dir, commitMsg, function (err, commitConsoleOutput) {
+                if (err) {
+                    res.send({ "warn": true, "message": err });
+                } else {
+                    // Then GIT Push
+                    console.debug("GIT push on dir " + project.dir);
+                    gitTools.push(project.dir, function (err, pushConsoleOutput) {
+                        if (err) {
+                            res.send({ "warn": true, "message": err });
+                        } else {
+                            res.send({ "warn": false, "message": "GIT Commit & Push Success! : " + commitConsoleOutput + "<br>" + pushConsoleOutput });
+                        }
+                    });
                 }
             });
         });

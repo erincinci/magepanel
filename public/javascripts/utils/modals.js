@@ -56,6 +56,8 @@ $('#editProjectModal').on('shown.bs.modal', function () {
                 var reportingEnabled = (project.reportingEnabled ? "On" : "Off");
                 $('#projectEditReportingSwitch').val(reportingEnabled);
                 $('#projectEditReportingSwitch').selectpicker('refresh');
+                $('#projectEditTagId').val(project.tagId);
+                $('#projectEditTagId').selectpicker('refresh');
             } else {
                 toastr.error('There was a problem getting project details', 'MagePanel Projects');
                 $('#editProjectModal').modal('hide');
@@ -65,6 +67,33 @@ $('#editProjectModal').on('shown.bs.modal', function () {
         // Selected project ID is invalid
         toastr.error('There was a problem getting project details', 'MagePanel Projects');
         $('#editProjectModal').modal('hide');
+    }
+});
+
+/**
+ * Edit Tag Modal Shown Event
+ */
+$('#editTagModal').on('shown.bs.modal', function () {
+    // Fill edit form with tag data on modalShown
+    var selectedItem = $('.list-group-item.active')[0];
+
+    if (selectedItem != null) {
+        $.get( '/tags/get?id=' + selectedItem.id, function(tag) {
+            if (tag != 'null') {
+                console.log($('#tagName').val());
+                $('#tagEditId').val(tag.id);
+                $('#tagEditName').val(tag.name);
+                $('#tagEditIcon').iconpicker('setIcon', tag.icon);
+                $('#tagEditIconName').val(tag.icon);
+            } else {
+                toastr.error('There was a problem getting tag details', 'MagePanel Tags');
+                $('#editTagModal').modal('hide');
+            }
+        });
+    } else {
+        // Selected tag ID is invalid
+        toastr.error('There was a problem getting tag details', 'MagePanel Tags');
+        $('#editTagModal').modal('hide');
     }
 });
 
@@ -82,7 +111,7 @@ $('#viewFileModal').on('shown.bs.modal', function () {
  */
 $('#viewFileModal').on('hidden.bs.modal', function () {
     // End file tail command on modal hidden
-    logSocket.emit('exitTail', {});
+    ioSocket.emit('exitTail', {});
 });
 
 /**

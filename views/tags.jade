@@ -1,0 +1,49 @@
+extends layout
+
+block content
+    .page-header
+        h1.icon.ion-pricetags= title
+
+    // Buttons
+    p
+        button#addTagBtn.btn.btn-default.btn-primary.icon.ion-android-add(
+                rel='tooltip',
+                data-original-title='Add new tag',
+                data-toggle='modal',
+                data-target='#addTagModal',
+                type='button',
+                style='margin-right:10px')
+        button#editTagBtn.btn.btn-default.btn-info.icon.ion-edit(
+                rel='tooltip',
+                data-original-title='Edit tag',
+                data-toggle='modal',
+                data-target='#editTagModal',
+                type='button',
+                style='margin-right:10px',
+                disabled)
+        button#delTagBtn.btn.btn-default.btn-danger.icon.ion-android-remove(
+                rel='tooltip',
+                data-original-title='Remove tag',
+                type='button',
+                style='margin-right:10px',
+                disabled)
+
+    // Columns
+    .row
+        // Available projects
+        .col-lg-12
+            div#tagsListContainer
+                ul.list-group#tagsList
+                    for tag in tags
+                        li.list-group-item(id= tag.id, class= tag.icon)  #{tag.name}
+                    else
+                        .panel.panel-primary
+                            .panel-heading
+                                h3.panel-title Tags
+                            .panel-body
+                                p No tags defined..
+
+    // -------------
+    // Modal Windows
+    include modals/addTag
+    include modals/editTag

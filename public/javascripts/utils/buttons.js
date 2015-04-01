@@ -20,7 +20,6 @@ $("#tailLatestLog").click(function() {
             if (logJson != 'null') {
                 if (logJson["status"] == "success") {
                     $('#viewFileModal').modal('show');
-                    // TODO: Fix mixing of tail log and tail console sockets
                     tailLogFile(logJson.logFile, logJson.logDate, logJson.logTime);
                 }else{
                     toastr.warning(logJson["message"], 'MagePanel Logs');
@@ -47,7 +46,7 @@ $("#clearConsole").click(function() {
  */
 $("#mageinfo").click(function() {
     cmdQueue.enqueue({
-        projectId: $('#activeProject').find(":selected").val(),
+        projectId: -1,
         cmd: 'version',
         multi: false,
         desc: 'Mage Version'
@@ -303,6 +302,49 @@ $('#gitPullProjectBtn').on('click', function() {
 });
 
 /**
+ * GIT Commit & Push button onClick
+ */
+$('#gitCommitPushProjectBtn').on('click', function() {
+    var selectedItem = $('.list-group-item.active')[0];
+
+    // Cancel if selection is not valid
+    if (selectedItem == null) {
+        toastr.warning("Select a project first", 'MagePanel Projects');
+        return;
+    }
+
+    // jQuery AJAX call for project refresh
+    $.post( '/projects/gitIsDirty?id=' + selectedItem.id, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            // Get user commit message
+            var commitMsg = prompt("Please enter a commit message", "");
+
+            // Continue with valid message
+            if (commitMsg) {
+                // Commit & Push
+                showAjaxLoader();
+                $.post( '/projects/gitCommitPush?id=' + selectedItem.id + '&commitMsg=' + commitMsg, function(result) {
+                    // Check if we have warning
+                    if(result["warn"]) {
+                        toastr.warning(result["message"], 'MagePanel Projects');
+                    } else {
+                        toastr.success(result["message"], 'MagePanel Projects');
+                    }
+                    hideAjaxLoader();
+                }).error(function() {
+                    toastr.error('Something went wrong ', 'MagePanel Projects');
+                });
+            }
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+});
+
+/**
  * GIT Switch Branch button onClick
  */
 $('#gitSwitchBranchProjectBtn').on('click', function() {
@@ -331,18 +373,50 @@ $('#gitSwitchBranchProjectBtn').on('click', function() {
     });
 });
 
+// Tags Page - Button onClick Events =============================================================
+
+/**
+ * Delete tag button onClick
+ */
+$('#delTagBtn').on('click', function() {
+    var selectedItem = $('.list-group-item.active')[0];
+
+    // Cancel if selection is not valid
+    if (selectedItem == null) {
+        toastr.warning("Select a tag first", 'MagePanel Tags');
+        return;
+    }
+
+    // Confirm tag deletion
+    if(confirm("Are you sure to delete tag?")) {
+        // jQuery AJAX call for tag deletion
+        $.post( '/tags/delete?id=' + selectedItem.id, function(result) {
+            // Check if we have warning
+            if(result["warn"]) {
+                toastr.warning(result["message"], 'MagePanel Tags');
+            } else {
+                $('#tagsList').load(document.URL +  ' #tagsList');
+                toggleTagsPageButtons('off'); // disable buttons
+                toastr.success(result["message"], 'MagePanel Tags');
+            }
+        }).error(function() {
+            toastr.error('Something went wrong ', 'MagePanel Tags');
+        });
+    }
+});
+
 // Mage Logs Page - Button onClick Events =============================================================
 
 /**
  * Pause & Resume Tail file buttons onClick Events
  */
 $("#pauseTailFileBtn").click(function() {
-    logSocket.emit('pauseTail', {});
+    ioSocket.emit('pauseTail', {});
     $('#pauseTailFileBtn').hide();
     $('#resumeTailFileBtn').show();
 });
 $("#resumeTailFileBtn").click(function() {
-    logSocket.emit('resumeTail', {});
+    ioSocket.emit('resumeTail', {});
     $('#pauseTailFileBtn').show();
     $('#resumeTailFileBtn').hide();
 });

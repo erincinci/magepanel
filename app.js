@@ -7,6 +7,7 @@ var routes = require('./routes');
 var projects = require('./routes/projects');
 var mage = require('./routes/mage');
 var mageLogs = require('./routes/mageLogs');
+var tags = require('./routes/tags');
 var setup = require('./routes/setup');
 var http = require('http');
 var path = require('path');
@@ -74,6 +75,7 @@ app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
 app.io.route('checkUpdates', setup.checkUpdates); // Execute check for app updates with Socket.IO
+app.io.route('revisionVersion', setup.revisionVersion); // Get revision version for app with Socket.IO
 
 // Mage Projects
 app.get('/projects', projects.index); // Projects page
@@ -83,6 +85,8 @@ app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project enviro
 app.post('/projects/addTaskFile', projects.addTaskFile); // Add new project task file
 app.post('/projects/refresh', projects.refresh); // Refresh project
 app.post('/projects/gitPull', projects.gitPull); // GIT Pull project
+app.post('/projects/gitCommitPush', projects.gitCommitPush); // GIT Commit & Push project
+app.post('/projects/gitIsDirty', projects.gitIsDirty); // GIT Is Dirty?
 app.post('/projects/gitRemoteBranches', projects.gitRemoteBranches); // GIT Remote Branches of project
 app.post('/projects/gitSwitchBranch', projects.gitSwitchBranch); // GIT Checkout branch project
 app.post('/projects/delete', projects.delete); // Delete projects
@@ -105,6 +109,12 @@ app.io.route('tailLog', mageLogs.tailLog); // Tail project log with Socket.IO
 app.io.route('exitTail', mageLogs.exitTail); // Exit tail log with Socket.IO
 app.io.route('pauseTail', mageLogs.pauseTail); // Pause tail log with Socket.IO
 app.io.route('resumeTail', mageLogs.resumeTail); // Resume tail log with Socket.IO
+
+// Project Tags
+app.get('/tags', tags.index); // Project Tags
+app.get('/tags/get', tags.getTag); // Get tag from DB with ID
+app.post('/tags/add', tags.add); // Add new tag
+app.post('/tags/delete', tags.delete); // Delete tag
 
 /**
  * Start Server

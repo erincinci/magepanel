@@ -12,9 +12,12 @@ html
         link(rel='stylesheet', href='/stylesheets/bootstrap-theme.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-select.css')
         link(rel='stylesheet', href='/stylesheets/bootstrap-toggle.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap-switch.css')
         // Bootstrap jsPanel
         link(rel='stylesheet', href='/stylesheets/jquery.jsPanel.css')
         link(rel='stylesheet', href='/stylesheets/jsglyph.css')
+        // Bootstrap IconPicker
+        link(rel='stylesheet', href='/stylesheets/bootstrap-iconpicker.css')
         // MagePanel Styles
         link(rel='stylesheet', href='/stylesheets/magepanel.css')
         // IonIcons
@@ -39,7 +42,8 @@ html
                         span.icon-bar
                         span.icon-bar
                     a.navbar-brand(href='#')
-                        b.icon.ion-magepanel  MagePanel
+                        img(src="/images/magepanel-128.png", width=24, height=24)
+                        b  MagePanel
                 .navbar-collapse.collapse
                     if setupCompleted
                         ul.nav.navbar-nav
@@ -51,6 +55,8 @@ html
                                 a.icon.ion-document(href='/mageLogs')  Logs
                             li(class=(menu === 'projects' ? 'active' : ''))
                                 a.icon.ion-briefcase(href='/projects')  Projects
+                            li(class=(menu === 'tags' ? 'active' : ''))
+                                a.icon.ion-pricetags(href='/tags')  Tags
                             li(class=(menu === 'setup' ? 'active' : ''))
                                 a.icon.ion-settings(href='/setup')  Settings
                     ul.nav.navbar-nav(style='float:right;')
@@ -73,7 +79,14 @@ html
                                 rel='tooltip',
                                 data-original-title='MagePanel up-to-date',
                                 data-placement="bottom",
+                                data-html="true",
                                 onclick="checkForUpdates();")
+                        li
+                            a.icon.ion-ios7-time#SystemLogsBtn(
+                                href='/log',
+                                rel='tooltip',
+                                data-original-title='System Logs',
+                                data-placement="bottom")
                         li
                             a.icon.ion-person(href='#')= username
 
@@ -106,8 +119,12 @@ html
         script(src='/javascripts/bootstrap.min.js')
         script(src='/javascripts/bootstrap-select.min.js')
         script(src='/javascripts/bootstrap-toggle.js')
+        script(src='/javascripts/bootstrap-switch.js')
         // Bootstrap jsPanel
         script(src='/javascripts/jquery.jspanel.js')
+        // Bootstrap IconPicker
+        script(src='/javascripts/iconset/iconset-ionicon-1.5.2.js')
+        script(src='/javascripts/bootstrap-iconpicker.js')
         // Toastr Notifications
         script(src='/javascripts/toastr.min.js')
         // CodeMirror Editor

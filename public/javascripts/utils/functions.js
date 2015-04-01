@@ -40,12 +40,9 @@ function appendToConsole() {
     }
 
     // Use Socket.IO for getting live command response
-    consoleSocket = io.connect();
-    var mageConsole = $('#console');
-    var mageConsoleFrame = $('#consoleFrame');
     var currentCmd = cmdQueue.dequeue();
-    mageConsole.append("<span class='console-pointer'>&gt;&gt; </span><b>" + currentCmd.desc + "</b><br>");
-    consoleSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId });
+    $('#console').append("<span class='console-pointer'>&gt;&gt; </span><b>" + currentCmd.desc + "</b><br>");
+    ioSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId });
     showAjaxLoader();
 
     // If it is a workflow, mark the active command that is being executed
@@ -54,11 +51,18 @@ function appendToConsole() {
             $('#queueCmd' + (currentCmd.queueId-1)).unblink();
         $('#queueCmd' + currentCmd.queueId).blink({ delay: 100 });
     }
+}
 
-    // Get live response
-    consoleSocket.on('connect', function () {
-        //console.log('Connected to backend!');
-        consoleSocket.on('cmdResponse', function(data) {
+/**
+ * Get Live Socket.IO Messages
+ */
+function getSocketIOMessages() {
+    // Get live response for Mage Console
+    if ($('#console').length) {
+        console.debug("Mage Console Socket.IO activated..");
+        var mageConsole = $('#console');
+        var mageConsoleFrame = $('#consoleFrame');
+        ioSocket.on('cmdResponse', function(data) {
             switch(data.status) {
                 case "stdout":
                     // Append results to console tag
@@ -66,7 +70,10 @@ function appendToConsole() {
                     mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
                     break;
                 case "stderr":
-                    // TODO: Show error in MageConsole in different style
+                    // Show error in MageConsole in different style
+                    mageConsole.append(data.result);
+                    mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
+                    hideAjaxLoader();
                     break;
                 case "warning":
                     // Show warning toast to user
@@ -87,6 +94,68 @@ function appendToConsole() {
             // Readjust ajax loader div
             updateAjaxLoader();
         });
+    }
+
+    // Get live response for Log tails
+    if ($('#logView').length) {
+        console.debug("Log Tail Socket.IO activated..");
+        var logView = $('#logView');
+        // Get tail data from socket
+        ioSocket.on('logTailContent', function(data) {
+            hideAjaxLoader();
+
+            // Update data or show toast according to data status
+            switch(data.status) {
+                case 'running':
+                    logView.append(data.line).scrollTop(logView[0].scrollHeight);
+                    break;
+                case 'paused':
+                    toastr.warning(data.line, 'MagePanel Logs');
+                    break;
+                case 'resumed':
+                    toastr.success(data.line, 'MagePanel Logs');
+                    break;
+                case 'closed':
+                    toastr.info(data.line, 'MagePanel Logs');
+                    break;
+                case 'error':
+                    toastr.error(data.line, 'MagePanel Logs');
+                    break;
+            }
+        });
+    }
+
+    // Get live response for application updates
+    console.debug("Auto-Update Socket.IO activated..");
+    ioSocket.on('updateCheck', function(data) {
+        switch(data.status) {
+            case "ok":
+                // Update status icon
+                $('#checkingUpdates').hide();
+                $('#updateOk').show();
+                break;
+            case "updated":
+                // Update status icon
+                $('#checkingUpdates').hide();
+                $('#updateOk').show();
+                toastr.success(data.msg, 'MagePanel Auto-Updater');
+                break;
+            case "err":
+                // Update status icon
+                $('#checkingUpdates').hide();
+                $('#updateError').show();
+                toastr.error(data.msg, 'MagePanel Auto-Updater');
+                break;
+        }
+    });
+
+    // Get live response for revision version of application
+    console.debug("App Revision Version Socket.IO activated..");
+    ioSocket.on('revisionVersion', function(data) {
+        // Show revision number on tooltip
+        if (! data.err) {
+            $('#updateOk').attr('data-original-title', 'MagePanel ' + data.version);
+        }
     });
 }
 
@@ -269,34 +338,7 @@ function tailLogFile(orgFile, logDate, logTime) {
     showAjaxLoader();
 
     // Use Socket.IO for tailing log file
-    logSocket = io.connect();
-    logSocket.emit('tailLog', { file: orgFile, tailStatus: 'running' });
-
-    // Get tail data from socket
-    logSocket.on('connect', function () {
-        logSocket.on('logTailContent', function(data) {
-            hideAjaxLoader();
-
-            // Update data or show toast according to data status
-            switch(data.status) {
-                case 'running':
-                    logView.append(data.line).scrollTop(logView[0].scrollHeight);
-                    break;
-                case 'paused':
-                    toastr.warning(data.line, 'MagePanel Logs');
-                    break;
-                case 'resumed':
-                    toastr.success(data.line, 'MagePanel Logs');
-                    break;
-                case 'closed':
-                    toastr.info(data.line, 'MagePanel Logs');
-                    break;
-                case 'error':
-                    toastr.error(data.line, 'MagePanel Logs');
-                    break;
-            }
-        });
-    });
+    ioSocket.emit('tailLog', { file: orgFile, tailStatus: 'running' });
 }
 
 /**
@@ -310,13 +352,33 @@ function addProjectToDB(formData) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
             $('.modal').modal('hide');
-            $('#projectListContainer').load(document.URL +  ' #projectsList');
+            $('#projectListContainer').load(document.URL +  ' #projectsPanel');
             $('#projectDetail').html("Select a project..");
             toggleProjectsPageButtons('off', null); // disable buttons
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+}
+
+/**
+ * Add new tag to DB using form data
+ * @param formData
+ */
+function addTagToDB(formData) {
+    $.post( '/tags/add', formData, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Tags');
+        } else {
+            $('.modal').modal('hide');
+            $('#tagsListContainer').load(document.URL +  ' #tagsList');
+            toggleTagsPageButtons('off'); //disable buttons
+            toastr.success(result["message"], 'MagePanel Tags');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Tags');
     });
 }
 
@@ -368,17 +430,19 @@ function switchGitBranch(branchName) {
  * @param mode
  * @param target
  */
-function toggleProjectsPageButtons(mode, target) {
+function toggleProjectsPageButtons(mode, isGit) {
     if (mode == 'on') {
         // Enabled
         $("#editProjectBtn").prop('disabled', false);
         $("#delProjectBtn").prop('disabled', false);
         $("#refreshProjectBtn").prop('disabled', false);
-        if (target.hasClass('ion-fork-repo')) {
+        if (isGit) {
             $("#gitPullProjectBtn").prop('disabled', false);
+            $("#gitCommitPushProjectBtn").prop('disabled', false);
             $("#gitSwitchBranchProjectBtn").prop('disabled', false);
         } else {
             $("#gitPullProjectBtn").prop('disabled', true);
+            $("#gitCommitPushProjectBtn").prop('disabled', true);
             $("#gitSwitchBranchProjectBtn").prop('disabled', true);
         }
     } else {
@@ -387,7 +451,24 @@ function toggleProjectsPageButtons(mode, target) {
         $("#delProjectBtn").prop('disabled', true);
         $("#refreshProjectBtn").prop('disabled', true);
         $("#gitPullProjectBtn").prop('disabled', true);
+        $("#gitCommitPushProjectBtn").prop('disabled', true);
         $("#gitSwitchBranchProjectBtn").prop('disabled', true);
+    }
+};
+
+/**
+ * Toggle disabled/enabled states for Tags Page Buttons
+ * @param mode
+ */
+function toggleTagsPageButtons(mode) {
+    if (mode == 'on') {
+        // Enabled
+        $("#editTagBtn").prop('disabled', false);
+        $("#delTagBtn").prop('disabled', false);
+    } else {
+        // Disabled
+        $("#editTagBtn").prop('disabled', true);
+        $("#delTagBtn").prop('disabled', true);
     }
 };
 
@@ -396,38 +477,21 @@ function toggleProjectsPageButtons(mode, target) {
  */
 function checkForUpdates() {
     // Use Socket.IO for getting live application updates
-    updateSocket = io.connect();
-    updateSocket.emit('checkUpdates');
+    //updateSocket = io.connect();
+    ioSocket.emit('checkUpdates');
 
     // Update status icons
     $('#checkingUpdates').show();
     $('#updateOk').hide();
     $('#updateError').hide();
+}
 
-    // Get live response from socket
-    updateSocket.on('connect', function () {
-        updateSocket.on('updateCheck', function(data) {
-            switch(data.status) {
-                case "ok":
-                    // Update status icon
-                    $('#checkingUpdates').hide();
-                    $('#updateOk').show();
-                    break;
-                case "updated":
-                    // Update status icon
-                    $('#checkingUpdates').hide();
-                    $('#updateOk').show();
-                    toastr.success(data.msg, 'MagePanel Auto-Updater');
-                    break;
-                case "err":
-                    // Update status icon
-                    $('#checkingUpdates').hide();
-                    $('#updateError').show();
-                    toastr.error(data.msg, 'MagePanel Auto-Updater');
-                    break;
-            }
-        });
-    });
+/**
+ * Get Application Revision Version
+ */
+function getRevisionVersion() {
+    // Use Socket.IO for getting live application revision version
+    ioSocket.emit('revisionVersion');
 }
 
 /**

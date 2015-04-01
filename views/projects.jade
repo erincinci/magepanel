@@ -6,6 +6,10 @@ block content
 
     // Buttons
     p
+        .label.label-default
+            | Create &nbsp;
+            i.icon.ion-arrow-right-a
+        | &nbsp;
         button.btn.btn-default.btn-primary.icon.ion-android-add(
                 rel='tooltip',
                 data-original-title='Add project',
@@ -20,6 +24,9 @@ block content
                 data-target='#initProjectModal',
                 type='button',
                 style='margin-right:10px')
+        .label.label-default
+            | Edit &nbsp;
+            i.icon.ion-arrow-right-a
         | &nbsp;
         button#editProjectBtn.btn.btn-default.btn-info.icon.ion-edit(
                 rel='tooltip',
@@ -41,14 +48,23 @@ block content
                 type='button',
                 style='margin-right:10px',
                 disabled)
+        .label.label-default
+            | GIT &nbsp;
+            i.icon.ion-arrow-right-a
         | &nbsp;
         button#gitPullProjectBtn.btn.btn-default.btn-success.icon.ion-arrow-down-c(
                 rel='tooltip',
-                data-original-title='GIT Pull project',
+                data-original-title='GIT Pull',
                 type='button',
                 style='margin-right:10px',
                 disabled)
-        button#gitSwitchBranchProjectBtn.btn.btn-warning.btn-success.icon.ion-fork-repo(
+        button#gitCommitPushProjectBtn.btn.btn-default.btn-success.icon.ion-arrow-up-c(
+                rel='tooltip',
+                data-original-title='GIT Commit & Push',
+                type='button',
+                style='margin-right:10px',
+                disabled)
+        button#gitSwitchBranchProjectBtn.btn.btn-warning.btn-success.icon.ion-network(
                 rel='tooltip',
                 data-original-title='GIT Switch Branch',
                 type='button',
@@ -62,19 +78,80 @@ block content
         // Available projects
         .col-lg-6
             div#projectListContainer
-                ul.list-group#projectsList
-                    if projects
+                if projects
+                    .panel-group#projectsPanel
+                        // Tag counter for div collapse IDs & Untagged projects
+                        - var tagIdArray = [];
+                        - var tagCount = 0;
+                        - var untaggedCount = 0;
+
+                        // For each tag
+                        for tag in tags
+                            // Count number of projects for specific tag (For use in number badge)
+                            - var projectCountInTag = 0;
+                            - tagIdArray.push(tag.id);
+                            for project in projects
+                                if project.tagId == tag.id
+                                    - projectCountInTag++;
+
+                            // Collapsable Panel
+                            .panel.panel-info
+                                // Panel Header
+                                a.list-group-item(data-toggle="collapse", href='#collapse' + tagCount)
+                                    span.badge #{projectCountInTag}
+                                    i(class= tag.icon)  #{tag.name}
+                                // Collapsable Panel Body
+                                .panel-collapse.collapse(id='collapse' + tagCount++)
+                                    .panel-body
+                                        // Projects List
+                                        ul.list-group#projectsList
+                                            // For each project
+                                            for project in projects
+                                                // Check if project belongs to the specific tag
+                                                if project.tagId == tag.id
+                                                    if project.branch != 'N/A'
+                                                        li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                            h5.list-group-item-heading.ion-fork-repo  <b>[#{project.branch}] - #{project.name}</b>
+                                                            p.list-group-item-text <i>#{project.dir}</i>
+                                                    else
+                                                        li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                            h5.list-group-item-heading.ion-briefcase  <b>#{project.name}</b>
+                                                            p.list-group-item-text <i>Local project</i>
+
+                        // Count untagged projects (For use in number badge)
                         for project in projects
-                            if project.branch != 'N/A'
-                                li.list-group-item(id= project.id).ion-fork-repo  [#{project.branch}] - #{project.name}
-                            else
-                                li.list-group-item(id= project.id).ion-briefcase  [Local] - #{project.name}
-                    else
-                        .panel.panel-primary
-                            .panel-heading
-                                h3.panel-title Projects
-                            .panel-body
-                                p No projects added yet..
+                            if tagIdArray.indexOf(project.tagId) < 0
+                                - untaggedCount++;
+
+                        // List untagged projects at last
+                        .panel.panel-info
+                            // Panel Header
+                            a.list-group-item(data-toggle="collapse", href='#collapseNA')
+                                span.badge #{untaggedCount}
+                                i.ion-more  Untagged Projects
+                            // Collapsable Panel Body
+                            .panel-collapse.collapse(id='collapseNA')
+                                .panel-body
+                                    // Projects List
+                                    ul.list-group#projectsList
+                                        // For each project
+                                        for project in projects
+                                            if tagIdArray.indexOf(project.tagId) < 0
+                                                if project.branch != 'N/A'
+                                                    li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                        h5.list-group-item-heading.ion-fork-repo  <b>[#{project.branch}] - #{project.name}</b>
+                                                        p.list-group-item-text <i>#{project.dir}</i>
+                                                else
+                                                    li.list-group-item(id= project.id, style="cursor: pointer;")
+                                                        h5.list-group-item-heading.ion-briefcase  <b>#{project.name}</b>
+                                                        p.list-group-item-text <i>Local project</i>
+                else
+                    // If there are no projects added in DB
+                    .panel.panel-primary
+                        .panel-heading
+                            h3.panel-title Projects
+                        .panel-body
+                            p No projects added yet..
         // Selected project details
         .col-lg-6
             .panel.panel-primary

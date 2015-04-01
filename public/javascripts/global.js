@@ -5,9 +5,7 @@
 var codeMirror = null;
 var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
-var logSocket = null;
-var consoleSocket = null;
-var updateSocket = null;
+var ioSocket = null;
 var cmdQueue;
 
 // DOM Ready =============================================================
@@ -64,9 +62,16 @@ $(document).ready(function() {
         toastr.success('Settings saved', 'MagePanel Setup');
     }
 
-    /**
-     * Check for application updates on GIT
-     */
+    // Connect to backend with Socket.IO
+    ioSocket = io.connect();
+    ioSocket.on('connect', function () {
+        console.log('Connected to backend with Socket.IO!');
+    });
+    getSocketIOMessages();
+
+    // Get revision version for app
+    getRevisionVersion();
+
     // Do update check based on cookie for updating less frequently
     if ($.cookie('updateCheck') == null) {
         // Create cookie & check of updates
@@ -76,6 +81,26 @@ $(document).ready(function() {
         $('#checkingUpdates').hide();
         $('#updateOk').show();
     }
+
+    // Change app update tooltip width
+    $(function () {
+        $('#updateOk').tooltip().on("mouseenter", function () {
+            var $this = $(this),
+                tooltip = $this.next(".tooltip");
+            tooltip.find(".tooltip-inner").css({
+                width: "300px",
+                backgroundColor: "#3c85c4"
+            });
+        });
+    });
+
+    // Tag icon picker on change event
+    $('#tagIcon').on('change', function(e) {
+        $('#tagIconName').val(e.icon);
+    });
+    $('#tagEditIcon').on('change', function(e) {
+        $('#tagEditIconName').val(e.icon);
+    });
 });
 
 // DOM Change ============================================================

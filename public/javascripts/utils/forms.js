@@ -142,3 +142,36 @@ $('#editFileForm').submit(function(event) {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
 });
+
+// Tags Page - Form onSubmit Events =============================================================
+/**
+ * Submit add new tag form
+ */
+$('#addTagForm').submit(function(event) {
+    event.preventDefault();
+    var formData = $(this).serialize();
+
+    addTagToDB(formData);
+});
+
+/**
+ * Submit edit tag form
+ */
+$('#editTagForm').submit(function(event) {
+    event.preventDefault();
+    var formData = $(this).serialize();
+    var tagId = $('.list-group-item.active')[0].id;
+
+    // First delete old tag
+    $.post( '/tags/delete?id=' + tagId, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Tags');
+        } else {
+            // No error deleting, then add edited tag as new
+            addTagToDB(formData);
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Tags');
+    });
+});
