@@ -416,7 +416,7 @@ function switchGitBranch(branchName) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
             $('#'+selectedProject.id).text($('#'+selectedProject.id).text().replace(/\[.*\]/g, "[" + branchName + "]"));
-            $('#refreshProjectBtn').trigger("click");
+            $('#refreshProjectBtn').click();
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
