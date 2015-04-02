@@ -1,4 +1,6 @@
 # ![MagePanel Logo](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
+
+[![Join the chat at https://gitter.im/erincinci/magepanel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/erincinci/magepanel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Release](http://img.shields.io/github/release/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/releases)
 [![Issues](http://img.shields.io/github/issues/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/issues?q=is%3Aopen)
 [![Issues](http://img.shields.io/badge/license-GNU-red.svg)](https://github.com/erincinci/magepanel/blob/master/LICENSE)
