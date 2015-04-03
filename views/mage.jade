@@ -2,7 +2,7 @@ extends layout
 
 block content
     .page-header
-        h1.icon.ion-code= title
+        h1.icon.ion-code  #{title}
     if pathWarning
         .alert.alert-danger(role='alert')
             strong Cygwin directory not found!

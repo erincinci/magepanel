@@ -11,8 +11,8 @@ exports.index = function(req, res) {
     if(Common.setupCompleted !== undefined && Common.setupCompleted == true) {
         res.render('index', {
             username: Common.username,
-            menu: 'home',
-            title: 'Home',
+            menu: 'stats',
+            title: 'Statistics',
             setupCompleted: Common.setupCompleted
         });
     } else {

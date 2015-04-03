@@ -18,6 +18,14 @@ html
         link(rel='stylesheet', href='/stylesheets/jsglyph.css')
         // Bootstrap IconPicker
         link(rel='stylesheet', href='/stylesheets/bootstrap-iconpicker.css')
+        // Bootstrap Odometer Themes
+        link(rel='stylesheet', href='/stylesheets/odometer/odometer-theme-default.css')
+        link(rel='stylesheet', href='/stylesheets/odometer/odometer-theme-car.css')
+        link(rel='stylesheet', href='/stylesheets/odometer/odometer-theme-digital.css')
+        link(rel='stylesheet', href='/stylesheets/odometer/odometer-theme-minimal.css')
+        link(rel='stylesheet', href='/stylesheets/odometer/odometer-theme-plaza.css')
+        link(rel='stylesheet', href='/stylesheets/odometer/odometer-theme-slot-machine.css')
+        link(rel='stylesheet', href='/stylesheets/odometer/odometer-theme-train-station.css')
         // MagePanel Styles
         link(rel='stylesheet', href='/stylesheets/magepanel.css')
         // IonIcons
@@ -47,8 +55,8 @@ html
                 .navbar-collapse.collapse
                     if setupCompleted
                         ul.nav.navbar-nav
-                            li(class=(menu === 'home' ? 'active' : ''))
-                                a.icon.ion-home(href='/')  Home
+                            li(class=(menu === 'stats' ? 'active' : ''))
+                                a.icon.ion-stats-bars(href='/')  Stats
                             li(class=(menu === 'mage' ? 'active' : ''))
                                 a.icon.ion-code(href='/mage')  Console
                             li(class=(menu === 'mageLogs' ? 'active' : ''))
@@ -125,6 +133,8 @@ html
         // Bootstrap IconPicker
         script(src='/javascripts/iconset/iconset-ionicon-1.5.2.js')
         script(src='/javascripts/bootstrap-iconpicker.js')
+        // Bootstrap Odometer
+        script(src='/javascripts/odometer.js')
         // Toastr Notifications
         script(src='/javascripts/toastr.min.js')
         // CodeMirror Editor

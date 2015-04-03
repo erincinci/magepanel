@@ -1,5 +1,6 @@
 # ![MagePanel Logo](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
 
+[![wercker status](https://app.wercker.com/status/0e31f751a3c9100051d7624693b68a7d/s "wercker status")](https://app.wercker.com/project/bykey/0e31f751a3c9100051d7624693b68a7d)
 [![Release](http://img.shields.io/github/release/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/releases)
 [![Issues](http://img.shields.io/github/issues/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/issues?q=is%3Aopen)
 [![Issues](http://img.shields.io/badge/license-GNU-red.svg)](https://github.com/erincinci/magepanel/blob/master/LICENSE)
@@ -14,7 +15,7 @@ Enjoy!
 
 ![File Editor](http://s4.postimg.org/dakqdzsgt/editor.png)
 
-*(Requires [Node](http://nodejs.org/) v0.10.2 or newer)*
+*(Requires [Node](http://nodejs.org/) v0.10 or newer)*
 
 ## Recommended Installation ##
 
@@ -35,7 +36,6 @@ Enjoy!
 ```bash
 >> sudo yum install php-cli
 ```
-Rest of the requirements will be automatically installed with installers provided..
 
 ## Installers ##
 

@@ -1,19 +1,38 @@
 extends layout
 
 block content
-    // Header
+    .page-header
+        h1.icon.ion-stats-bars  #{title}
+
+    // Stats
     .jumbotron
-        table
-            tr
-                td
-                    img(src='/images/magepanel-128.png', alt='Magallanes')
-                td
-                    h1= title
-                    p
-                        | A web panel for controlling your MagePHP projects from a user friendly UI.
-                    p
-            tr
-                td
-                    br
-                td
-                    a.btn.btn-primary.btn-lg(href='https://github.com/erincinci/magepanel', target='_blank', role='button') Learn more »
+        // All-time Stats
+        h2.icon.ion-ios7-stopwatch-outline.text-center  Counters
+        | &nbsp;
+        #statsComponents(style="width: 100%;")
+            table(style="width: 100%")
+                tr
+                    td(align="center")
+                        .input-group
+                            i.icon.ion-briefcase  Projects&nbsp;&nbsp;
+                            #projectsOdometer(class="odometer")
+                        | &nbsp;
+                        .input-group
+                            i.icon.ion-pricetags  Tags&nbsp;&nbsp;
+                            #tagsOdometer(class="odometer")
+                    td(align="center")
+                        .input-group
+                            i.icon.ion-cloud  Project Environments&nbsp;&nbsp;
+                            #envOdometer(class="odometer")
+                        | &nbsp;
+                        .input-group
+                            i.icon.ion-ios7-gear  Project Tasks&nbsp;&nbsp;
+                            #tasksOdometer(class="odometer")
+                    td(align="center")
+                        .input-group
+                            i.icon.ion-android-mail  Report Mails Sent&nbsp;&nbsp;
+                            #mailsOdometer(class="odometer")
+                        | &nbsp;
+                        .input-group
+                            i.icon.ion-paper-airplane  Workflows Run&nbsp;&nbsp;
+                            #workflowsOdometer(class="odometer")

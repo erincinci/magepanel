@@ -7,6 +7,7 @@ var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
 var ioSocket = null;
 var cmdQueue;
+var odometers = [];
 
 // DOM Ready =============================================================
 $(window).load(function() {
@@ -100,6 +101,20 @@ $(document).ready(function() {
     });
     $('#tagEditIcon').on('change', function(e) {
         $('#tagEditIconName').val(e.icon);
+    });
+
+    /**
+     * Bootstrap Odometer Config
+     */
+    $('.odometer').each(function(index) {
+        odometers[this.id] = new Odometer({ el: $('.odometer')[index], value: 0, theme: 'car', format: 'd', animation: 'count' });
+    });
+
+    /**
+     * Stats Page - Update Components
+     */
+    $("#statsComponents").ready(function() {
+        updateStatsComponents();
     });
 });
 

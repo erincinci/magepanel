@@ -1,5 +1,5 @@
 {
-    "version": "v1.1.0",
+    "version": "v1.4.0",
 
     "logger": {
         "directory": "./logs",
@@ -23,6 +23,10 @@
     "server": {
         "name": "MagePanel",
         "port": 8886
+    },
+
+    "stats": {
+        "updateRate": 60
     },
 
     "mailer": {

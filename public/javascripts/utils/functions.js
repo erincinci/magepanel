@@ -495,6 +495,32 @@ function getRevisionVersion() {
 }
 
 /**
+ * Update stats page components
+ */
+function updateStatsComponents() {
+    // Prepare date range
+    var fromTimestamp = new Date(0) / 1000;
+    var toTimestamp = new Date() / 1000;
+
+    // Get stats from backend using socket.io
+    ioSocket.emit('getStats', { from: fromTimestamp.toFixed(0), to: toTimestamp.toFixed(0) });
+    ioSocket.on('statsCalculated', function(stats) {
+        if (stats.err)
+            toastr.warning(stats.err, 'MagePanel Stats');
+
+        // Update odometers
+        odometers['projectsOdometer'].update(stats.data.numProjects);
+        odometers['tagsOdometer'].update(stats.data.numTags);
+        odometers['envOdometer'].update(stats.data.numEnvs);
+        odometers['tasksOdometer'].update(stats.data.numTasks);
+        odometers['mailsOdometer'].update(stats.data.mailsSent);
+        odometers['workflowsOdometer'].update(stats.data.workflowsRun);
+
+        // TODO: Other Components
+    });
+}
+
+/**
  * jQuery Blink Effect
  */
 // Source: http://www.antiyes.com/jquery-blink-plugin
