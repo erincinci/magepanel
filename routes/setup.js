@@ -101,8 +101,15 @@ exports.checkUpdates = function(req) {
                         console.error("Error while getting the update! " + err.message);
                         req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while getting updates ' + err.message });
                     } else {
-                        console.debug("Application updated successfully. " + consoleOutput);
-                        req.io.emit('updateCheck', { status: "updated", err: false, msg: 'Application updated successfully' });
+                        gitTools.npmInstall(Common.path.join(__dirname, '../'), function(error, output) {
+                            if (error) {
+                                console.error("Error while installing NPM dependencies! " + err.message);
+                                req.io.emit('updateCheck', { status: "err", err: true, msg: 'Error while installing NPM dependencies ' + err.message });
+                            } else {
+                                console.debug("Application updated successfully. " + consoleOutput);
+                                req.io.emit('updateCheck', { status: "updated", err: false, msg: 'Application updated successfully' });
+                            }
+                        });
                     }
                 });
             }
