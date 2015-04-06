@@ -74,6 +74,7 @@ app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 
 // Stats
 app.io.route('getStats', stats.getStats); // Get stats with Socket.IO
+app.io.route('increaseWorkflowsRunStat', stats.increaseWorkflowsRun); // Increase Workflows Run Counter with Socket.IO
 
 // MagePanel App Setup
 app.get('/setup', setup.index); // App setup

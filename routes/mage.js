@@ -147,6 +147,8 @@ function prepareConsoleMsg(status, msg) {
             return Common.config.html.consolePointerWarn + " <span style='background-color: rgba(255, 244, 141, 0.3);'>" + msg + "</span><br>";
         case Common.eCmdStatus.success:
             return msg;
+        default:
+            return msg;
     }
 }
 
@@ -197,6 +199,10 @@ exports.command = function(req) {
         var util  = require('util'),
             spawn = require('child_process').spawn;
 
+        // Start timer for deploy cmd - Stats
+        if (Common.S(req.data.cmd).include('deploy'))
+            Common.timerUtil.startTimer();
+
         // Spawn command
         if (Common.os == 'win32') {
             var mageCmd = spawn('cmd', ['/c', mageCommand]);
@@ -222,9 +228,15 @@ exports.command = function(req) {
             if (Common.S(req.data.cmd).include('deploy')) {
                 console.debug("Mage command was DEPLOY");
 
+                // Calculate elapsed time for stats
+                var elapsedTime = Common.timerUtil.stopTimer(0);
+                console.info("Elapsed time for deploy: " + elapsedTime + "ms");
+                Common.stats.addDeployTime(elapsedTime);
+
                 // If deploy command is SUCCESS
                 if (code == 0) {
                     console.debug("Deploy command was SUCCESS");
+                    Common.stats.incDeploysSuccess();
 
                     // If auto-reporting is ENABLED
                     if(project.reportingEnabled == true) {
@@ -249,17 +261,26 @@ exports.command = function(req) {
                                 new Date().toLocaleString(),
                                 consoleOutput
                             );
+                            Common.stats.incMailsSent();
                         } else {
                             // E-mail address is not valid, show warning..
                             console.warn("Project's e-mail address is invalid!");
                             req.io.emit('cmdResponse', { result: "Failed sending report mail, project's e-mail address is invalid..", status: Common.eCmdStatus.warning });
                         }
                     }
+                } else {
+                    // If deploy was failed
+                    Common.stats.incDeploysFail();
+                    console.warn('Mage deploy failed!');
+                    req.io.emit('cmdResponse', { result: "Mage deploy failed!", status: Common.eCmdStatus.exit });
                 }
+            } else if (Common.S(req.data.cmd).include('rollback')) {
+                // If command was mage rollback
+                Common.stats.incRollbacks();
             }
 
             // Emit exit code to frontend
-            console.log('Mage command exited with code ' + code);
+            console.warn('Mage command exited with code ' + code);
             req.io.emit('cmdResponse', { result: code, status: Common.eCmdStatus.exit });
         });
 

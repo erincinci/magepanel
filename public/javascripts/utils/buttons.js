@@ -162,6 +162,7 @@ $("#mageAddToFlow").click(function() {
                     callback: function(event){
                         if(confirm("Do you really want to execute workflow?")) {
                             $("#clearConsole").trigger('click');
+                            ioSocket.emit('increaseWorkflowsRunStat', {});
                             appendToConsole();
                         }
                     }

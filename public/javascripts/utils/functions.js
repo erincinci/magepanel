@@ -503,8 +503,10 @@ function updateStatsComponents() {
     var toTimestamp = new Date() / 1000;
 
     // Get stats from backend using socket.io
+    showAjaxLoader();
     ioSocket.emit('getStats', { from: fromTimestamp.toFixed(0), to: toTimestamp.toFixed(0) });
     ioSocket.on('statsCalculated', function(stats) {
+        hideAjaxLoader();
         if (stats.err)
             toastr.warning(stats.err, 'MagePanel Stats');
 

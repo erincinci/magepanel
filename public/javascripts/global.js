@@ -114,7 +114,8 @@ $(document).ready(function() {
      * Stats Page - Update Components
      */
     $("#statsComponents").ready(function() {
-        updateStatsComponents();
+        if( $('#statsComponents').length )
+            updateStatsComponents();
     });
 });
 

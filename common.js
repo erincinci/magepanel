@@ -5,6 +5,7 @@ var appConfig = require('./config.json');
 var appSettings = require('user-settings').file(appConfig.setup.file);
 var nStore = require('nstore').extend(require('nstore/query')());
 var Stats = require('./util/stats');
+var statsDBPointer = nStore.new('dbs/stats.db');
 
 Common = {
     // Locals
@@ -29,7 +30,7 @@ Common = {
     TagsModel: require('./models/tagsModel'),
 
     // DBs
-    statsDB: nStore.new('dbs/stats.db'),
+    statsDB: statsDBPointer,
     projectsDB: nStore.new('dbs/projects.db'),
     tagsDB: nStore.new('dbs/tags.db'),
 
@@ -38,10 +39,11 @@ Common = {
 
     // Utils
     util: require('util'),
+    timerUtil: require('./util/timerUtil'),
     mailUtils: require('./util/mailUtils'),
     dbUtils: require('./util/dbUtils'),
     stringUtils: require('./util/stringUtils'),
-    stats: new Stats(nStore.new('dbs/stats.db'), nStore.new('dbs/tags.db'), nStore.new('dbs/projects.db'))
+    stats: new Stats(statsDBPointer, nStore.new('dbs/tags.db'), nStore.new('dbs/projects.db'))
 };
 
 module.exports = Common;

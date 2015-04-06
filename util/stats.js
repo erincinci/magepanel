@@ -34,7 +34,7 @@ Stats.prototype.cron = function(interval) {
         start: true
     });
     job.start();
-}
+};
 
 /**
  * Dump Stats to DB
@@ -60,7 +60,7 @@ Stats.prototype.dumpToDB = function() {
             self.curStats = self.initStatsObject();
         });
     });
-}
+};
 
 /**
  * Calculate Static Stats
@@ -96,7 +96,7 @@ Stats.prototype.calculateStaticStats = function(callback) {
             if ((self.curStats.deploysSuccess + self.curStats.deploysFail) == 0)
                 self.curStats.avgDeployTime = 0;
             else
-                self.curStats.avgDeployTime = (self.curStats.totalDeployTime / (self.curStats.deploysSuccess + self.curStats.deploysFail)).toFixed(2);
+                self.curStats.avgDeployTime = (parseFloat(self.curStats.totalDeployTime) / parseFloat((self.curStats.deploysSuccess + self.curStats.deploysFail))).toFixed(2);
             callback(null);
         });
     });
@@ -127,7 +127,7 @@ Stats.prototype.incMailsSent = function() {
 };
 Stats.prototype.addDeployTime = function(deployTimeSpent) {
     var self = this;
-    self.curStats.totalDeployTime = self.curStats.totalDeployTime + deployTimeSpent;
+    self.curStats.totalDeployTime += parseFloat(deployTimeSpent);
 };
 
 /**
@@ -147,6 +147,6 @@ Stats.prototype.initStatsObject = function() {
         numTasks: 0,
         numTags: 0
     };
-}
+};
 
 module.exports = Stats;

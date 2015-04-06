@@ -38,4 +38,13 @@ exports.getStats = function(req) {
         // Return stats data
         req.io.emit('statsCalculated', { err: null, data: statsData });
     });
-}
+};
+
+/**
+ * Increase Workflows Run Counter
+ * @param req
+ */
+exports.increaseWorkflowsRun = function(req) {
+    Common.stats.incWorkflowsRun();
+    req.io.respond({ status: 'ok' });
+};
