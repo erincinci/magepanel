@@ -7,32 +7,43 @@ block content
     // Stats
     .jumbotron
         // All-time Stats
-        h2.icon.ion-ios7-stopwatch-outline.text-center  Counters
-        | &nbsp;
-        #statsComponents(style="width: 100%;")
-            table(style="width: 100%")
-                tr
-                    td(align="center")
-                        .input-group
-                            i.icon.ion-briefcase  Projects&nbsp;&nbsp;
-                            #projectsOdometer(class="odometer")
-                        | &nbsp;
-                        .input-group
-                            i.icon.ion-pricetags  Tags&nbsp;&nbsp;
-                            #tagsOdometer(class="odometer")
-                    td(align="center")
-                        .input-group
-                            i.icon.ion-cloud  Project Environments&nbsp;&nbsp;
-                            #envOdometer(class="odometer")
-                        | &nbsp;
-                        .input-group
-                            i.icon.ion-ios7-gear  Project Tasks&nbsp;&nbsp;
-                            #tasksOdometer(class="odometer")
-                    td(align="center")
-                        .input-group
-                            i.icon.ion-android-mail  Report Mails Sent&nbsp;&nbsp;
-                            #mailsOdometer(class="odometer")
-                        | &nbsp;
-                        .input-group
-                            i.icon.ion-paper-airplane  Workflows Run&nbsp;&nbsp;
-                            #workflowsOdometer(class="odometer")
+        h3.icon.ion-ios7-stopwatch.text-center  Counters
+        .container.container-fluid#statsComponents(style="width: 100%;")
+            .row.clearfix(align="center", style="padding-top: 50px")
+                .col-md-4
+                    .input-group
+                        i.icon.ion-briefcase  Projects&nbsp;&nbsp;
+                        #projectsOdometer(class="odometer")
+                .col-md-4
+                    .input-group
+                        i.icon.ion-ios7-gear  Project Tasks&nbsp;&nbsp;
+                        #tasksOdometer(class="odometer")
+                .col-md-4
+                    .input-group
+                        i.icon.ion-cloud  Project Environments&nbsp;&nbsp;
+                        #envOdometer(class="odometer")
+            .row.clearfix(align="center", style="padding-top: 20px")
+                .col-md-4
+                    .input-group
+                        i.icon.ion-pricetags  Tags&nbsp;&nbsp;
+                        #tagsOdometer(class="odometer")
+                .col-md-4
+                    .input-group
+                        i.icon.ion-android-mail  Report Mails Sent&nbsp;&nbsp;
+                        #mailsOdometer(class="odometer")
+                .col-md-4
+                    .input-group
+                        i.icon.ion-paper-airplane  Workflows Run&nbsp;&nbsp;
+                        #workflowsOdometer(class="odometer")
+            .row.clearfix(align="center", style="padding-top: 20px")
+                .col-md-12
+                    hr(style='width: 90%; color: gray; height: 1px; background-color:darkgray;')
+                    h3.icon.ion-arrow-graph-up-right  Average Deploy Times
+                    #avgDeployTimeGraph(style="width: 100%; height: 300px;")
+                        .chart-curtain.text-info.small Calculating average deploy times..
+            .row.clearfix(align="center", style="padding-top: 30px")
+                .col-md-12
+                    hr(style='width: 90%; color: gray; height: 1px; background-color:darkgray;')
+                    h3.icon.ion-pie-graph  Deploys
+                    #deploysPie(style="width: 100%; height: 300px;")
+                        .chart-curtain.text-info.small Calculating deploy statistics..

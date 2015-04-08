@@ -30,10 +30,26 @@ exports.getStats = function(req) {
         statsData.numTasks = Common._.max(stats, function(stat){ return stat.numTasks; }).numTasks;
 
         // Calculate aggregated data
+        var avgCounter = 0;
+        statsData.avgDeployTimes = [];
         Common._.each(stats, function(stat) {
             statsData.mailsSent += stat.mailsSent;
             statsData.workflowsRun += stat.workflowsRun;
+            statsData.deploysSuccess += stat.deploysSuccess;
+            statsData.deploysFail += stat.deploysFail;
+            statsData.rollbacks += stat.rollbacks;
+            statsData.totalDeployTime += parseFloat(stat.totalDeployTime);
+            if (stat.avgDeployTime > 0) {
+                statsData.avgDeployTimes.push({ "date": new Date(stat.timestamp * 1000), "avg": stat.avgDeployTime });
+                statsData.avgDeployTime += parseFloat(stat.avgDeployTime);
+                avgCounter++;
+            }
         });
+
+        // TODO: Fix finding a cumulative moving average
+        // Find average of average deploy time within give time range
+        if (avgCounter > 0)
+            statsData.avgDeployTime = parseFloat(statsData.avgDeployTime / avgCounter);
 
         // Return stats data
         req.io.emit('statsCalculated', { err: null, data: statsData });

@@ -499,6 +499,7 @@ function getRevisionVersion() {
  */
 function updateStatsComponents() {
     // Prepare date range
+    // TODO: Request time range from user via UI
     var fromTimestamp = new Date(0) / 1000;
     var toTimestamp = new Date() / 1000;
 
@@ -518,7 +519,10 @@ function updateStatsComponents() {
         odometers['mailsOdometer'].update(stats.data.mailsSent);
         odometers['workflowsOdometer'].update(stats.data.workflowsRun);
 
-        // TODO: Other Components
+        // Update charts
+        $('.chart-curtain').show();
+        generateDeployPie("deploysPie", stats.data);
+        generateAvgDeployTimeGraph("avgDeployTimeGraph", stats.data);
     });
 }
 
