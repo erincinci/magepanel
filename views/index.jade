@@ -6,6 +6,9 @@ block content
 
     // Stats
     .jumbotron
+        // TODO: User date range selection
+        // TODO: Clear all stats button
+
         // All-time Stats
         h3.icon.ion-ios7-stopwatch.text-center  Counters
         .container.container-fluid#statsComponents(style="width: 100%;")
@@ -40,10 +43,12 @@ block content
                     hr(style='width: 90%; color: gray; height: 1px; background-color:darkgray;')
                     h3.icon.ion-arrow-graph-up-right  Average Deploy Times
                     #avgDeployTimeGraph(style="width: 100%; height: 300px;")
+                        i.icon.ion-refreshing(style="margin-top: 150px;")
                         .chart-curtain.text-info.small Calculating average deploy times..
             .row.clearfix(align="center", style="padding-top: 30px")
                 .col-md-12
                     hr(style='width: 90%; color: gray; height: 1px; background-color:darkgray;')
                     h3.icon.ion-pie-graph  Deploys
                     #deploysPie(style="width: 100%; height: 300px;")
+                        i.icon.ion-refreshing(style="margin-top: 150px;")
                         .chart-curtain.text-info.small Calculating deploy statistics..
