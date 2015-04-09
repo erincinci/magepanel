@@ -64,3 +64,19 @@ exports.increaseWorkflowsRun = function(req) {
     Common.stats.incWorkflowsRun();
     req.io.respond({ status: 'ok' });
 };
+
+/**
+ * Clear All Stats DB
+ * @param req
+ */
+exports.clearAllStats = function(req) {
+    Common.dbUtils.clearDB(Common.statsDB, function (err) {
+        if (err) {
+            console.error("Error clearing stats DB:", err);
+            req.io.emit('statsCleared', { err: err, msg: "Error while clearing stats DB" });
+        }
+
+        console.debug("Stats DB wiped out!");
+        req.io.emit('statsCleared', { err: null, msg: "Cleared stats DB!" });
+    });
+};

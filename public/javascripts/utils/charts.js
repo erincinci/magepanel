@@ -36,6 +36,9 @@ function generateDeployPie(divId, data) {
     deploysPieChart.addListener("rendered", function(event) {
         $('.chart-curtain').hide();
     });
+
+    // Check empty data
+    AmCharts.checkEmptyData(deploysPieChart, 'pie');
 }
 
 function generateAvgDeployTimeGraph(divId, data) {
@@ -80,4 +83,53 @@ function generateAvgDeployTimeGraph(divId, data) {
     avgDeployTimesGraph.addListener("rendered", function(event) {
         $('.chart-curtain').hide();
     });
+
+    // Check empty data
+    AmCharts.checkEmptyData(avgDeployTimesGraph, 'graph');
 }
+
+/**
+ * Handle empty data for charts
+ * @param chart
+ * @param type
+ */
+AmCharts.checkEmptyData = function (chart, type) {
+    var warningMessage = 'There is no data between date range';
+
+    switch (type) {
+        case 'pie':
+            var validPie = false;
+            chart.dataProvider.forEach(function(data) {
+                if (data.deploys > 0)
+                    validPie = true;
+            });
+
+            // If pie is not valid
+            if (! validPie) {
+                chart.addLabel(0, '50%', warningMessage, 'center');
+                chart.chartDiv.style.opacity = 0.5;
+            }
+            break;
+        default:
+            if ( 0 == chart.dataProvider.length ) {
+                // set min/max on the value axis
+                chart.valueAxes[0].minimum = 0;
+                chart.valueAxes[0].maximum = 100;
+
+                // add dummy data point
+                var dataPoint = {
+                    dummyValue: 0
+                };
+                dataPoint[chart.categoryField] = '';
+                chart.dataProvider = [dataPoint];
+
+                // add label
+                chart.addLabel(0, '50%', warningMessage, 'center');
+                // set opacity of the chart div
+                chart.chartDiv.style.opacity = 0.5;
+                // redraw it
+                chart.validateNow();
+            }
+            break;
+    }
+};

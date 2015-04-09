@@ -496,20 +496,25 @@ function getRevisionVersion() {
 
 /**
  * Update stats page components
+ * @param selectedFrom
+ * @param selectedTo
  */
-function updateStatsComponents() {
+function updateStatsComponents(selectedFrom, selectedTo) {
     // Prepare date range
-    // TODO: Request time range from user via UI
-    var fromTimestamp = new Date(0) / 1000;
-    var toTimestamp = new Date() / 1000;
+    var fromTimestamp = selectedFrom ? selectedFrom : (new Date(0) / 1000).toFixed(0);
+    var toTimestamp = selectedTo ? selectedTo : (new Date() / 1000).toFixed(0);
+    //console.debug(fromTimestamp + " --> " + toTimestamp);
 
     // Get stats from backend using socket.io
     showAjaxLoader();
-    ioSocket.emit('getStats', { from: fromTimestamp.toFixed(0), to: toTimestamp.toFixed(0) });
+    ioSocket.emit('getStats', { from: fromTimestamp, to: toTimestamp });
     ioSocket.on('statsCalculated', function(stats) {
-        hideAjaxLoader();
-        if (stats.err)
+        // Error handling
+        if (stats.err) {
             toastr.warning(stats.err, 'MagePanel Stats');
+            hideAjaxLoader();
+            return;
+        }
 
         // Update odometers
         odometers['projectsOdometer'].update(stats.data.numProjects);
@@ -523,6 +528,8 @@ function updateStatsComponents() {
         $('.chart-curtain').show();
         generateDeployPie("deploysPie", stats.data);
         generateAvgDeployTimeGraph("avgDeployTimeGraph", stats.data);
+
+        hideAjaxLoader();
     });
 }
 
