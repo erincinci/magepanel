@@ -109,6 +109,19 @@ $(document).ready(function() {
             $(".inlineEdit").each(function (index, el) {
                 $(this).editable();
             });
+
+            // Setup left menu affix
+            var $body   = $(document.body);
+            var navHeight = $('.navbar').outerHeight(true) + 10;
+            $('#ddAvailableTasks').affix({
+                offset: {
+                    top: 235
+                }
+            });
+            $body.scrollspy({
+                target: '#envEditUILeft',
+                offset: navHeight
+            });
         }
     });
 
