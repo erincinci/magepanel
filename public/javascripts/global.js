@@ -95,6 +95,23 @@ $(document).ready(function() {
         });
     });
 
+    /**
+     * Init Drag & Drop Sortable Panels
+     */
+    prepareSortableDragDrops();
+
+    /**
+     * Init Inline Editable Components
+     */
+    $("#envEditUI").ready(function() {
+        if( $('#envEditUI').length ) {
+            $.fn.editable.defaults.mode = 'inline'; // Editor Mode (inline | popup)
+            $(".inlineEdit").each(function (index, el) {
+                $(this).editable();
+            });
+        }
+    });
+
     // Tag icon picker on change event
     $('#tagIcon').on('change', function(e) {
         $('#tagIconName').val(e.icon);

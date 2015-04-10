@@ -534,6 +534,61 @@ function updateStatsComponents(selectedFrom, selectedTo) {
 }
 
 /**
+ * Clear Drag & Drop Trash List Items
+ * @param trashId
+ */
+function clearDragDropTrash(trashId) {
+    $('#' + trashId).empty();
+}
+
+/**
+ * Init sortable drag & drop panels
+ */
+function prepareSortableDragDrops() {
+    /*
+     Init Tasks Panels
+     */
+    $("ol.dragdrop#ddAvailableTasks").sortable({
+        group: "tasks",
+        drop: false,
+        drag: true,
+        onDragStart: function (item, container, _super) {
+            // Duplicate items of the no drop area
+            if(!container.options.drop)
+                item.clone().insertAfter(item);
+            _super(item);
+        }
+    }).disableSelection();
+
+    $("ol.dragdrop.envTasks").sortable({
+        group: "tasks",
+        drop: true,
+        drag: true,
+        pullPlaceholder: true,
+        placeholder: '<li class="list-group-item-success" />',
+        onDrop: function (item, container, _super, event) {
+            // Remove the element dropped on trash
+            console.log("will remove:", item);
+            //item.remove();
+            _super(item);
+        }
+    }).disableSelection();
+
+    //$("#ddTrash").css({ 'height':($("#envTasks").height() + 'px') });
+    $("ol.dragdrop#ddTrash").sortable({
+        group: "tasks",
+        drop: true,
+        drag: false,
+        onDrop: function (item, container, _super, event) {
+            // Remove the element dropped on trash
+            console.log("will remove:", item);
+            item.remove();
+            _super(item);
+        }
+    }).disableSelection();
+}
+
+/**
  * jQuery Blink Effect
  */
 // Source: http://www.antiyes.com/jquery-blink-plugin

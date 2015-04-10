@@ -2,13 +2,14 @@
   "name": "magepanel",
   "description": "UI for MagePHP Deployment Tool",
   "homepage": "http://erincinci.github.io/magepanel/",
+  "license": "LGPL 2.1",
   "keywords": [
     "Magallanes",
     "MagePHP",
     "deployment",
     "UI"
   ],
-  "author": "Erinç İnci <erincinci@gmail.com>",
+  "author": "Erinç İnci <erincinci@gmail.com> (https://about.me/erincinci)",
   "contributors": [
     "Murat Aksoy"
   ],

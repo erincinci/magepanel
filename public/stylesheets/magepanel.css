@@ -188,3 +188,37 @@ input[readonly] {
     font-size: 10px;
     font-weight: bold;
 }
+
+/* Drag & Drop Sortable Panels */
+body.dragging, body.dragging * {
+    cursor: move !important;
+}
+.list-group-item.draggable {
+    margin-left: 15px;
+}
+.dragged {
+    position: absolute;
+    opacity: 0.5;
+    z-index: 2000;
+    display: block;
+}
+.list-group-item.draggable {
+    display: list-item;
+}
+ol.dragdrop li.placeholder {
+    position: relative;
+    /** More li styles **/
+}
+ol.dragdrop li.placeholder:before {
+    position: absolute;
+    /** Define arrowhead **/
+}
+
+.fixed {
+    height: 600px;
+    overflow:hidden;
+}
+.scrollIt {
+    height: 600px;
+    overflow-y: scroll;
+}

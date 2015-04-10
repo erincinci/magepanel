@@ -1,8 +1,89 @@
 extends layout
 
 block content
+    // ----------------------------- DEBUG -----------------------------
+    .row.clearfix#envEditUI
+        // ---- Left-Side ---- (data-spy="affix", data-offset-top="60", data-offset-bottom="200")
+        .col-md-6
+            // Available Tasks
+            ol.bs-callout.bs-callout-info.dragdrop#ddAvailableTasks.taskGroup
+                .list-group-item-text.text-center.ion-ios7-gear  Available Tasks
+                li.list-group-item.draggable.small.ion-drag#task-1  Task-1
+                li.list-group-item.draggable.small.ion-drag#task-2  Task-2
+                li.list-group-item.draggable.small.ion-drag#task-3  Task-3
+                li.list-group-item.draggable.small.ion-drag#task-4  Task-4
+                li.list-group-item.draggable.small.ion-drag#task-5  Task-5
+            // Trash Area
+            .btn.btn-warning.text-center.ion-trash-b(onClick="clearDragDropTrash('ddTrash');", style="width: 100%;")  Empty Trash
+            ol.bs-callout.bs-callout-warning.dragdrop#ddTrash(style="margin-top: 0px; opacity: 0.45;")
+
+        // ---- Right-Side ----
+        .col-md-6
+            // Deployment
+            .panel.panel-default
+                .panel-heading Deployment
+                .panel-body
+                    // Deploy Options
+                    li.list-group-item.small.ion-android-social-user#deployUser  User:&nbsp;&nbsp;
+                        a.inlineEdit(href="#") root
+                    li.list-group-item.small.ion-folder#deployFromDir  From:&nbsp;&nbsp;
+                        a.inlineEdit(href="#") ./
+                    li.list-group-item.small.ion-folder#deployToDir  To:&nbsp;&nbsp;
+                        a.inlineEdit(href="#") /home/orbitadserving
+                    li.list-group-item.small.ion-folder#deployStrategy  Strategy:&nbsp;&nbsp;
+                        select#deployStrategyPicker.selectpicker(name='deployStrategyPicker')
+                            option(value='rsync', selected) Rsync
+                            option(value='targz') tar.gz
+                            option(value='git-rebase') GIT Rebase
+                            option(value='disabled') Disabled
+                    li.list-group-item.small.ion-funnel#deployExcludes  Excludes:&nbsp;&nbsp;
+                        | TODO
+
+            // Releases
+            .panel.panel-default
+                .panel-heading Releases
+                .panel-body
+                    // Release Options
+                    li.list-group-item.small.ion-checkmark-circled#releasesEnabled  Enabled:&nbsp;&nbsp;
+                        | TODO
+                    li.list-group-item.small.ion-pound#releasesMax  Max:&nbsp;&nbsp;
+                        a.inlineEdit(href="#") 8
+                    li.list-group-item.small.ion-folder#releasesSymLink  Symbolic Link:&nbsp;&nbsp;
+                        a.inlineEdit(href="#") ads
+                    li.list-group-item.small.ion-folder#releasesDir  Directory:&nbsp;&nbsp;
+                        a.inlineEdit(href="#") releases
+
+            // Hosts
+            .panel.panel-default
+                .panel-heading Hosts
+                .panel-body
+
+            // Tasks
+            .panel.panel-default
+                .panel-heading Tasks (Applies to all hosts)
+                .panel-body
+                    // Stages
+                    .panel.panel-info
+                        .panel-heading Pre-Deploy
+                        .panel-body(style="margin-left: 10px;")
+                            ol.list-group.dragdrop#ddPreDeploy.taskGroup.envTasks
+                    .panel.panel-info
+                        .panel-heading On-Deploy
+                        .panel-body(style="margin-left: 10px;")
+                            ol.list-group.dragdrop#ddOnDeploy.taskGroup.envTasks
+                    .panel.panel-info
+                        .panel-heading Post-Release
+                        .panel-body(style="margin-left: 10px;")
+                            ol.list-group.dragdrop#ddPostRelease.taskGroup.envTasks
+                    .panel.panel-info
+                        .panel-heading Post-Deploy
+                        .panel-body(style="margin-left: 10px;")
+                            ol.list-group.dragdrop#ddPostDeploy.taskGroup.envTasks
+
+    // -----------------------------------------------------------------
+
     // Stats
-    .jumbotron
+        .jumbotron
         // Date Range & Clear Stats Button
         .row.clearfix
             button#clearStatsBtn.btn.btn-small.btn-warning.ion-ios7-trash-outline(type='button')  Clear All Stats
