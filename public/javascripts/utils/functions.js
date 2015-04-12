@@ -549,12 +549,20 @@ function setupEnvEditor() {
      * Adjust inline edits
      */
     $(".inlineEdit").each(function (index, el) {
-        $(this).editable();
+        $(this).editable({
+            success: function(response, newValue) {
+                initDragDrops();
+            }
+        });
     });
 
-    /*
-     * Init Drag & Drop Sortables
-     */
+    initDragDrops();
+}
+
+/**
+ * Init Drag & Drop Sortables
+ */
+function initDragDrops() {
     $("ol.dragdrop#ddAvailableTasks").sortable({
         group: "tasks",
         drop: false,
@@ -587,7 +595,11 @@ function setupEnvEditor() {
         }
     }).disableSelection();
 
-    $("ol.dragdrop#ddHosts").sortable({}).disableSelection();
+    $("ol.dragdrop#ddHosts").sortable({
+        group: "hosts",
+        drop: true,
+        drag: true
+    }).disableSelection();
 }
 
 /**

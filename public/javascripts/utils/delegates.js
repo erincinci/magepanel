@@ -67,5 +67,5 @@ $(document).delegate('#projectsListLogs .list-group-item', 'click', function(e) 
  * Env Editor UI - Remove host panel button delegate
  */
 $(document).delegate('#envEditRemoveHostBtn', 'click', function(e) {
-    $(this).closest('li').remove();
+    $(this).closest('div .list-group-item').remove();
 });

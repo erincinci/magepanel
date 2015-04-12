@@ -450,20 +450,20 @@ $("#resumeTailFileBtn").click(function() {
  * Add new host to the list
  */
 $("#envEditAddHostBtn").click(function() {
-    // TODO: Append new empty host to list
+    // Append new empty host to list
     var hostPanel =
-        '<li class="list-group-item draggable small">' +
-            '<div class="ion-drag">' + '  ' +
+        '<div class="list-group-item small">' +
+            '<div class="glyphicon glyphicon-hdd" style="width: 100%">' + '  ' +
                 '<a href="#" class="inlineEdit">##.##.##.##</a>' +
-                '<button class="btn btn-sm btn-warning glyphicon glyphicon-minus pull-right" id="envEditRemoveHostBtn" type="button">' +
+                '<button class="btn btn-sm btn-warning pull-right" id="envEditRemoveHostBtn" type="button">' +
+                    '<i class="fa fa-minus" />' +
+                '</button>' +
             '</div>' +
-            '<div class="panel-group">' +
-                appendNewEnvHostPanel('Pre-Deploy') +
-                appendNewEnvHostPanel('On-Deploy') +
-                appendNewEnvHostPanel('Post-Release') +
-                appendNewEnvHostPanel('Post-Deploy') +
-            '</div>'
-        '</li>';
+            appendNewEnvHostPanel('Pre-Deploy') +
+            appendNewEnvHostPanel('On-Deploy') +
+            appendNewEnvHostPanel('Post-Release') +
+            appendNewEnvHostPanel('Post-Deploy') +
+        '</div>';
 
     // Append new empty host to list
     $('#ddHosts').append(
