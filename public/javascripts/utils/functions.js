@@ -565,13 +565,7 @@ function prepareSortableDragDrops() {
         drop: true,
         drag: true,
         pullPlaceholder: true,
-        placeholder: '<li class="list-group-item-success" />',
-        onDrop: function (item, container, _super, event) {
-            // Remove the element dropped on trash
-            console.log("will remove:", item);
-            //item.remove();
-            _super(item);
-        }
+        placeholder: '<li class="list-group-item-success" />'
     }).disableSelection();
 
     //$("#ddTrash").css({ 'height':($("#envTasks").height() + 'px') });
@@ -586,6 +580,28 @@ function prepareSortableDragDrops() {
             _super(item);
         }
     }).disableSelection();
+
+    $("ol.dragdrop#ddHosts").sortable({}).disableSelection();
+}
+
+/**
+ * Prepare a new host panel group for env editor UI
+ * @param title
+ * @param dragId
+ * @returns {*|jQuery|HTMLElement}
+ */
+function appendNewEnvHostPanel(title, dragId) {
+    var panel =
+        '<div class="panel panel-info" style="margin-bottom: 5px;">' +
+            '<div class="panel-heading">' + title +
+                '<div class="btn-group btn-group-sm pull-right" style="position: relative; top: -5px;" />' +
+                '<button class="btn btn-sm btn-warning glyphicon glyphicon-minus" id="envEditRemoveHostBtn" type="button">' +
+            '</div>' +
+            '<div class="panel-body" style="margin-left: 10px;">' +
+                '<ol class="list-group dragdrop taskGroup envTasks" style="margin-bottom: 5px;" id="' + dragId + '" />' +
+            '</div>' +
+        '</div>';
+    return panel;
 }
 
 /**

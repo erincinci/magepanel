@@ -400,7 +400,6 @@ $('#gitSwitchBranchProjectBtn').on('click', function() {
 });
 
 // Tags Page - Button onClick Events =============================================================
-
 /**
  * Delete tag button onClick
  */
@@ -432,7 +431,6 @@ $('#delTagBtn').on('click', function() {
 });
 
 // Mage Logs Page - Button onClick Events =============================================================
-
 /**
  * Pause & Resume Tail file buttons onClick Events
  */
@@ -445,4 +443,18 @@ $("#resumeTailFileBtn").click(function() {
     ioSocket.emit('resumeTail', {});
     $('#pauseTailFileBtn').show();
     $('#resumeTailFileBtn').hide();
+});
+
+// Environment Editor UI - Button onClick Events =============================================================
+/**
+ * Add & Remove new host to the list
+ */
+$("#envEditAddHostBtn").click(function() {
+    // TODO: Append new empty host to list
+    $('#ddHosts').append(
+        appendNewEnvHostPanel('Pre-Deploy', 'ddPreDeploy')
+    );
+});
+$("#envEditRemoveHostBtn").click(function() {
+    $(this).remove();
 });

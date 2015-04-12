@@ -104,23 +104,27 @@ $(document).ready(function() {
      * Init Inline Editable Components
      */
     $("#envEditUI").ready(function() {
+        // If current page in Env Editor UI
         if( $('#envEditUI').length ) {
-            $.fn.editable.defaults.mode = 'inline'; // Editor Mode (inline | popup)
-            $(".inlineEdit").each(function (index, el) {
-                $(this).editable();
-            });
-
-            // Setup left menu affix
+            // Setup left tasks menu as sticky
+            var leftPanel = $('#envEditUILeft');
+            leftPanel.css('width', leftPanel.width());
             var $body   = $(document.body);
-            var navHeight = $('.navbar').outerHeight(true) + 10;
-            $('#ddAvailableTasks').affix({
+            var navHeight = $('.navbar').outerHeight(true) + 0;
+            leftPanel.affix({
                 offset: {
-                    top: 235
+                    top: navHeight
                 }
             });
             $body.scrollspy({
                 target: '#envEditUILeft',
                 offset: navHeight
+            });
+
+            // Adjust inline edits
+            $.fn.editable.defaults.mode = 'inline'; // Editor Mode (inline | popup)
+            $(".inlineEdit").each(function (index, el) {
+                $(this).editable();
             });
         }
     });

@@ -222,3 +222,11 @@ ol.dragdrop li.placeholder:before {
     height: 600px;
     overflow-y: scroll;
 }
+
+/* Block level inputs */
+.input-block-level {
+    display: block;
+    width: 100%;
+    min-height: 28px;
+    .box-sizing(border-box);
+}
