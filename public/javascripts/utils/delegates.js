@@ -62,3 +62,10 @@ $(document).delegate('#projectsListLogs .list-group-item', 'click', function(e) 
         $('#projectLogs').html(output);
     });
 });
+
+/**
+ * Env Editor UI - Remove host panel button delegate
+ */
+$(document).delegate('#envEditRemoveHostBtn', 'click', function(e) {
+    $(this).closest('li').remove();
+});

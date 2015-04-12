@@ -96,15 +96,10 @@ $(document).ready(function() {
     });
 
     /**
-     * Init Drag & Drop Sortable Panels
-     */
-    prepareSortableDragDrops();
-
-    /**
-     * Init Inline Editable Components
+     * Init Env Editor UI
      */
     $("#envEditUI").ready(function() {
-        // If current page in Env Editor UI
+        // If current page includes Env Editor UI
         if( $('#envEditUI').length ) {
             // Setup left tasks menu as sticky
             var leftPanel = $('#envEditUILeft');
@@ -121,11 +116,9 @@ $(document).ready(function() {
                 offset: navHeight
             });
 
-            // Adjust inline edits
-            $.fn.editable.defaults.mode = 'inline'; // Editor Mode (inline | popup)
-            $(".inlineEdit").each(function (index, el) {
-                $(this).editable();
-            });
+            // Setup env editor UI
+            $.fn.editable.defaults.mode = 'inline';
+            setupEnvEditor();
         }
     });
 

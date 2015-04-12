@@ -447,14 +447,29 @@ $("#resumeTailFileBtn").click(function() {
 
 // Environment Editor UI - Button onClick Events =============================================================
 /**
- * Add & Remove new host to the list
+ * Add new host to the list
  */
 $("#envEditAddHostBtn").click(function() {
     // TODO: Append new empty host to list
+    var hostPanel =
+        '<li class="list-group-item draggable small">' +
+            '<div class="ion-drag">' + '  ' +
+                '<a href="#" class="inlineEdit">##.##.##.##</a>' +
+                '<button class="btn btn-sm btn-warning glyphicon glyphicon-minus pull-right" id="envEditRemoveHostBtn" type="button">' +
+            '</div>' +
+            '<div class="panel-group">' +
+                appendNewEnvHostPanel('Pre-Deploy') +
+                appendNewEnvHostPanel('On-Deploy') +
+                appendNewEnvHostPanel('Post-Release') +
+                appendNewEnvHostPanel('Post-Deploy') +
+            '</div>'
+        '</li>';
+
+    // Append new empty host to list
     $('#ddHosts').append(
-        appendNewEnvHostPanel('Pre-Deploy', 'ddPreDeploy')
+        hostPanel
     );
-});
-$("#envEditRemoveHostBtn").click(function() {
-    $(this).remove();
+
+    // Attach jQuery Sortable scripts to new elements
+    setupEnvEditor();
 });
