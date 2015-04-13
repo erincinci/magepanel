@@ -455,9 +455,7 @@ $("#envEditAddHostBtn").click(function() {
         '<div class="list-group-item small">' +
             '<div class="glyphicon glyphicon-hdd" style="width: 100%">' + '  ' +
                 '<a href="#" class="inlineEdit">##.##.##.##</a>' +
-                '<button class="btn btn-sm btn-warning pull-right" id="envEditRemoveHostBtn" type="button">' +
-                    '<i class="fa fa-minus" />' +
-                '</button>' +
+                '<a id="envEditRemoveHostBtn" href="#" class="btn btn-xs pull-right fa fa-minus" style="text-decoration: none; vertical-align: top; margin-top: 0px;") />' +
             '</div>' +
             appendNewEnvHostPanel('Pre-Deploy') +
             appendNewEnvHostPanel('On-Deploy') +
