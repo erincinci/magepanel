@@ -15,7 +15,7 @@ exports.envArrayToList = function(envArray, projectDir) {
     var arrayValues = _.values(envArray);
 
     if (_.size(envArray) > 0) {
-        var result = "<ul>";
+        var result = "<ul class='list-group'>";
     } else {
         return "<br />";
     }
@@ -38,12 +38,12 @@ exports.envArrayToList = function(envArray, projectDir) {
         var orgFile = ymlFile.replace(/\\/g, "/");
 
         // Create list item
-        result += "<li><i>" + value + "</i>";
-        result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
-            "rel='tooltip' class='glyphicon glyphicon-edit' data-original-title='Edit environment' " +
+        result += "<li class='list-group-item list-group-item-info small'><i>" + value + "</i>";
+        result += " <a class='btn btn-xs pull-right glyphicon glyphicon-edit' href='javascript:void(0);' style='text-decoration: none;' " +
+            "rel='tooltip' data-original-title='Edit env' " +
             "onclick='envListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";
-        result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
-            "rel='tooltip' class='glyphicon glyphicon-remove' data-original-title='Delete environment' " +
+        result += " <a class='btn btn-xs pull-right glyphicon glyphicon-remove' href='javascript:void(0);' style='text-decoration: none;' " +
+            "rel='tooltip' data-original-title='Delete env' " +
             "onclick='if(window.confirm(\"Are you sure to delete environment: " + value + "?\")) deleteProjectFile(\"" + orgFile + "\");'></a></li>";
 
     });
@@ -62,7 +62,7 @@ exports.taskArrayToList = function(taskArray, projectDir) {
     var arrayValues = _.values(taskArray);
 
     if (_.size(taskArray) > 0) {
-        var result = "<ul>";
+        var result = "<ul class='list-group'>";
     } else {
         return "<br /";
     }
@@ -85,12 +85,12 @@ exports.taskArrayToList = function(taskArray, projectDir) {
         var orgFile = phpFile.replace(/\\/g, "/");
 
         // Create list item
-        result += "<li><i>" + value + "</i>";
-        result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
-            "rel='tooltip' class='glyphicon glyphicon-edit' data-original-title='Edit task' " +
+        result += "<li class='list-group-item list-group-item-info small'><i>" + value + "</i>";
+        result += " <a class='btn btn-xs pull-right glyphicon glyphicon-edit' href='javascript:void(0);' style='text-decoration: none;' " +
+            "rel='tooltip' data-original-title='Edit task' " +
             "onclick='taskListItemOnClick(\"" + tmpPath + "\", \"" + orgFile + "\", \"" + value + "\");'></a>";
-        result += " <a href='javascript:void(0);' style='text-decoration: none;' " +
-            "rel='tooltip' class='glyphicon glyphicon-remove' data-original-title='Delete task' " +
+        result += " <a class='btn btn-xs pull-right glyphicon glyphicon-remove' href='javascript:void(0);' style='text-decoration: none;' " +
+            "rel='tooltip' data-original-title='Delete task' " +
             "onclick='if(window.confirm(\"Are you sure to delete task: " + value + "?\")) deleteProjectFile(\"" + orgFile + "\");'></a></li>";
 
     });

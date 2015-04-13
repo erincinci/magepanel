@@ -523,22 +523,26 @@ exports.detail = function(req, res) {
             var projectEnvSize = Common._.size(project.envs);
             var projectTaskSize = Common._.size(project.tasks);
             if (project.reportingEnabled)
-                var reportingStatus = "<i class='icon ion-checkmark'>";
+                var reportingStatus = "<i class='label label-success ion-checkmark'> On</i>";
             else
-                var reportingStatus = "<i class='icon ion-close'>";
+                var reportingStatus = "<i class='label label-warning ion-close'> Off</i>";
 
             //var details = project.toString();
             var details =
-                "<i class='icon ion-android-information' /> <b>Name: </b>" + project.name +
-                "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
-                "<br><i class='icon ion-android-mail' /> <b>Reporting E-Mail: </b>" + project.mailAddress +
-                "<br><i class='icon ion-speakerphone' /> <b>Automatic Reporting: </b>" + reportingStatus +
-                "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
-                    + " <a href='#' data-toggle='modal' data-target='#addProjectEnvModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
-                    + Common.stringUtils.envArrayToList(project.envs, project.dir) +
-                "<i class='icon ion-ios7-gear' /> <b>Custom Tasks</b> <span class='badge'>" + projectTaskSize + "</span>"
-                    + " <a href='#' data-toggle='modal' data-target='#addProjectTaskModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new task' style='text-decoration: none;'></a>"
-                    + Common.stringUtils.taskArrayToList(project.tasks, project.dir);
+                "<div class='list-group' style='margin: 0 0 0 0;'>" +
+                    "<li class='list-group-item ion-android-information'> <b>Name: </b>" + project.name + "</li>" +
+                    "<li class='list-group-item ion-folder'> <b>Dir: </b>" + project.dir + "</li>" +
+                    "<li class='list-group-item ion-android-mail'> <b>Reporting E-Mail: </b>" + project.mailAddress + "</li>" +
+                    "<li class='list-group-item ion-speakerphone'> <b>Automatic Reporting: </b> " + reportingStatus + "</li>" +
+                    "<li class='list-group-item ion-cloud'> <b>Environments</b> <span class='badge pull-right'>" + projectEnvSize + "</span>"
+                        + " <a href='#' data-toggle='modal' data-target='#addProjectEnvModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
+                            + Common.stringUtils.envArrayToList(project.envs, project.dir) +
+                    "</li>" +
+                    "<li class='list-group-item ion-ios7-gear'> <b>Custom Tasks</b> <span class='badge pull-right'>" + projectTaskSize + "</span>"
+                        + " <a href='#' data-toggle='modal' data-target='#addProjectTaskModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new task' style='text-decoration: none;'></a>"
+                            + Common.stringUtils.taskArrayToList(project.tasks, project.dir) +
+                    "</li>" +
+                "</div>";
             res.send(details);
         });
     }
