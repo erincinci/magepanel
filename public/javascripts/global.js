@@ -101,7 +101,7 @@ $(document).ready(function() {
     $("#envEditUI").ready(function() {
         // If current page includes Env Editor UI
         if( $('#envEditUI').length ) {
-            // Setup left tasks menu as sticky
+            /*// Setup left tasks menu as sticky
             var leftPanel = $('#envEditUILeft');
             leftPanel.css('width', leftPanel.width());
             var $body   = $(document.body);
@@ -114,6 +114,17 @@ $(document).ready(function() {
             $body.scrollspy({
                 target: '#envEditUILeft',
                 offset: navHeight
+            });*/
+
+            // Inline scroll of right content column
+            var rightPanel = $('#envEditUIRight'),
+                window_height = $(window).height(),
+                content_height = window_height - 200;
+            rightPanel.height(content_height);
+            $(window).resize(function() {
+                var window_height = $(window).height(),
+                    content_height = window_height - 200;
+                rightPanel.height(content_height);
             });
 
             // Setup env editor UI
