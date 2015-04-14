@@ -41,11 +41,12 @@
                                         ol.bs-callout.bs-callout-warning.dragdrop#ddTrash(style="margin-top: 0px; opacity: 0.45;")
 
                                 // ---- Right-Side ----
-                                .col-sm-6#envEditUIRight(style="overflow-y: scroll; overflow-x: hidden;")
+                                .col-sm-6#envEditUIRight(style="overflow-y: scroll; overflow-x: hidden; margin-top: 10px;")
                                     // Deployment
                                     .panel.panel-default(style="margin-bottom: 5px;")
                                         .panel-heading.small.ion-paper-airplane  Deployment
-                                        .panel-body
+                                            a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditDeployPanel", style="margin-top: 0px;")
+                                        .panel-body#envEditDeployPanel(class="collapse in withIcon")
                                             // Deploy Options
                                             li.list-group-item.small.ion-android-social-user#deployUser  User:&nbsp;&nbsp;
                                                 a.inlineEdit(href="#") root
@@ -66,7 +67,8 @@
                                     // Releases
                                     .panel.panel-default(style="margin-bottom: 5px;")
                                         .panel-heading.ion-ios7-cloud-upload-outline  Releases
-                                        .panel-body
+                                            a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditReleasesPanel", style="margin-top: 0px;")
+                                        .panel-body#envEditReleasesPanel(class="collapse in withIcon")
                                             // Release Options
                                             li.list-group-item.small.ion-checkmark-circled#releasesEnabled  Enabled:&nbsp;&nbsp;
                                                 input(type="checkbox", data-toggle="toggle", data-size="mini", checked)#releasesEnabledToggle
@@ -94,7 +96,8 @@
                                     // Tasks
                                     .panel.panel-default(style="margin-bottom: 5px;")
                                         .panel-heading.ion-ios7-gear  Tasks (Applies to all hosts)
-                                        .panel-body
+                                            a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditTasksPanel", style="margin-top: 0px;")
+                                        .panel-body#envEditTasksPanel(class="collapse in withIcon")
                                             // Stages
                                             .panel.panel-info(style="margin-bottom: 5px;")
                                                 .panel-heading Pre-Deploy

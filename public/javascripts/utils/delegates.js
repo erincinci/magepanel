@@ -64,8 +64,21 @@ $(document).delegate('#projectsListLogs .list-group-item', 'click', function(e) 
 });
 
 /**
- * Env Editor UI - Remove host panel button delegate
+ * Env Editor UI
  */
+// Remove host panel button delegate
 $(document).delegate('#envEditRemoveHostBtn', 'click', function(e) {
     $(this).closest('div .list-group-item').remove();
+});
+
+// Collapse button icon change
+$(document).delegate('.withIcon', 'shown.bs.collapse', function(e) {
+    var toggleButton = $(this).parent().find('.toggleEnvTasksBtn')[0];
+    if (toggleButton)
+        $(toggleButton).removeClass('fa-angle-down').addClass('fa-angle-up');
+});
+$(document).delegate('.withIcon', 'hidden.bs.collapse', function(e) {
+    var toggleButton = $(this).parent().find('.toggleEnvTasksBtn')[0];
+    if (toggleButton)
+        $(toggleButton).removeClass('fa-angle-up').addClass('fa-angle-down');
 });

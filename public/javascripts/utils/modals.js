@@ -127,8 +127,3 @@ $('#addProjectEnvModal').on('shown.bs.modal', function () {
 $('#addProjectTaskModal').on('shown.bs.modal', function () {
     $('#projectIdTask').val($('.list-group-item.active')[0].id);
 });
-
-$.fn.modal.defaults.maxHeight = function(){
-    // subtract the height of the modal header and footer
-    return $(window).height() - 200;
-}

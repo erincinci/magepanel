@@ -450,17 +450,23 @@ $("#resumeTailFileBtn").click(function() {
  * Add new host to the list
  */
 $("#envEditAddHostBtn").click(function() {
+    var divId = Date.now();
     // Append new empty host to list
     var hostPanel =
         '<div class="list-group-item small">' +
             '<div class="glyphicon glyphicon-hdd" style="width: 100%">' + '  ' +
                 '<a href="#" class="inlineEdit">##.##.##.##</a>' +
-                '<a id="envEditRemoveHostBtn" href="#" class="btn btn-xs pull-right fa fa-minus" style="text-decoration: none; vertical-align: top; margin-top: 0px;") />' +
+                '<div class="btn-group btn-group-xs pull-right" role="group">' +
+                    '<a href="#" class="toggleEnvTasksBtn btn btn-xs fa fa-angle-down" data-toggle="collapse" data-target="#' + divId + '" style="text-decoration: none; vertical-align: top; margin-top: 0px;") />' +
+                    '<a id="envEditRemoveHostBtn" href="#" class="btn btn-xs fa fa-minus" style="text-decoration: none; vertical-align: top; margin-top: 0px;") />' +
+                '</div>' +
             '</div>' +
-            appendNewEnvHostPanel('Pre-Deploy') +
-            appendNewEnvHostPanel('On-Deploy') +
-            appendNewEnvHostPanel('Post-Release') +
-            appendNewEnvHostPanel('Post-Deploy') +
+            '<div class="collapse withIcon" id="' + divId + '">' +
+                appendNewEnvHostPanel('Pre-Deploy') +
+                appendNewEnvHostPanel('On-Deploy') +
+                appendNewEnvHostPanel('Post-Release') +
+                appendNewEnvHostPanel('Post-Deploy') +
+            '</div>' +
         '</div>';
 
     // Append new empty host to list

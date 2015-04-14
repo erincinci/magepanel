@@ -15,7 +15,7 @@ exports.envArrayToList = function(envArray, projectDir) {
     var arrayValues = _.values(envArray);
 
     if (_.size(envArray) > 0) {
-        var result = "<ul class='list-group'>";
+        var result = "<ul class='list-group collapse in withIcon' id='projectEnvsPanel'>";
     } else {
         return "<br />";
     }
@@ -62,7 +62,7 @@ exports.taskArrayToList = function(taskArray, projectDir) {
     var arrayValues = _.values(taskArray);
 
     if (_.size(taskArray) > 0) {
-        var result = "<ul class='list-group'>";
+        var result = "<ul class='list-group collapse in withIcon' id='projectTasksPanel'>";
     } else {
         return "<br /";
     }

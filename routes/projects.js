@@ -534,13 +534,15 @@ exports.detail = function(req, res) {
                     "<li class='list-group-item ion-folder'> <b>Dir: </b>" + project.dir + "</li>" +
                     "<li class='list-group-item ion-android-mail'> <b>Reporting E-Mail: </b>" + project.mailAddress + "</li>" +
                     "<li class='list-group-item ion-speakerphone'> <b>Automatic Reporting: </b> " + reportingStatus + "</li>" +
-                    "<li class='list-group-item ion-cloud'> <b>Environments</b> <span class='badge pull-right'>" + projectEnvSize + "</span>"
-                        + " <a href='#' data-toggle='modal' data-target='#addProjectEnvModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"
-                            + Common.stringUtils.envArrayToList(project.envs, project.dir) +
+                    "<li class='list-group-item ion-cloud'> <b>Environments</b> <span class='badge pull-right'>" + projectEnvSize + "</span>" +
+                        "<a href='#' class='toggleEnvTasksBtn pull-right btn btn-xs fa fa-angle-up' data-toggle='collapse' data-target='#projectEnvsPanel' style='margin-top: 0px;') />" +
+                        "<a href='#' data-toggle='modal' data-target='#addProjectEnvModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>" +
+                            Common.stringUtils.envArrayToList(project.envs, project.dir) +
                     "</li>" +
-                    "<li class='list-group-item ion-ios7-gear'> <b>Custom Tasks</b> <span class='badge pull-right'>" + projectTaskSize + "</span>"
-                        + " <a href='#' data-toggle='modal' data-target='#addProjectTaskModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new task' style='text-decoration: none;'></a>"
-                            + Common.stringUtils.taskArrayToList(project.tasks, project.dir) +
+                    "<li class='list-group-item ion-ios7-gear'> <b>Custom Tasks</b> <span class='badge pull-right'>" + projectTaskSize + "</span>" +
+                        "<a href='#' class='toggleEnvTasksBtn pull-right btn btn-xs fa fa-angle-up' data-toggle='collapse' data-target='#projectTasksPanel' style='margin-top: 0px;') />" +
+                        "<a href='#' data-toggle='modal' data-target='#addProjectTaskModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new task' style='text-decoration: none;'></a>" +
+                            Common.stringUtils.taskArrayToList(project.tasks, project.dir) +
                     "</li>" +
                 "</div>";
             res.send(details);
