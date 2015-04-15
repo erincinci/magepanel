@@ -155,7 +155,6 @@ $('#envEditorUIForm').submit(function(event) {
     };
     var selectedItem = $('.list-group-item.active')[0];
 
-    console.debug(formData);
     $.post( '/projects/applyFile', formData, function(result) {
         // Check if we have warning
         if(result["warn"]) {

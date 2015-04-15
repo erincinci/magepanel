@@ -22,7 +22,7 @@
                                 a(href="#editorRaw", role="tab", data-toggle="tab", id="showRawEditorTab") Raw
                             li.btn-group.btn-group-sm.pull-right
                                 button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                                button#applyFileBtn.btn.btn-success.glyphicon.glyphicon-ok(type='button') Apply
+                                //button#envEditorApplyFileBtn.btn.btn-success.glyphicon.glyphicon-ok(type='button') Apply
                                 button.btn.btn-primary.glyphicon.glyphicon-floppy-disk(type='submit') Save
 
                         .tab-content
@@ -50,11 +50,11 @@
                                             .panel-body#envEditDeployPanel(class="collapse in withIcon")
                                                 // Deploy Options
                                                 li.list-group-item.small.ion-android-social-user  User:&nbsp;&nbsp;
-                                                    a.inlineEdit#deployUser(href="#") root
+                                                    a.inlineEdit.envEditorInline#deployUser(href="#", name="user: ") root
                                                 li.list-group-item.small.ion-folder  From Dir:&nbsp;&nbsp;
-                                                    a.inlineEdit#deployFromDir(href="#") ./
+                                                    a.inlineEdit.envEditorInline#deployFromDir(href="#", name="from: ") ./
                                                 li.list-group-item.small.ion-folder  To Dir:&nbsp;&nbsp;
-                                                    a.inlineEdit#deployToDir(href="#") /root
+                                                    a.inlineEdit.envEditorInline#deployToDir(href="#", name="to: ") /root
                                                 li.list-group-item.small.ion-shuffle  Strategy:&nbsp;&nbsp;
                                                     select#deployStrategy.selectpicker(name='deployStrategyPicker')
                                                         option(value='rsync', selected) Rsync
@@ -82,9 +82,9 @@
                                                             button.btn.btn-default
                                                                 i.fa.fa-caret-down
                                                 li.list-group-item.small.ion-link  Symbolic Link:&nbsp;&nbsp;
-                                                    a.inlineEdit#releasesSymLink(href="#") projectName
+                                                    a.inlineEdit.envEditorInline#releasesSymLink(href="#", name="symlink: ") projectName
                                                 li.list-group-item.small.ion-folder  Directory:&nbsp;&nbsp;
-                                                    a.inlineEdit#releasesDir(href="#") releases
+                                                    a.inlineEdit.envEditorInline#releasesDir(href="#", name="directory: ") releases
 
                                         // Hosts
                                         .panel.panel-default(style="margin-bottom: 5px;")

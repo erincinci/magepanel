@@ -249,6 +249,73 @@ function getParameterByName(name) {
 }
 
 /**
+ * Setup Env Editor UI
+ */
+function setupEnvEditor() {
+    /*
+     * Adjust inline edits
+     */
+    $(".inlineEdit.envEditorInline").each(function (index, el) {
+        inlineEditables[$(el).attr('id')] = $(this).editable({
+            success: function(response, newValue) {
+                // On success replace appropriate string in raw editor
+                var name = $(el).attr('name');
+                var oldValue = name + $(this).editable('getValue', true);
+                newValue = name + newValue;
+
+                // Check if we are updating codemirror instance or textarea component
+                if (codeMirror instanceof CodeMirror) {
+                    var newCode = codeMirror.getValue().replace(new RegExp(oldValue, "g"), newValue);
+                    codeMirror.setValue(newCode);
+                    codeMirror.refresh();
+                } else {
+                    var rawEditor = $('#envRawEditor');
+                    rawEditor.val(rawEditor.val().replace(new RegExp(oldValue,"g"), newValue));
+                }
+
+                // Refresh drag & drop panels
+                initDragDrops();
+            }
+        });
+    });
+
+    initDragDrops();
+}
+
+/**
+ * Update Environment Editor UI Elements
+ * @param envFileData
+ */
+function updateEnvEditorUI(envFileData) {
+    /*
+     * Set UI Editor Values to env file values
+     */
+    var envJson = jsyaml.load(envFileData);
+    console.dir(envJson);
+    // Section - Deployment
+    $('#deployUser').editable('setValue', envJson.deployment.user);
+    $('#deployFromDir').editable('setValue', envJson.deployment.from);
+    $('#deployToDir').editable('setValue', envJson.deployment.to);
+    $('#deployStrategy').val(envJson.deployment.strategy).selectpicker('refresh');
+    if (envJson.deployment.excludes) {
+        envJson.deployment.excludes.forEach(function(exclude, index) {
+            $('#deployExcludes').tagsinput('add', exclude);
+        });
+    }
+    // Section - Releases
+    $('#releasesEnabled').prop('checked', envJson.releases.enabled);
+    $('#releasesMax').val(envJson.releases.max);
+    $('#releasesSymLink').editable('setValue', envJson.releases.symlink);
+    $('#releasesDir').editable('setValue', envJson.releases.directory);
+    // TODO: Section - Hosts
+    // TODO: Section - Tasks
+
+    // TODO: Spinner input causes form to submit, fix it!
+
+    // TODO: Update other components on edit (TagsInput, Bootstrap-SelectPicker, Checkbox, ...)
+}
+
+/**
  * Environments list item onClick event
  * @param ymlFile
  * @param orgFile
@@ -263,26 +330,8 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
             $("#orgFile").val(orgFile);
             $("#envEditorModalLabel").html(" Environment Editor - '<strong>" + envName.capitalize() + "</strong>'");
 
-            /*
-             * TODO: Set UI Editor Values to env file values
-             */
-            var envJson = jsyaml.load(envFileData);
-            console.dir(envJson);
-            // Section - Deployment
-            $('#deployUser').editable('setValue', envJson.deployment.user);
-            $('#deployFromDir').editable('setValue', envJson.deployment.from);
-            $('#deployToDir').editable('setValue', envJson.deployment.to);
-            $('#deployStrategy').val(envJson.deployment.strategy).selectpicker('refresh');
-            if (envJson.deployment.excludes) {
-                envJson.deployment.excludes.forEach(function(exclude, index) {
-                    $('#deployExcludes').tagsinput('add', exclude);
-                });
-            }
-            // Section - Releases
-            $('#releasesEnabled').prop('checked', envJson.releases.enabled);
-            $('#releasesMax').val(envJson.releases.max);
-            $('#releasesSymLink').editable('setValue', envJson.releases.symlink);
-            $('#releasesDir').editable('setValue', envJson.releases.directory);
+            // Update env editor UI
+            updateEnvEditorUI(envFileData);
 
             /*
              * Set Code content to Raw Editor & Init CodeMirror
@@ -298,6 +347,8 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
                     theme: 'mdn-like',
                     mode: 'yaml'
                 });
+            } else {
+                codeMirror.refresh();
             }
 
             // Show modal window
@@ -563,24 +614,6 @@ function updateStatsComponents(selectedFrom, selectedTo) {
  */
 function clearDragDropTrash(trashId) {
     $('#' + trashId).empty();
-}
-
-/**
- * Setup Env Editor UI
- */
-function setupEnvEditor() {
-    /*
-     * Adjust inline edits
-     */
-    $(".inlineEdit").each(function (index, el) {
-        inlineEditables[$(el).attr('id')] = $(this).editable({
-            success: function(response, newValue) {
-                initDragDrops();
-            }
-        });
-    });
-
-    initDragDrops();
 }
 
 /**
