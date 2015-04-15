@@ -143,6 +143,33 @@ $('#editFileForm').submit(function(event) {
     });
 });
 
+/**
+ * Submit edited project environment via UI
+ */
+$('#envEditorUIForm').submit(function(event) {
+    event.preventDefault();
+    // Get current form data
+    var formData = {
+        orgFile: $("#orgFile").val(),
+        code: codeMirror.getValue()
+    };
+    var selectedItem = $('.list-group-item.active')[0];
+
+    console.debug(formData);
+    $.post( '/projects/applyFile', formData, function(result) {
+        // Check if we have warning
+        if(result["warn"]) {
+            toastr.warning(result["message"], 'MagePanel Projects');
+        } else {
+            $('#envEditorModal').modal('hide');
+            $('#'+selectedItem.id).trigger("click");
+            toastr.success(result["message"], 'MagePanel Projects');
+        }
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+    });
+});
+
 // Tags Page - Form onSubmit Events =============================================================
 /**
  * Submit add new tag form
