@@ -8,38 +8,40 @@
                     span.sr-only Close
                 h4.modal-title.ion-compose#envEditorModalLabel  Environment Editor
             .modal-body
-                // Tabbed Interface - Model Content
-                .tabbable
-                    // Tab Navigation
-                    ul.nav.nav-tabs(role="tablist")
-                        li.active
-                            a(href="#editorUI", role="tab", data-toggle="tab") Graphical
-                        li
-                            a(href="#editorRaw", role="tab", data-toggle="tab", id="showRawEditorTab") Raw
-                        li.btn-group.btn-group-sm.pull-right
-                            button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
-                            button#applyFileBtn.btn.btn-success.glyphicon.glyphicon-ok(type='button') Apply
-                            button.btn.btn-primary.glyphicon.glyphicon-floppy-disk(type='submit') Save
+                // Form
+                form#envEditorRawForm(method='POST')
+                    input#orgFile(type='hidden', name='orgFile', value='')
 
-                    .tab-content
-                        // ------------------------ UI Editor Tab ------------------------
-                        #editorUI.tab-pane.active(role="tabpanel")
-                            .row.clearfix#envEditUI
-                                // ---- Left-Side ----
-                                .col-sm-6
-                                    ol#envEditUILeft
-                                        // Available Tasks
-                                        ol.bs-callout.bs-callout-info.dragdrop#ddAvailableTasks.taskGroup
-                                            .list-group-item-text.text-center.ion-ios7-gear  Available Tasks
-                                            li.list-group-item.draggable.small.ion-drag#task-1  Task-1
-                                            li.list-group-item.draggable.small.ion-drag#task-2  Task-2
-                                        // Trash Area
-                                        .btn.btn-warning.text-center.ion-trash-b(onClick="clearDragDropTrash('ddTrash');", style="width: 100%;")  Empty Trash
-                                        ol.bs-callout.bs-callout-warning.dragdrop#ddTrash(style="margin-top: 0px; opacity: 0.45;")
+                    // Tabbed Interface - Model Content
+                    .tabbable
+                        // Tab Navigation
+                        ul.nav.nav-tabs(role="tablist")
+                            li.active
+                                a(href="#editorUI", role="tab", data-toggle="tab", id="showUiEditorTab") Graphical
+                            li
+                                a(href="#editorRaw", role="tab", data-toggle="tab", id="showRawEditorTab") Raw
+                            li.btn-group.btn-group-sm.pull-right
+                                button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
+                                button#applyFileBtn.btn.btn-success.glyphicon.glyphicon-ok(type='button') Apply
+                                button.btn.btn-primary.glyphicon.glyphicon-floppy-disk(type='submit') Save
 
-                                // ---- Right-Side ----
-                                form#envEditorRawForm(method='POST')
-                                    input#orgFile(type='hidden', name='orgFile', value='')
+                        .tab-content
+                            // ------------------------ UI Editor Tab ------------------------
+                            #editorUI.tab-pane.active(role="tabpanel")
+                                .row.clearfix#envEditUI
+                                    // ---- Left-Side ----
+                                    .col-sm-6
+                                        ol#envEditUILeft
+                                            // Available Tasks
+                                            ol.bs-callout.bs-callout-info.dragdrop#ddAvailableTasks.taskGroup
+                                                .list-group-item-text.text-center.ion-ios7-gear  Available Tasks
+                                                li.list-group-item.draggable.small.ion-drag#task-1  Task-1
+                                                li.list-group-item.draggable.small.ion-drag#task-2  Task-2
+                                            // Trash Area
+                                            .btn.btn-warning.text-center.ion-trash-b(onClick="clearDragDropTrash('ddTrash');", style="width: 100%;")  Empty Trash
+                                            ol.bs-callout.bs-callout-warning.dragdrop#ddTrash(style="margin-top: 0px; opacity: 0.45;")
+
+                                    // ---- Right-Side ----
                                     .col-sm-6#envEditUIRight(style="overflow-y: scroll; overflow-x: hidden; margin-top: 10px;")
                                         // Deployment
                                         .panel.panel-default(style="margin-bottom: 5px;")
@@ -115,9 +117,7 @@
                                                     .panel-body(style="margin-left: 10px;")
                                                         ol.list-group.dragdrop#ddPostDeploy.taskGroup.envTasks(style="margin-bottom: 5px;")
 
-                        // ------------------------ Raw Editor Tab ------------------------
-                        #editorRaw.tab-pane(role="tabpanel")
-                            form#envEditorRawForm(method='POST')
-                                input#orgFile(type='hidden', name='orgFile', value='')
+                            // ------------------------ Raw Editor Tab ------------------------
+                            #editorRaw.tab-pane(role="tabpanel")
                                 // WYSIWYG Editor
-                                textarea#code(name='code', autocapitalize='off', autocorrect='off', wrap='off')
+                                textarea#envRawEditor(name='code', autocapitalize='off', autocorrect='off', wrap='off')

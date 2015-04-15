@@ -127,3 +127,13 @@ $('#addProjectEnvModal').on('shown.bs.modal', function () {
 $('#addProjectTaskModal').on('shown.bs.modal', function () {
     $('#projectIdTask').val($('.list-group-item.active')[0].id);
 });
+
+/**
+ * Reset Env Editor UI Modal State on Show & Hide Events
+ */
+$('#envEditorModal').on('shown.bs.modal', function () {
+    $('#envEditUIRight').scrollTop(0);
+});
+$('#envEditorModal').on('hidden.bs.modal', function () {
+    $('#showUiEditorTab').tab('show');
+});

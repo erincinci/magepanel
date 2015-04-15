@@ -285,9 +285,20 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
             $('#releasesDir').editable('setValue', envJson.releases.directory);
 
             /*
-             * Set Code content to Raw Editor
+             * Set Code content to Raw Editor & Init CodeMirror
              */
-            $("textarea#code").val(envFileData);
+            $("textarea#envRawEditor").val(envFileData);
+            if (! (codeMirror instanceof CodeMirror)) {
+                // Convert textarea to CodeMirror editor
+                codeMirror = CodeMirror.fromTextArea(document.getElementById("envRawEditor"), {
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    styleActiveLine: true,
+                    tabMode: 'spaces',
+                    theme: 'mdn-like',
+                    mode: 'yaml'
+                });
+            }
 
             // Show modal window
             $('#envEditorModal').modal('show');
