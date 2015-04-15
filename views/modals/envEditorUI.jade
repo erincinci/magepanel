@@ -6,16 +6,16 @@
                 button.close(type='button', data-dismiss='modal')
                     span(aria-hidden='true') ×
                     span.sr-only Close
-                h4.modal-title.ion-compose  Environment Editor
+                h4.modal-title.ion-compose#envEditorModalLabel  Environment Editor
             .modal-body
                 // Tabbed Interface - Model Content
                 .tabbable
                     // Tab Navigation
-                    ul.nav.nav-tabs
+                    ul.nav.nav-tabs(role="tablist")
                         li.active
-                            a(href="#editorUI", data-toggle="tab") Graphical
+                            a(href="#editorUI", role="tab", data-toggle="tab") Graphical
                         li
-                            a(href="#editorRaw", data-toggle="tab") Raw
+                            a(href="#editorRaw", role="tab", data-toggle="tab", id="showRawEditorTab") Raw
                         li.btn-group.btn-group-sm.pull-right
                             button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Cancel
                             button#applyFileBtn.btn.btn-success.glyphicon.glyphicon-ok(type='button') Apply
@@ -23,7 +23,7 @@
 
                     .tab-content
                         // ------------------------ UI Editor Tab ------------------------
-                        #editorUI.tab-pane.active
+                        #editorUI.tab-pane.active(role="tabpanel")
                             .row.clearfix#envEditUI
                                 // ---- Left-Side ----
                                 .col-sm-6
@@ -33,92 +33,91 @@
                                             .list-group-item-text.text-center.ion-ios7-gear  Available Tasks
                                             li.list-group-item.draggable.small.ion-drag#task-1  Task-1
                                             li.list-group-item.draggable.small.ion-drag#task-2  Task-2
-                                            li.list-group-item.draggable.small.ion-drag#task-3  Task-3
-                                            li.list-group-item.draggable.small.ion-drag#task-4  Task-4
-                                            li.list-group-item.draggable.small.ion-drag#task-5  Task-5
                                         // Trash Area
                                         .btn.btn-warning.text-center.ion-trash-b(onClick="clearDragDropTrash('ddTrash');", style="width: 100%;")  Empty Trash
                                         ol.bs-callout.bs-callout-warning.dragdrop#ddTrash(style="margin-top: 0px; opacity: 0.45;")
 
                                 // ---- Right-Side ----
-                                .col-sm-6#envEditUIRight(style="overflow-y: scroll; overflow-x: hidden; margin-top: 10px;")
-                                    // Deployment
-                                    .panel.panel-default(style="margin-bottom: 5px;")
-                                        .panel-heading.small.ion-paper-airplane  Deployment
-                                            a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditDeployPanel", style="margin-top: 0px;")
-                                        .panel-body#envEditDeployPanel(class="collapse in withIcon")
-                                            // Deploy Options
-                                            li.list-group-item.small.ion-android-social-user#deployUser  User:&nbsp;&nbsp;
-                                                a.inlineEdit(href="#") root
-                                            li.list-group-item.small.ion-folder#deployFromDir  From Dir:&nbsp;&nbsp;
-                                                a.inlineEdit(href="#") ./
-                                            li.list-group-item.small.ion-folder#deployToDir  To Dir:&nbsp;&nbsp;
-                                                a.inlineEdit(href="#") /home/orbitadserving
-                                            li.list-group-item.small.ion-shuffle#deployStrategy  Strategy:&nbsp;&nbsp;
-                                                select#deployStrategyPicker.selectpicker(name='deployStrategyPicker')
-                                                    option(value='rsync', selected) Rsync
-                                                    option(value='targz') tar.gz
-                                                    option(value='git-rebase') GIT Rebase
-                                                    option(value='disabled') Disabled
-                                            li.list-group-item.small#deployExcludes
-                                                .clearfix.ion-funnel(style="width: 100%;")  Exclude Dirs:&nbsp;&nbsp;
-                                                    input.input-block-level(type="text", data-role="tagsinput")#deployExcludeDirs
+                                form#envEditorRawForm(method='POST')
+                                    input#orgFile(type='hidden', name='orgFile', value='')
+                                    .col-sm-6#envEditUIRight(style="overflow-y: scroll; overflow-x: hidden; margin-top: 10px;")
+                                        // Deployment
+                                        .panel.panel-default(style="margin-bottom: 5px;")
+                                            .panel-heading.small.ion-paper-airplane  Deployment
+                                                a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditDeployPanel", style="margin-top: 0px;")
+                                            .panel-body#envEditDeployPanel(class="collapse in withIcon")
+                                                // Deploy Options
+                                                li.list-group-item.small.ion-android-social-user  User:&nbsp;&nbsp;
+                                                    a.inlineEdit#deployUser(href="#") root
+                                                li.list-group-item.small.ion-folder  From Dir:&nbsp;&nbsp;
+                                                    a.inlineEdit#deployFromDir(href="#") ./
+                                                li.list-group-item.small.ion-folder  To Dir:&nbsp;&nbsp;
+                                                    a.inlineEdit#deployToDir(href="#") /root
+                                                li.list-group-item.small.ion-shuffle  Strategy:&nbsp;&nbsp;
+                                                    select#deployStrategy.selectpicker(name='deployStrategyPicker')
+                                                        option(value='rsync', selected) Rsync
+                                                        option(value='targz') tar.gz
+                                                        option(value='git-rebase') GIT Rebase
+                                                        option(value='disabled') Disabled
+                                                li.list-group-item.small
+                                                    .clearfix.ion-funnel(style="width: 100%;")  Exclude Dirs:&nbsp;&nbsp;
+                                                        input.input-block-level#deployExcludes(type="text", data-role="tagsinput")
 
-                                    // Releases
-                                    .panel.panel-default(style="margin-bottom: 5px;")
-                                        .panel-heading.ion-ios7-cloud-upload-outline  Releases
-                                            a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditReleasesPanel", style="margin-top: 0px;")
-                                        .panel-body#envEditReleasesPanel(class="collapse in withIcon")
-                                            // Release Options
-                                            li.list-group-item.small.ion-checkmark-circled#releasesEnabled  Enabled:&nbsp;&nbsp;
-                                                input(type="checkbox", data-toggle="toggle", data-size="mini", checked)#releasesEnabledToggle
-                                            li.list-group-item.small.ion-pound#releasesMax  Max Releases:&nbsp;&nbsp;
-                                                .input-group.spinner
-                                                    input.form-control#releasesMaxSpinner(type='text', value='8')
-                                                    .input-group-btn-vertical
-                                                        button.btn.btn-default
-                                                            i.fa.fa-caret-up
-                                                        button.btn.btn-default
-                                                            i.fa.fa-caret-down
-                                            li.list-group-item.small.ion-link#releasesSymLink  Symbolic Link:&nbsp;&nbsp;
-                                                a.inlineEdit(href="#") ads
-                                            li.list-group-item.small.ion-folder#releasesDir  Directory:&nbsp;&nbsp;
-                                                a.inlineEdit(href="#") releases
+                                        // Releases
+                                        .panel.panel-default(style="margin-bottom: 5px;")
+                                            .panel-heading.ion-ios7-cloud-upload-outline  Releases
+                                                a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditReleasesPanel", style="margin-top: 0px;")
+                                            .panel-body#envEditReleasesPanel(class="collapse in withIcon")
+                                                // Release Options
+                                                li.list-group-item.small.ion-checkmark-circled  Enabled:&nbsp;&nbsp;
+                                                    input#releasesEnabled(type="checkbox", data-toggle="toggle", data-size="mini", checked)
+                                                li.list-group-item.small.ion-pound  Max Releases:&nbsp;&nbsp;
+                                                    .input-group.spinner
+                                                        input.form-control#releasesMax(type='text', value='8')
+                                                        .input-group-btn-vertical
+                                                            button.btn.btn-default
+                                                                i.fa.fa-caret-up
+                                                            button.btn.btn-default
+                                                                i.fa.fa-caret-down
+                                                li.list-group-item.small.ion-link  Symbolic Link:&nbsp;&nbsp;
+                                                    a.inlineEdit#releasesSymLink(href="#") projectName
+                                                li.list-group-item.small.ion-folder  Directory:&nbsp;&nbsp;
+                                                    a.inlineEdit#releasesDir(href="#") releases
 
-                                    // Hosts
-                                    .panel.panel-default(style="margin-bottom: 5px;")
-                                        .panel-heading.ion-laptop  Hosts
-                                            .btn-group.btn-group-sm.pull-right(style="position: relative; top: -5px;")
-                                                a#envEditAddHostBtn(href="#", class="btn btn-xs glyphicon glyphicon-plus", style="text-decoration: none;")
-                                        .panel-body
-                                            #ddHosts
+                                        // Hosts
+                                        .panel.panel-default(style="margin-bottom: 5px;")
+                                            .panel-heading.ion-laptop  Hosts
+                                                .btn-group.btn-group-sm.pull-right(style="position: relative; top: -5px;")
+                                                    a#envEditAddHostBtn(href="#", class="btn btn-xs glyphicon glyphicon-plus", style="text-decoration: none;")
+                                            .panel-body
+                                                #ddHosts
 
-                                    // Tasks
-                                    .panel.panel-default(style="margin-bottom: 5px;")
-                                        .panel-heading.ion-ios7-gear  Tasks (Applies to all hosts)
-                                            a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditTasksPanel", style="margin-top: 0px;")
-                                        .panel-body#envEditTasksPanel(class="collapse in withIcon")
-                                            // Stages
-                                            .panel.panel-info(style="margin-bottom: 5px;")
-                                                .panel-heading Pre-Deploy
-                                                .panel-body(style="margin-left: 10px;")
-                                                    ol.list-group.dragdrop#ddPreDeploy.taskGroup.envTasks(style="margin-bottom: 5px;")
-                                            .panel.panel-info(style="margin-bottom: 5px;")
-                                                .panel-heading On-Deploy
-                                                .panel-body(style="margin-left: 10px;")
-                                                    ol.list-group.dragdrop#ddOnDeploy.taskGroup.envTasks(style="margin-bottom: 5px;")
-                                            .panel.panel-info(style="margin-bottom: 5px;")
-                                                .panel-heading Post-Release
-                                                .panel-body(style="margin-left: 10px;")
-                                                    ol.list-group.dragdrop#ddPostRelease.taskGroup.envTasks(style="margin-bottom: 5px;")
-                                            .panel.panel-info(style="margin-bottom: 5px;")
-                                                .panel-heading Post-Deploy
-                                                .panel-body(style="margin-left: 10px;")
-                                                    ol.list-group.dragdrop#ddPostDeploy.taskGroup.envTasks(style="margin-bottom: 5px;")
+                                        // Tasks
+                                        .panel.panel-default(style="margin-bottom: 5px;")
+                                            .panel-heading.ion-ios7-gear  Tasks (Applies to all hosts)
+                                                a.toggleEnvTasksBtn.btn.btn-xs.fa.fa-angle-up.pull-right(href="#", data-toggle="collapse", data-target="#envEditTasksPanel", style="margin-top: 0px;")
+                                            .panel-body#envEditTasksPanel(class="collapse in withIcon")
+                                                // Stages
+                                                .panel.panel-info(style="margin-bottom: 5px;")
+                                                    .panel-heading Pre-Deploy
+                                                    .panel-body(style="margin-left: 10px;")
+                                                        ol.list-group.dragdrop#ddPreDeploy.taskGroup.envTasks(style="margin-bottom: 5px;")
+                                                .panel.panel-info(style="margin-bottom: 5px;")
+                                                    .panel-heading On-Deploy
+                                                    .panel-body(style="margin-left: 10px;")
+                                                        ol.list-group.dragdrop#ddOnDeploy.taskGroup.envTasks(style="margin-bottom: 5px;")
+                                                .panel.panel-info(style="margin-bottom: 5px;")
+                                                    .panel-heading Post-Release
+                                                    .panel-body(style="margin-left: 10px;")
+                                                        ol.list-group.dragdrop#ddPostRelease.taskGroup.envTasks(style="margin-bottom: 5px;")
+                                                .panel.panel-info(style="margin-bottom: 5px;")
+                                                    .panel-heading Post-Deploy
+                                                    .panel-body(style="margin-left: 10px;")
+                                                        ol.list-group.dragdrop#ddPostDeploy.taskGroup.envTasks(style="margin-bottom: 5px;")
 
                         // ------------------------ Raw Editor Tab ------------------------
-                        #editorRaw.tab-pane
-                            form#envEditorUIForm(method='POST')
-                                // WYSIWYG Editor
+                        #editorRaw.tab-pane(role="tabpanel")
+                            form#envEditorRawForm(method='POST')
                                 input#orgFile(type='hidden', name='orgFile', value='')
+                                // WYSIWYG Editor
                                 textarea#code(name='code', autocapitalize='off', autocorrect='off', wrap='off')

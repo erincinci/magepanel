@@ -1,11 +1,8 @@
 extends layout
 
 block content
-    a.btn.btn-info(href="#envEditorModal", role="button", data-toggle="modal") Env Editor UI
-    include modals/envEditorUI
-
     // Stats
-        .jumbotron
+    .jumbotron
         // Date Range & Clear Stats Button
         .row.clearfix
             button#clearStatsBtn.btn.btn-small.btn-warning.ion-ios7-trash-outline(type='button')  Clear All Stats

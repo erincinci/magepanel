@@ -258,26 +258,39 @@ function envListItemOnClick(ymlFile, orgFile, envName) {
     $.ajax({
         url : ymlFile.replace('public',''),
         dataType: "text",
-        success : function (data) {
+        success : function (envFileData) {
             // Set hidden input value & Change modal title
             $("#orgFile").val(orgFile);
-            $("#editFileModalLabel").html("<i class='icon ion-cloud'/> Edit '<strong>" + envName.capitalize() + "</strong>' Environment");
+            $("#envEditorModalLabel").html(" Environment Editor - '<strong>" + envName.capitalize() + "</strong>'");
 
-            // Set code to textarea
-            $("textarea#code").val(data);
+            /*
+             * TODO: Set UI Editor Values to env file values
+             */
+            var envJson = jsyaml.load(envFileData);
+            console.dir(envJson);
+            // Section - Deployment
+            $('#deployUser').editable('setValue', envJson.deployment.user);
+            $('#deployFromDir').editable('setValue', envJson.deployment.from);
+            $('#deployToDir').editable('setValue', envJson.deployment.to);
+            $('#deployStrategy').val(envJson.deployment.strategy).selectpicker('refresh');
+            if (envJson.deployment.excludes) {
+                envJson.deployment.excludes.forEach(function(exclude, index) {
+                    $('#deployExcludes').tagsinput('add', exclude);
+                });
+            }
+            // Section - Releases
+            $('#releasesEnabled').prop('checked', envJson.releases.enabled);
+            $('#releasesMax').val(envJson.releases.max);
+            $('#releasesSymLink').editable('setValue', envJson.releases.symlink);
+            $('#releasesDir').editable('setValue', envJson.releases.directory);
 
-            // Convert textarea to CodeMirror editor
-            codeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
-                lineNumbers: true,
-                lineWrapping: true,
-                styleActiveLine: true,
-                tabMode: 'spaces',
-                theme: 'mdn-like',
-                mode: 'yaml'
-            });
+            /*
+             * Set Code content to Raw Editor
+             */
+            $("textarea#code").val(envFileData);
 
             // Show modal window
-            $('#editFileModal').modal('show');
+            $('#envEditorModal').modal('show');
         },
         error : function () {
             toastr.error("There was an error while opening environment file", 'MagePanel Projects');
@@ -549,7 +562,7 @@ function setupEnvEditor() {
      * Adjust inline edits
      */
     $(".inlineEdit").each(function (index, el) {
-        $(this).editable({
+        inlineEditables[$(el).attr('id')] = $(this).editable({
             success: function(response, newValue) {
                 initDragDrops();
             }

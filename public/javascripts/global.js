@@ -8,6 +8,7 @@ var ajaxTimeout = 600;
 var ioSocket = null;
 var cmdQueue;
 var odometers = [];
+var inlineEditables = [];
 
 // DOM Ready =============================================================
 $(window).load(function() {
@@ -101,21 +102,6 @@ $(document).ready(function() {
     $("#envEditUI").ready(function() {
         // If current page includes Env Editor UI
         if( $('#envEditUI').length ) {
-            /*// Setup left tasks menu as sticky
-            var leftPanel = $('#envEditUILeft');
-            leftPanel.css('width', leftPanel.width());
-            var $body   = $(document.body);
-            var navHeight = $('.navbar').outerHeight(true) + 0;
-            leftPanel.affix({
-                offset: {
-                    top: navHeight
-                }
-            });
-            $body.scrollspy({
-                target: '#envEditUILeft',
-                offset: navHeight
-            });*/
-
             // Inline scroll of right content column
             var rightPanel = $('#envEditUIRight'),
                 window_height = $(window).height(),
@@ -194,7 +180,6 @@ $(document).ready(function() {
                     }
                 }, function(start, end, label) {
                     updateStatsComponents(start.format('X'), end.format('X'));
-                    //console.log(start.format('X'), end.format('X'), label);
                     $('#statsDateRange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
                 });
 

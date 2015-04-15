@@ -82,3 +82,26 @@ $(document).delegate('.withIcon', 'hidden.bs.collapse', function(e) {
     if (toggleButton)
         $(toggleButton).removeClass('fa-angle-up').addClass('fa-angle-down');
 });
+
+// On Raw File Editor Tab Shown Event
+$(document).delegate('#showRawEditorTab', 'shown.bs.tab', function(e) {
+    // Refresh or Initialize CodeMirror Editor
+    // TODO: CodeMirror not showing!
+    if (codeMirror instanceof CodeMirror) {
+        console.debug("Refreshing editor..");
+        codeMirror.refresh();
+    } else {
+        // Convert textarea to CodeMirror editor
+        console.debug("Initializing editor..");
+        codeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            lineWrapping: true,
+            styleActiveLine: true,
+            tabMode: 'spaces',
+            theme: 'mdn-like',
+            mode: 'yaml'
+        });
+        codeMirror.setSize('100%', 50);
+        codeMirror.refresh();
+    }
+})
