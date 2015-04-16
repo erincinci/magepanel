@@ -15,6 +15,7 @@ String.prototype.capitalize = function() {
  */
 function showAjaxLoader() {
     // TODO: Show loading div only on loaded part of page
+    updateAjaxLoader();
     $("#overlay").show();
     $("#ajaxloader").show();
     $("#wait").css("display","block");
@@ -288,8 +289,8 @@ function setupEnvEditor() {
         inlineEditables[$(el).attr('id')] = $(this).editable({
             success: function(response, newValue) {
                 // On success replace appropriate string in raw editor
-                var oldValue = $(this).editable('getValue', true) + ':';
-                newValue += ':';
+                var oldValue = '- ' + $(this).editable('getValue', true);
+                newValue = '- ' + newValue;
                 replaceInCodemirrorCode(oldValue, newValue);
 
                 // Refresh drag & drop panels
@@ -373,9 +374,14 @@ function updateEnvEditorUI(envFileData) {
     // Section - Hosts
     if (env.hosts) {
         $.each(env.hosts, function(ip, hostTasks) {
-            //console.debug(ip, hostTasks);
-            // Append new host to list
-            prepareEnvEditorHostPanelGroup('ddHosts', ip);
+            // Check if host has custom tasks
+            if (hostTasks instanceof Object) {
+                var arr = jQuery.makeArray(hostTasks);
+                // TODO: Fix
+                prepareEnvEditorHostPanelGroup('ddHosts', ip);
+            } else {
+                prepareEnvEditorHostPanelGroup('ddHosts', hostTasks);
+            }
 
             // TODO: Add host's tasks to the appropriate panels
         });
@@ -389,19 +395,24 @@ function updateEnvEditorUI(envFileData) {
     // TODO: Section - Tasks
     if (env.tasks) {
         // Do for each stage
-        appendTaskListEnvEditor(env.tasks);
+        appendTaskListEnvEditor(env.tasks, 'ddPreDeploy', 'ddOnDeploy', 'ddPostRelease', 'ddPostDeploy');
     }
 }
 
 /**
  * Env Editor - Append Tasks to UI
  * @param tasksJson
+ * @param preDeployId
+ * @param onDeployId
+ * @param postReleaseId
+ * @param postDeployId
  */
-function appendTaskListEnvEditor(tasksJson) {
+function appendTaskListEnvEditor(tasksJson, preDeployId, onDeployId, postReleaseId, postDeployId) {
     // Check JSON
     $.each(tasksJson, function(stage, tasks) {
         // If there are any tasks defined in the current stage
         if (tasks) {
+            console.debug("Stage: ", stage);
             $.each(tasks, function(i, stageTask) {
                 // Check if task has variables
                 if (stageTask instanceof Object) {
@@ -409,6 +420,7 @@ function appendTaskListEnvEditor(tasksJson) {
                     $.each(stageTask, function(taskName, taskVars) {
                         console.debug(taskName, ':', taskVars);
                         // TODO: Send to task list item creator!
+                        //appendEnvTaskToList(listId, taskName, taskVars)
                     });
                 } else {
                     // Task with no variables
