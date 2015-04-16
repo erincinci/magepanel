@@ -351,6 +351,8 @@ function updateEnvEditorUI(envFileData) {
      */
     var env = jsyaml.load(envFileData);
 
+    // TODO: Get available tasks from projects DB & add them to the left panel!
+
     // Section - Deployment
     $('#deployUser').editable('setValue', env.deployment.user);
     $('#deployFromDir').editable('setValue', env.deployment.from);
@@ -371,11 +373,9 @@ function updateEnvEditorUI(envFileData) {
     // Section - Hosts
     if (env.hosts) {
         $.each(env.hosts, function(ip, hostTasks) {
-            console.debug(ip, hostTasks);
+            //console.debug(ip, hostTasks);
             // Append new host to list
-            $('#ddHosts').append(
-                prepareEnvEditorHostPanelGroup(ip)
-            );
+            prepareEnvEditorHostPanelGroup('ddHosts', ip);
 
             // TODO: Add host's tasks to the appropriate panels
         });
@@ -387,7 +387,36 @@ function updateEnvEditorUI(envFileData) {
     }
 
     // TODO: Section - Tasks
-    //console.dir(envJson.tasks);
+    if (env.tasks) {
+        // Do for each stage
+        appendTaskListEnvEditor(env.tasks);
+    }
+}
+
+/**
+ * Env Editor - Append Tasks to UI
+ * @param tasksJson
+ */
+function appendTaskListEnvEditor(tasksJson) {
+    // Check JSON
+    $.each(tasksJson, function(stage, tasks) {
+        // If there are any tasks defined in the current stage
+        if (tasks) {
+            $.each(tasks, function(i, stageTask) {
+                // Check if task has variables
+                if (stageTask instanceof Object) {
+                    // Task with variables
+                    $.each(stageTask, function(taskName, taskVars) {
+                        console.debug(taskName, ':', taskVars);
+                        // TODO: Send to task list item creator!
+                    });
+                } else {
+                    // Task with no variables
+                    console.debug(stageTask);
+                }
+            });
+        }
+    });
 }
 
 /**
@@ -736,10 +765,11 @@ function initDragDrops() {
 
 /**
  * Prepare env editor new host panel
+ * @param listId
  * @param ip
- * @returns {string}
+ * @returns {number}
  */
-function prepareEnvEditorHostPanelGroup(ip) {
+function prepareEnvEditorHostPanelGroup(listId, ip) {
     // Random div id
     if (! ip)
         ip = '##.##.##.##';
@@ -761,7 +791,12 @@ function prepareEnvEditorHostPanelGroup(ip) {
             appendNewEnvHostPanel('Post-Deploy') +
             '</div>' +
             '</div>';
-    return hostPanel;
+
+    // Append to list
+    $('#'+listId).append(
+        hostPanel
+    );
+    return divId;
 }
 
 /**
@@ -778,6 +813,35 @@ function appendNewEnvHostPanel(title) {
             '</div>' +
         '</div>';
     return panel;
+}
+
+/**
+ * Append new task list-item to the specified list
+ * with name and custom variables, if there are any
+ * @param listId
+ * @param taskName
+ * @param taskVars
+ */
+function appendEnvTaskToList(listId, taskName, taskVars) {
+    // Prepare task variables
+    var taskVarsStr = '';
+    if (taskVars.length > 0) {
+        $.each(taskVars, function(name, value) {
+            taskVarsStr += '[' + name + ': ' + value + '] ';
+        });
+    }
+
+    // Prepare task
+    var task =
+        '<li class="list-group-item draggable small ion-drag" id="' + listId + '-' + taskName + '" data-tasks="' + JSON.stringify(taskVars) + '">' +
+            '  ' + taskName +
+            '<i class="taskVars" style="font-style: italic;">' + taskVarsStr + '</i>'
+        '</li>';
+
+    // Append created task to the list
+    $('#'+listId).append(
+        task
+    );
 }
 
 /**

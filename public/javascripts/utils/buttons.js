@@ -451,9 +451,7 @@ $("#resumeTailFileBtn").click(function() {
  */
 $("#envEditAddHostBtn").click(function() {
     // Append new empty host to list
-    $('#ddHosts').append(
-        prepareEnvEditorHostPanelGroup('127.0.0.1')
-    );
+    prepareEnvEditorHostPanelGroup('ddHosts', '127.0.0.1');
 
     // Attach jQuery Sortable scripts to new elements
     setupEnvEditor();
