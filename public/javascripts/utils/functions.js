@@ -253,7 +253,7 @@ function getParameterByName(name) {
  */
 function setupEnvEditor() {
     /*
-     * Adjust inline edits
+     * Adjust text inline edits
      */
     $(".inlineEdit.envEditorInline").each(function (index, el) {
         inlineEditables[$(el).attr('id')] = $(this).editable({
@@ -262,16 +262,7 @@ function setupEnvEditor() {
                 var name = $(el).attr('name');
                 var oldValue = name + $(this).editable('getValue', true);
                 newValue = name + newValue;
-
-                // Check if we are updating codemirror instance or textarea component
-                if (codeMirror instanceof CodeMirror) {
-                    var newCode = codeMirror.getValue().replace(new RegExp(oldValue, "g"), newValue);
-                    codeMirror.setValue(newCode);
-                    codeMirror.refresh();
-                } else {
-                    var rawEditor = $('#envRawEditor');
-                    rawEditor.val(rawEditor.val().replace(new RegExp(oldValue,"g"), newValue));
-                }
+                replaceInCodemirrorCode(oldValue, newValue);
 
                 // Refresh drag & drop panels
                 initDragDrops();
@@ -279,7 +270,47 @@ function setupEnvEditor() {
         });
     });
 
+    /*
+     * Init Special Inline Editables
+     */
+    $('#deployStrategy').editable({
+        value: 'rsync',
+        source: [
+            {value: 'rsync', text: 'Rsync'},
+            {value: 'targz', text: 'tar.gz'},
+            {value: 'git-rebase', text: 'GIT Rebase'},
+            {value: 'disabled', text: 'Disabled'}
+        ],
+        success: function(response, newValue) {
+            // On success replace appropriate string in raw editor
+            var name = $(this).attr('name');
+            var oldValue = name + $(this).editable('getValue', true);
+            newValue = name + newValue;
+            replaceInCodemirrorCode(oldValue, newValue);
+
+            // Refresh drag & drop panels
+            initDragDrops();
+        }
+    });
+
     initDragDrops();
+}
+
+/**
+ * Find & Replace Code Fragment in CodeMirror Editor
+ * @param oldValue
+ * @param newValue
+ */
+function replaceInCodemirrorCode(oldValue, newValue) {
+    // Check if we are updating codemirror instance or textarea component
+    if (codeMirror instanceof CodeMirror) {
+        var newCode = codeMirror.getValue().replace(new RegExp(oldValue, "g"), newValue);
+        codeMirror.setValue(newCode);
+        codeMirror.refresh();
+    } else {
+        var rawEditor = $('#envRawEditor');
+        rawEditor.val(rawEditor.val().replace(new RegExp(oldValue,"g"), newValue));
+    }
 }
 
 /**
@@ -296,7 +327,7 @@ function updateEnvEditorUI(envFileData) {
     $('#deployUser').editable('setValue', envJson.deployment.user);
     $('#deployFromDir').editable('setValue', envJson.deployment.from);
     $('#deployToDir').editable('setValue', envJson.deployment.to);
-    $('#deployStrategy').val(envJson.deployment.strategy).selectpicker('refresh');
+    $('#deployStrategy').editable('setValue', envJson.deployment.strategy);
     if (envJson.deployment.excludes) {
         envJson.deployment.excludes.forEach(function(exclude, index) {
             $('#deployExcludes').tagsinput('add', exclude);
@@ -304,15 +335,11 @@ function updateEnvEditorUI(envFileData) {
     }
     // Section - Releases
     $('#releasesEnabled').prop('checked', envJson.releases.enabled);
-    $('#releasesMax').val(envJson.releases.max);
+    $('#releasesMax').editable('setValue', envJson.releases.max);
     $('#releasesSymLink').editable('setValue', envJson.releases.symlink);
     $('#releasesDir').editable('setValue', envJson.releases.directory);
     // TODO: Section - Hosts
     // TODO: Section - Tasks
-
-    // TODO: Spinner input causes form to submit, fix it!
-
-    // TODO: Update other components on edit (TagsInput, Bootstrap-SelectPicker, Checkbox, ...)
 }
 
 /**

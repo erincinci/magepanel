@@ -3,6 +3,7 @@ deployment:
   user: dummy
   from: ./
   to: /var/www/vhosts/example.com
+  strategy: rsync
   excludes:
 releases:
   enabled: true

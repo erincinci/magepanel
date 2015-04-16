@@ -90,3 +90,23 @@ $(document).delegate('#showRawEditorTab', 'shown.bs.tab', function(e) {
     codeMirror.refresh();
     codeMirror.focus();
 })
+
+// TagsInput Item Added & Removed Events
+$(document).delegate('#deployExcludes', 'itemAdded', function(e) {
+    var oldValue = 'excludes:';
+    var newValue = oldValue + '\n    - ' + e.item;
+    replaceInCodemirrorCode(oldValue, newValue);
+});
+$(document).delegate('#deployExcludes', 'itemRemoved', function(e) {
+    var oldValue = '    - ' + e.item + '\n';
+    replaceInCodemirrorCode(oldValue, '');
+});
+
+// Releases Enabled Checkbox on State Changed Event
+$(document).delegate('#releasesEnabled', 'change', function(e) {
+    if(this.checked) {
+        replaceInCodemirrorCode('enabled: false', 'enabled: true');
+    } else {
+        replaceInCodemirrorCode('enabled: true', 'enabled: false');
+    }
+});
