@@ -249,6 +249,17 @@ function getParameterByName(name) {
 }
 
 /**
+ * Reset Evn Editor UI to its original state
+ */
+function resetEnvEditorPanels() {
+    $('#ddHosts').empty();
+    $('#ddPreDeploy').empty();
+    $('#ddOnDeploy').empty();
+    $('#ddPostRelease').empty();
+    $('#ddPostDeploy').empty();
+}
+
+/**
  * Setup Env Editor UI
  */
 function setupEnvEditor() {
@@ -262,6 +273,23 @@ function setupEnvEditor() {
                 var name = $(el).attr('name');
                 var oldValue = name + $(this).editable('getValue', true);
                 newValue = name + newValue;
+                replaceInCodemirrorCode(oldValue, newValue);
+
+                // Refresh drag & drop panels
+                initDragDrops();
+            }
+        });
+    });
+
+    /*
+     * Adjust Host ip inline edits
+     */
+    $(".inlineEdit.envEditorInlineHosts").each(function (index, el) {
+        inlineEditables[$(el).attr('id')] = $(this).editable({
+            success: function(response, newValue) {
+                // On success replace appropriate string in raw editor
+                var oldValue = $(this).editable('getValue', true) + ':';
+                newValue += ':';
                 replaceInCodemirrorCode(oldValue, newValue);
 
                 // Refresh drag & drop panels
@@ -304,12 +332,12 @@ function setupEnvEditor() {
 function replaceInCodemirrorCode(oldValue, newValue) {
     // Check if we are updating codemirror instance or textarea component
     if (codeMirror instanceof CodeMirror) {
-        var newCode = codeMirror.getValue().replace(new RegExp(oldValue, "g"), newValue);
+        var newCode = codeMirror.getValue().replace(new RegExp(oldValue, ''), newValue);
         codeMirror.setValue(newCode);
         codeMirror.refresh();
     } else {
         var rawEditor = $('#envRawEditor');
-        rawEditor.val(rawEditor.val().replace(new RegExp(oldValue,"g"), newValue));
+        rawEditor.val(rawEditor.val().replace(new RegExp(oldValue,''), newValue));
     }
 }
 
@@ -321,25 +349,45 @@ function updateEnvEditorUI(envFileData) {
     /*
      * Set UI Editor Values to env file values
      */
-    var envJson = jsyaml.load(envFileData);
-    console.dir(envJson);
+    var env = jsyaml.load(envFileData);
+
     // Section - Deployment
-    $('#deployUser').editable('setValue', envJson.deployment.user);
-    $('#deployFromDir').editable('setValue', envJson.deployment.from);
-    $('#deployToDir').editable('setValue', envJson.deployment.to);
-    $('#deployStrategy').editable('setValue', envJson.deployment.strategy);
-    if (envJson.deployment.excludes) {
-        envJson.deployment.excludes.forEach(function(exclude, index) {
+    $('#deployUser').editable('setValue', env.deployment.user);
+    $('#deployFromDir').editable('setValue', env.deployment.from);
+    $('#deployToDir').editable('setValue', env.deployment.to);
+    $('#deployStrategy').editable('setValue', env.deployment.strategy);
+    if (env.deployment.excludes) {
+        env.deployment.excludes.forEach(function(exclude, index) {
             $('#deployExcludes').tagsinput('add', exclude);
         });
     }
+
     // Section - Releases
-    $('#releasesEnabled').prop('checked', envJson.releases.enabled);
-    $('#releasesMax').editable('setValue', envJson.releases.max);
-    $('#releasesSymLink').editable('setValue', envJson.releases.symlink);
-    $('#releasesDir').editable('setValue', envJson.releases.directory);
-    // TODO: Section - Hosts
+    $('#releasesEnabled').prop('checked', env.releases.enabled);
+    $('#releasesMax').editable('setValue', env.releases.max);
+    $('#releasesSymLink').editable('setValue', env.releases.symlink);
+    $('#releasesDir').editable('setValue', env.releases.directory);
+
+    // Section - Hosts
+    if (env.hosts) {
+        $.each(env.hosts, function(ip, hostTasks) {
+            console.debug(ip, hostTasks);
+            // Append new host to list
+            $('#ddHosts').append(
+                prepareEnvEditorHostPanelGroup(ip)
+            );
+
+            // TODO: Add host's tasks to the appropriate panels
+        });
+
+        // TODO: Handle add & remove of hosts!
+
+        // Attach jQuery Sortable scripts to new elements
+        setupEnvEditor();
+    }
+
     // TODO: Section - Tasks
+    //console.dir(envJson.tasks);
 }
 
 /**
@@ -684,6 +732,36 @@ function initDragDrops() {
         drop: true,
         drag: true
     }).disableSelection();
+}
+
+/**
+ * Prepare env editor new host panel
+ * @param ip
+ * @returns {string}
+ */
+function prepareEnvEditorHostPanelGroup(ip) {
+    // Random div id
+    if (! ip)
+        ip = '##.##.##.##';
+    var divId = Math.floor((Math.random() * 999999) + 1);
+
+    var hostPanel =
+        '<div class="list-group-item small">' +
+            '<div class="glyphicon glyphicon-hdd" style="width: 100%">' + '  ' +
+            '<a href="#" class="inlineEdit envEditorInlineHosts">' + ip + '</a>' +
+            '<div class="btn-group btn-group-xs pull-right" role="group">' +
+            '<a href="#" class="toggleEnvTasksBtn btn btn-xs fa fa-angle-down" data-toggle="collapse" data-target="#' + divId + '" style="text-decoration: none; vertical-align: top; margin-top: 0px;") />' +
+            '<a id="envEditRemoveHostBtn" href="#" class="btn btn-xs fa fa-minus" style="text-decoration: none; vertical-align: top; margin-top: 0px;") />' +
+            '</div>' +
+            '</div>' +
+            '<div class="collapse withIcon" id="' + divId + '">' +
+            appendNewEnvHostPanel('Pre-Deploy') +
+            appendNewEnvHostPanel('On-Deploy') +
+            appendNewEnvHostPanel('Post-Release') +
+            appendNewEnvHostPanel('Post-Deploy') +
+            '</div>' +
+            '</div>';
+    return hostPanel;
 }
 
 /**

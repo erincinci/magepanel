@@ -136,4 +136,5 @@ $('#envEditorModal').on('shown.bs.modal', function () {
 });
 $('#envEditorModal').on('hidden.bs.modal', function () {
     $('#showUiEditorTab').tab('show');
+    resetEnvEditorPanels();
 });
