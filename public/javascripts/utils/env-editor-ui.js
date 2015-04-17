@@ -129,7 +129,7 @@ function updateEnvEditorUI(envFileData) {
             // Check if host has custom tasks
             if (hostTasks instanceof Object) {
                 // Host with specific tasks
-                var divId = prepareEnvEditorHostPanelGroup('ddHosts', hostTasks.firstKey());
+                var divId = prepareEnvEditorHostPanelGroup('ddHosts', Object.keys(hostTasks)[0]);
 
                 // TODO: Prepare host specific task panels
                 //appendTaskListEnvEditor(env.tasks, divId);

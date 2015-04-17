@@ -1,7 +1,4 @@
 /**
- * Created by erincinci on 16/04/15.
- */
-/**
  * Capitalize String
  * @returns {string}
  */
@@ -12,7 +9,7 @@ String.prototype.capitalize = function() {
 /**
  * Return first key of array like object
  * @returns {*}
- */
+ *
 Object.prototype.firstKey = function() {
     return Object.keys(this)[0];
-};
+};*/
