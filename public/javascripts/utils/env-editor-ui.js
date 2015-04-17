@@ -41,8 +41,7 @@ function setupEnvEditor() {
         inlineEditables[$(el).attr('id')] = $(this).editable({
             success: function(response, newValue) {
                 // On success replace appropriate string in raw editor
-                var oldValue = '- ' + $(this).editable('getValue', true);
-                newValue = '- ' + newValue;
+                var oldValue = $(this).editable('getValue', true);
                 replaceInCodemirrorCode(oldValue, newValue);
 
                 // Refresh drag & drop panels
@@ -99,10 +98,16 @@ function replaceInCodemirrorCode(oldValue, newValue) {
  * @param envFileData
  */
 function updateEnvEditorUI(envFileData) {
-    /*
-     * Set UI Editor Values to env file values
-     */
-    var env = jsyaml.load(envFileData);
+    // Parse YAML file contents to JSON
+    try {
+        var env = jsyaml.load(envFileData);
+    } catch(err) {
+        // Error handling
+        toastr.error("Error parsing YAML file: " + err, "MagePanel Projects");
+        $('#envEditorModal').modal('hide');
+        hideAjaxLoader();
+        return;
+    }
 
     // TODO: Get available tasks from projects DB & add them to the left panel!
 
@@ -125,20 +130,36 @@ function updateEnvEditorUI(envFileData) {
 
     // Section - Hosts
     if (env.hosts) {
-        $.each(env.hosts, function(ip, hostTasks) {
-            // Check if host has custom tasks
-            if (hostTasks instanceof Object) {
-                // Host with specific tasks
-                var divId = prepareEnvEditorHostPanelGroup('ddHosts', Object.keys(hostTasks)[0]);
+        $.each(env.hosts, function(leftVal, rightVal) {
+            /*
+             * Two host definition types:
+             * 1 - Index: IP (String)   |   Value: null OR Object of tasks array
+             * 2 - Index: 0, 1, ..      |   Value: IP (String)
+             */
+            var ip, hostTasks;
+            if (typeof rightVal === "string") {
+                // Type-2
+                ip = rightVal;
 
-                // TODO: Prepare host specific task panels
-                //appendTaskListEnvEditor(env.tasks, divId);
+                // Host panels without specific tasks
+                prepareEnvEditorHostPanelGroup('ddHosts', ip, false);
             } else {
-                // Host without specific tasks
-                prepareEnvEditorHostPanelGroup('ddHosts', hostTasks);
-            }
+                // Type-1
+                ip = leftVal;
+                hostTasks = rightVal;
 
-            // TODO: Add host's tasks to the appropriate panels
+                // Host panels with specific tasks
+                var hostDivId = prepareEnvEditorHostPanelGroup('ddHosts', ip, (hostTasks != null));
+
+                // Clean host tasks (Root value differs from type-1 to type-2)
+                if (hostTasks != null) {
+                    if (Object.keys(hostTasks)[0] == "tasks")
+                        hostTasks = hostTasks["tasks"];
+                }
+
+                // Prepare host specific task panels
+                appendTaskListEnvEditor(hostTasks, hostDivId);
+            }
         });
 
         // TODO: Handle add & remove of hosts!
@@ -161,26 +182,26 @@ function updateEnvEditorUI(envFileData) {
  */
 function appendTaskListEnvEditor(tasksJson, customDivId) {
     // Check JSON
-    $.each(tasksJson, function(stage, tasks) {
-        // If there are any tasks defined in the current stage
-        if (tasks) {
-            console.debug("Stage: ", stage);
-            $.each(tasks, function(i, stageTask) {
-                // Check if task has variables
-                if (stageTask instanceof Object) {
-                    // Task with variables
-                    $.each(stageTask, function(taskName, taskVars) {
-                        //console.debug(taskName, ':', taskVars);
-                        // TODO: Send to task list item creator!
-                        appendEnvTaskToList(customDivId, stage, taskName, taskVars);
-                    });
-                } else {
-                    // Task with no variables
-                    console.debug(stageTask);
-                }
-            });
-        }
-    });
+    if (tasksJson) {
+        $.each(tasksJson, function(stage, tasks) {
+            // If there are any tasks defined in the current stage
+            if (tasks) {
+                $.each(tasks, function(i, stageTask) {
+                    // Check if task has variables
+                    if (stageTask instanceof Object) {
+                        // Task with variables
+                        $.each(stageTask, function(taskName, taskVars) {
+                            // Append task with variables
+                            appendEnvTaskToList(customDivId, stage, taskName, taskVars);
+                        });
+                    } else {
+                        // Append task with no variables
+                        appendEnvTaskToList(customDivId, stage, stageTask, []);
+                    }
+                });
+            }
+        });
+    }
 }
 
 /**
@@ -238,13 +259,17 @@ function initDragDrops() {
  * Prepare env editor new host panel
  * @param listId
  * @param ip
+ * @param isCollapsed
  * @returns {number}
  */
-function prepareEnvEditorHostPanelGroup(listId, ip) {
+function prepareEnvEditorHostPanelGroup(listId, ip, isCollapsed) {
     // Random div id
     if (! ip)
         ip = '##.##.##.##';
     var divId = Math.floor((Math.random() * 999999) + 1);
+    var collapsedDiv = '';
+    if (isCollapsed)
+        collapsedDiv = ' in';
 
     var hostPanel =
         '<div class="list-group-item small">' +
@@ -255,7 +280,7 @@ function prepareEnvEditorHostPanelGroup(listId, ip) {
         '<a id="envEditRemoveHostBtn" href="#" class="btn btn-xs fa fa-minus" style="text-decoration: none; vertical-align: top; margin-top: 0px;") />' +
         '</div>' +
         '</div>' +
-        '<div class="collapse withIcon" id="' + divId + '">' +
+        '<div class="collapse withIcon' + collapsedDiv + '" id="' + divId + '">' +
         appendNewEnvHostPanel('ddPreDeploy-'+divId, 'Pre-Deploy') +
         appendNewEnvHostPanel('ddOnDeploy-'+divId, 'On-Deploy') +
         appendNewEnvHostPanel('ddPostRelease-'+divId, 'Post-Release') +
@@ -298,10 +323,11 @@ function appendNewEnvHostPanel(divId, title) {
 function appendEnvTaskToList(divId, stage, taskName, taskVars) {
     // Prepare task variables
     var taskVarsStr = '';
-    console.dir(taskVars);
-    $.each(taskVars, function(name, value) {
-        taskVarsStr += '[' + name + ': ' + value + '] ';
-    });
+    if (taskVars) {
+        $.each(taskVars, function(name, value) {
+            taskVarsStr += '[' + name + ': ' + value + '] ';
+        });
+    }
 
     // Prepare panel ID
     var panelId = '';
@@ -325,7 +351,7 @@ function appendEnvTaskToList(divId, stage, taskName, taskVars) {
     // Prepare task
     var task =
         '<li class="list-group-item draggable small ion-drag" id="' + panelId + '-' + taskName + '" data-tasks="' + JSON.stringify(taskVars) + '">' +
-        '  ' + taskName +
+        '  <b>' + taskName + '</b>' +
         '  <i class="taskVars" style="font-style: italic;">' + taskVarsStr + '</i>'
     '</li>';
 
