@@ -17,7 +17,7 @@ function resetEnvEditorPanels() {
  */
 function setupEnvEditor() {
     /*
-     * Adjust text inline edits
+     * Adjust General Env Editor Text Inline Edits
      */
     $(".inlineEdit.envEditorInline").each(function (index, el) {
         inlineEditables[$(el).attr('id')] = $(this).editable({
@@ -35,7 +35,7 @@ function setupEnvEditor() {
     });
 
     /*
-     * Adjust Host ip inline edits
+     * Adjust Host IP Inline Edits
      */
     $(".inlineEdit.envEditorInlineHosts").each(function (index, el) {
         inlineEditables[$(el).attr('id')] = $(this).editable({
@@ -51,7 +51,28 @@ function setupEnvEditor() {
     });
 
     /*
-     * Init Special Inline Editables
+     * Adjust Task Variable Inline Edits
+     */
+    $(".inlineEdit.taskVarEdit").each(function (index, el) {
+        $(this).editable({
+            mode: 'popup',
+            success: function(response, newValue) {
+                // On success replace appropriate string in raw editor
+                var oldValue = $(this).editable('getValue', true);
+                var taskName = $(el).data('taskname');
+                var varName = $(el).attr('name');
+                console.debug(taskName, varName, oldValue, newValue);
+                // TODO: Replace in raw editor
+                //replaceInCodemirrorCode(oldValue, newValue);
+
+                // Refresh drag & drop panels
+                initDragDrops();
+            }
+        });
+    });
+
+    /*
+     * Init Special Inline Editables with Element IDs
      */
     $('#deployStrategy').editable({
         value: 'rsync',
@@ -163,16 +184,21 @@ function updateEnvEditorUI(envFileData) {
         });
 
         // TODO: Handle add & remove of hosts!
-
-        // Attach jQuery Sortable scripts to new elements
-        setupEnvEditor();
     }
 
-    // TODO: Section - Tasks
+    // Section - Tasks
     if (env.tasks) {
         // Do for each stage
         appendTaskListEnvEditor(env.tasks, '');
+
+        // Uncollapse if no globals tasks
+        if (isArrayContentsEmpty(env.tasks))
+            $('#envEditTasksPanel').collapse('hide');
     }
+
+    // Refresh dynamic DOMs
+    setupEnvEditor();
+    initDragDrops();
 }
 
 /**
@@ -216,7 +242,7 @@ function clearDragDropTrash(trashId) {
  * Init Drag & Drop Sortables
  */
 function initDragDrops() {
-    $("ol.dragdrop#ddAvailableTasks").sortable({
+    var availableTasksDD = $("ol.dragdrop#ddAvailableTasks").sortable({
         group: "tasks",
         drop: false,
         drag: true,
@@ -233,14 +259,21 @@ function initDragDrops() {
         drop: true,
         drag: true,
         pullPlaceholder: true,
-        placeholder: '<li class="list-group-item-success" />'
-    }).disableSelection();
+        placeholder: '<li class="list-group-item-success" />',
+        onDrop: function (item, container, _super) {
+            // TODO: On tasks change update raw editor
+            var data = this.sortable("serialize").get();
+            var jsonString = JSON.stringify(data, null, ' ');
+            console.debug(jsonString);
+            _super(item, container)
+        }
+    });
 
     $("ol.dragdrop#ddTrash").sortable({
         group: "tasks",
         drop: true,
         drag: false,
-        onDrop: function (item, container, _super, event) {
+        onDrop: function (item, container, _super) {
             // Remove the element dropped on trash
             console.log("will remove:", item);
             item.remove();
@@ -248,6 +281,7 @@ function initDragDrops() {
         }
     }).disableSelection();
 
+    // Deprecated
     $("ol.dragdrop#ddHosts").sortable({
         group: "hosts",
         drop: true,
@@ -325,7 +359,11 @@ function appendEnvTaskToList(divId, stage, taskName, taskVars) {
     var taskVarsStr = '';
     if (taskVars) {
         $.each(taskVars, function(name, value) {
-            taskVarsStr += '[' + name + ': ' + value + '] ';
+            taskVarsStr += '[' + name + ': ' +
+                            '<a class="inlineEdit taskVarEdit" href="#" name="' + name + ': " data-taskname="' + taskName + '">' +
+                                value +
+                            '</a>' +
+                        '] ';
         });
     }
 

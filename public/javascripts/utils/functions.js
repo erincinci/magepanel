@@ -535,6 +535,21 @@ function updateStatsComponents(selectedFrom, selectedTo) {
 }
 
 /**
+ * Check if array contents is empty or not
+ * @param arr
+ * @returns {boolean}
+ */
+function isArrayContentsEmpty(arr) {
+    var isEmpty = true;
+    $.each(arr, function(i, el) {
+        if (el instanceof Object)
+            isEmpty = false;
+    });
+
+    return isEmpty;
+}
+
+/**
  * jQuery Blink Effect
  */
 // Source: http://www.antiyes.com/jquery-blink-plugin
