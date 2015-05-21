@@ -45,3 +45,4 @@ Enjoy!
 ## NPM Status
 
 [![NPM](https://nodei.co/npm/magepanel.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/magepanel/)
+[![NPM](https://nodei.co/npm-dl/magepanel.png?height=3)](https://nodei.co/npm/kafka-node/)
