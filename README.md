@@ -4,6 +4,7 @@
 [![Release](http://img.shields.io/github/release/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/releases)
 [![Issues](http://img.shields.io/github/issues/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/issues?q=is%3Aopen)
 [![Issues](http://img.shields.io/badge/license-GNU-red.svg)](https://github.com/erincinci/magepanel/blob/master/LICENSE)
+[![bitHound Score](https://www.bithound.io/github/erincinci/magepanel/badges/score.svg)](https://www.bithound.io/github/erincinci/magepanel)
 
 Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 
