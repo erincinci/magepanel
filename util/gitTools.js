@@ -188,6 +188,20 @@ exports.pull = function performPull(dir, cb) {
 };
 
 /**
+ * Perform NPM Install command on directory
+ * @param dir
+ * @param cb
+ */
+exports.npmInstall = function npmInstall(dir, cb) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && npm install', function (err, stdout, stderr) {
+        if (err) return cb(err.stack);
+        if (stderr) return cb(stderr);
+
+        cb(null, stdout.trim());
+    });
+};
+
+/**
  * Perform GIT Commit command on project dir with user message
  * @param dir
  * @param msg

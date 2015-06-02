@@ -9,6 +9,7 @@ var mage = require('./routes/mage');
 var mageLogs = require('./routes/mageLogs');
 var tags = require('./routes/tags');
 var setup = require('./routes/setup');
+var stats = require('./routes/stats');
 var http = require('http');
 var path = require('path');
 
@@ -71,6 +72,11 @@ if (app.get('env') == 'development') {
 app.get('/', routes.index); // Index
 app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
 
+// Stats
+app.io.route('getStats', stats.getStats); // Get stats with Socket.IO
+app.io.route('increaseWorkflowsRunStat', stats.increaseWorkflowsRun); // Increase Workflows Run Counter with Socket.IO
+app.io.route('clearStatsDB', stats.clearAllStats); // Clear all stats DB with Socket.IO
+
 // MagePanel App Setup
 app.get('/setup', setup.index); // App setup
 app.post('/setup/save', setup.save); // Setup save
@@ -121,4 +127,8 @@ app.post('/tags/delete', tags.delete); // Delete tag
  */
 app.listen(app.get('port'), function(){
   console.t().info('MagePanel started on port ' + app.get('port'));
+
+    // Collect Statistics every X minutes
+    Common.stats.cron(Common.config.stats.updateRate);
 });
+

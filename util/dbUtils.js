@@ -31,3 +31,27 @@ exports.cleanResult = function(result) {
     else
         return result;
 }
+
+/**
+ * Clear DB contents
+ * @param db
+ * @param callback
+ */
+exports.clearDB = function(db, callback) {
+    // Select all elements from DB
+    db.all(function(err, elements) {
+        if (err)
+            callback(err)
+
+        // For each element in DB
+        _.each(_.keys(elements), function(key) {
+            // Remove from DB
+            db.remove(key, function (err) {
+                if (err)
+                    console.error("Error while removing document:", err);
+            });
+        });
+
+        callback(null);
+    });
+}

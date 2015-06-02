@@ -1,19 +1,21 @@
 # ![MagePanel Logo](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
+[![wercker status](https://app.wercker.com/status/0e31f751a3c9100051d7624693b68a7d/s "wercker status")](https://app.wercker.com/project/bykey/0e31f751a3c9100051d7624693b68a7d)
 [![Release](http://img.shields.io/github/release/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/releases)
 [![Issues](http://img.shields.io/github/issues/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/issues?q=is%3Aopen)
 [![Issues](http://img.shields.io/badge/license-GNU-red.svg)](https://github.com/erincinci/magepanel/blob/master/LICENSE)
+[![bitHound Score](https://www.bithound.io/github/erincinci/magepanel/badges/score.svg)](https://www.bithound.io/github/erincinci/magepanel)
 
 Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 
 Enjoy!
 
-![Console](http://s4.postimg.org/to4px58m5/console.png)
+![Stats](http://s13.postimg.org/ideg9k8vb/mage_stats.png)
 
-![Projects](http://s4.postimg.org/x6gptj9i5/projects.png)
+![Projects](http://s13.postimg.org/l4xq067dz/mage_projects.png)
 
-![File Editor](http://s4.postimg.org/dakqdzsgt/editor.png)
+![File Editor](http://s13.postimg.org/hp5lqma5j/mage_fileedit.png)
 
-*(Requires [Node](http://nodejs.org/) v0.10.2 or newer)*
+*(Requires [Node](http://nodejs.org/) v0.10 or newer)*
 
 ## Recommended Installation ##
 
@@ -34,7 +36,6 @@ Enjoy!
 ```bash
 >> sudo yum install php-cli
 ```
-Rest of the requirements will be automatically installed with installers provided..
 
 ## Installers ##
 
@@ -44,3 +45,4 @@ Rest of the requirements will be automatically installed with installers provide
 [![Build Status](https://snap-ci.com/erincinci/magepanel/branch/master/build_image)](https://snap-ci.com/erincinci/magepanel/branch/master)
 
 [![NPM](https://nodei.co/npm/magepanel.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/magepanel/)
+[![NPM](https://nodei.co/npm-dl/magepanel.png?height=3)](https://nodei.co/npm/magepanel/)

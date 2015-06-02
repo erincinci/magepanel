@@ -1,6 +1,31 @@
 /**
  * Created by erinci on 27.01.2015.
  */
+// Statistics Page - Button onClick Events ===============================================================
+/**
+ * Clear all stats button
+ */
+$("#clearStatsBtn").click(function() {
+    // Confirm user for action
+    if(confirm("Are you sure to wipe out stats DB? This process is irreversible!")) {
+        // Clear stats DB using Socket.IO call
+        showAjaxLoader();
+        ioSocket.emit('clearStatsDB', {});
+        ioSocket.on('statsCleared', function(response) {
+            // Handle error first
+            if (response.err) {
+                toastr.error(response.msg, 'MagePanel Stats');
+            } else {
+                // Update counters & charts
+                toastr.success(response.msg, 'MagePanel Stats');
+                updateStatsComponents(moment().subtract(29, 'days').format('X'), moment().format('X'));
+            }
+
+            hideAjaxLoader();
+        });
+    }
+});
+
 // Mage Console Page - Button onClick Events =============================================================
 /**
  * Tail latest log button
@@ -162,6 +187,7 @@ $("#mageAddToFlow").click(function() {
                     callback: function(event){
                         if(confirm("Do you really want to execute workflow?")) {
                             $("#clearConsole").trigger('click');
+                            ioSocket.emit('increaseWorkflowsRunStat', {});
                             appendToConsole();
                         }
                     }

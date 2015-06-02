@@ -416,7 +416,7 @@ function switchGitBranch(branchName) {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
             $('#'+selectedProject.id).text($('#'+selectedProject.id).text().replace(/\[.*\]/g, "[" + branchName + "]"));
-            $('#refreshProjectBtn').trigger("click");
+            $('#refreshProjectBtn').click();
             toastr.success(result["message"], 'MagePanel Projects');
         }
     }).error(function() {
@@ -492,6 +492,45 @@ function checkForUpdates() {
 function getRevisionVersion() {
     // Use Socket.IO for getting live application revision version
     ioSocket.emit('revisionVersion');
+}
+
+/**
+ * Update stats page components
+ * @param selectedFrom
+ * @param selectedTo
+ */
+function updateStatsComponents(selectedFrom, selectedTo) {
+    // Prepare date range
+    var fromTimestamp = selectedFrom ? selectedFrom : (new Date(0) / 1000).toFixed(0);
+    var toTimestamp = selectedTo ? selectedTo : (new Date() / 1000).toFixed(0);
+    //console.debug(fromTimestamp + " --> " + toTimestamp);
+
+    // Get stats from backend using socket.io
+    showAjaxLoader();
+    ioSocket.emit('getStats', { from: fromTimestamp, to: toTimestamp });
+    ioSocket.on('statsCalculated', function(stats) {
+        // Error handling
+        if (stats.err) {
+            toastr.warning(stats.err, 'MagePanel Stats');
+            hideAjaxLoader();
+            return;
+        }
+
+        // Update odometers
+        odometers['projectsOdometer'].update(stats.data.numProjects);
+        odometers['tagsOdometer'].update(stats.data.numTags);
+        odometers['envOdometer'].update(stats.data.numEnvs);
+        odometers['tasksOdometer'].update(stats.data.numTasks);
+        odometers['mailsOdometer'].update(stats.data.mailsSent);
+        odometers['workflowsOdometer'].update(stats.data.workflowsRun);
+
+        // Update charts
+        $('.chart-curtain').show();
+        generateDeployPie("deploysPie", stats.data);
+        generateAvgDeployTimeGraph("avgDeployTimeGraph", stats.data);
+
+        hideAjaxLoader();
+    });
 }
 
 /**

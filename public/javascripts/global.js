@@ -7,6 +7,7 @@ var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
 var ioSocket = null;
 var cmdQueue;
+var odometers = [];
 
 // DOM Ready =============================================================
 $(window).load(function() {
@@ -100,6 +101,70 @@ $(document).ready(function() {
     });
     $('#tagEditIcon').on('change', function(e) {
         $('#tagEditIconName').val(e.icon);
+    });
+
+    /**
+     * Bootstrap Odometer Config
+     */
+    $('.odometer').each(function(index) {
+        odometers[this.id] = new Odometer({ el: $('.odometer')[index], value: 0, theme: 'car', format: 'd', animation: 'count' });
+    });
+
+    /**
+     * Stats Page - Update Components
+     */
+    $("#statsComponents").ready(function() {
+        if( $('#statsComponents').length ) {
+            // Init date selector
+            $(function() {
+                $('#statsDateRange span').html(moment().subtract(29, 'days').format('D MMMM, YYYY') + ' - ' + moment().format('D MMMM, YYYY'));
+                $('#statsDateRange').daterangepicker({
+                    format: 'DD/MM/YYYY',
+                    startDate: moment().subtract(29, 'days'),
+                    endDate: moment(),
+                    minDate: '01/01/2013',
+                    maxDate: moment().format('DD/MM/YYYY'),
+                    dateLimit: { months: 24 },
+                    showDropdowns: true,
+                    showWeekNumbers: false,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: false,
+                    ranges: {
+                        'Today': [moment().startOf('day'), moment()],
+                        'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    opens: 'left',
+                    drops: 'down',
+                    buttonClasses: ['btn', 'btn-sm'],
+                    applyClass: 'btn-primary',
+                    cancelClass: 'btn-default',
+                    separator: ' to ',
+                    locale: {
+                        applyLabel: 'Submit',
+                        cancelLabel: 'Cancel',
+                        fromLabel: 'From',
+                        toLabel: 'To',
+                        customRangeLabel: 'Custom',
+                        daysOfWeek: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+                        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        firstDay: 1
+                    }
+                }, function(start, end, label) {
+                    updateStatsComponents(start.format('X'), end.format('X'));
+                    //console.log(start.format('X'), end.format('X'), label);
+                    $('#statsDateRange span').html(start.format('D MMMM, YYYY') + ' - ' + end.format('D MMMM, YYYY'));
+                });
+
+            });
+
+            // Update counters & charts
+            updateStatsComponents(moment().subtract(29, 'days').format('X'), moment().format('X'));
+        }
     });
 });
 
