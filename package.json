@@ -18,7 +18,7 @@
     "url": "https://github.com/erincinci/magepanel.git"
   },
   "main": "app.js",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "scripts": {
     "prestart": "npm install",
     "start": "pm2 start ./node_modules/nodemon/bin/nodemon.js --name MagePanel -- app.js",

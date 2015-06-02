@@ -3,7 +3,7 @@
 
 #define MyAppName "MagePanel"
 #define MyAppShortName "MagePanel"
-#define MyAppVersion "1.4"
+#define MyAppVersion "1.5"
 #define MyAppPublisher "Erinç İnci"
 #define MyAppURL "http://erincinci.github.io/magepanel/l"
 #define MyAppExeName "browser.bat"
