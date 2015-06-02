@@ -10,11 +10,11 @@ Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 
 Enjoy!
 
-![Console](http://s4.postimg.org/to4px58m5/console.png)
+![Stats](http://s13.postimg.org/ideg9k8vb/mage_stats.png)
 
-![Projects](http://s4.postimg.org/x6gptj9i5/projects.png)
+![Projects](http://s13.postimg.org/l4xq067dz/mage_projects.png)
 
-![File Editor](http://s4.postimg.org/dakqdzsgt/editor.png)
+![File Editor](http://s13.postimg.org/hp5lqma5j/mage_fileedit.png)
 
 *(Requires [Node](http://nodejs.org/) v0.10 or newer)*
 
