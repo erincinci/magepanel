@@ -1,43 +1,53 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<!doctype html>
+<html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>MagePanel by erincinci</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name">MagePanel</h1>
-      <h2 class="project-tagline">Deployment Automator</h2>
-      <a href="https://github.com/erincinci/magepanel" class="btn">View on GitHub</a>
-      <a href="https://github.com/erincinci/magepanel/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/erincinci/magepanel/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
-
-    <section class="main-content">
-      <h1>
+    <div class="wrapper">
+      <header>
+        <h1>MagePanel</h1>
+        <p>Deployment Automator</p>
+        <p class="view"><a href="https://github.com/erincinci/magepanel">View the Project on GitHub <small>erincinci/magepanel</small></a></p>
+        <ul>
+          <li><a href="https://github.com/erincinci/magepanel/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/erincinci/magepanel/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/erincinci/magepanel">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
 <a id="-magepanel" class="anchor" href="#-magepanel" aria-hidden="true"><span class="octicon octicon-link"></span></a>
 <img src="http://s23.postimg.org/t7m6upgzb/magepanel.png" alt="MagePanel Logo"> MagePanel</h1>
 
-<p><a href="https://github.com/erincinci/magepanel/releases"><img src="http://img.shields.io/github/release/erincinci/magepanel.svg" alt="Release"></a>
+<p><a href="https://app.wercker.com/project/bykey/0e31f751a3c9100051d7624693b68a7d"><img src="https://app.wercker.com/status/0e31f751a3c9100051d7624693b68a7d/s" alt="wercker status" title="wercker status"></a>
+<a href="https://github.com/erincinci/magepanel/releases"><img src="http://img.shields.io/github/release/erincinci/magepanel.svg" alt="Release"></a>
 <a href="https://github.com/erincinci/magepanel/issues?q=is%3Aopen"><img src="http://img.shields.io/github/issues/erincinci/magepanel.svg" alt="Issues"></a>
-<a href="https://github.com/erincinci/magepanel/blob/master/LICENSE"><img src="http://img.shields.io/badge/license-GNU-red.svg" alt="Issues"></a></p>
+<a href="https://github.com/erincinci/magepanel/blob/master/LICENSE"><img src="http://img.shields.io/badge/license-GNU-red.svg" alt="Issues"></a>
+<a href="https://www.bithound.io/github/erincinci/magepanel"><img src="https://www.bithound.io/github/erincinci/magepanel/badges/score.svg" alt="bitHound Score"></a></p>
 
 <p>Web-based user interface for <a href="http://magephp.com/">Magallanes Deployment Tool</a>.</p>
 
 <p>Enjoy!</p>
 
-<p><img src="http://s4.postimg.org/to4px58m5/console.png" alt="Console"></p>
+<p><img src="http://s13.postimg.org/ideg9k8vb/mage_stats.png" alt="Stats"></p>
 
-<p><img src="http://s4.postimg.org/x6gptj9i5/projects.png" alt="Projects"></p>
+<p><img src="http://s13.postimg.org/l4xq067dz/mage_projects.png" alt="Projects"></p>
 
-<p><img src="http://s4.postimg.org/dakqdzsgt/editor.png" alt="File Editor"></p>
+<p><img src="http://s13.postimg.org/hp5lqma5j/mage_fileedit.png" alt="File Editor"></p>
 
-<p><em>(Requires <a href="http://nodejs.org/">Node</a> v0.10.2 or newer)</em></p>
+<p><em>(Requires <a href="http://nodejs.org/">Node</a> v0.10 or newer)</em></p>
 
 <h2>
 <a id="recommended-installation" class="anchor" href="#recommended-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recommended Installation</h2>
@@ -62,8 +72,6 @@
 
 <div class="highlight highlight-bash"><pre><span class="pl-k">&gt;&gt;</span> sudo yum install php-cli</pre></div>
 
-<p>Rest of the requirements will be automatically installed with installers provided..</p>
-
 <h2>
 <a id="installers" class="anchor" href="#installers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installers</h2>
 
@@ -76,17 +84,16 @@
 
 <p><a href="https://snap-ci.com/erincinci/magepanel/branch/master"><img src="https://snap-ci.com/erincinci/magepanel/branch/master/build_image" alt="Build Status"></a></p>
 
-<p><a href="https://nodei.co/npm/magepanel/"><img src="https://nodei.co/npm/magepanel.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a></p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/erincinci/magepanel">MagePanel</a> is maintained by <a href="https://github.com/erincinci">erincinci</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-            <script type="text/javascript">
+<p><a href="https://nodei.co/npm/magepanel/"><img src="https://nodei.co/npm/magepanel.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM"></a>
+<a href="https://nodei.co/npm/magepanel/"><img src="https://nodei.co/npm-dl/magepanel.png?height=3" alt="NPM"></a></p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/erincinci">erincinci</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -99,4 +106,3 @@
 
   </body>
 </html>
-
