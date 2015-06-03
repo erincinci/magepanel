@@ -37,13 +37,6 @@
                             option(value='null', selected) [Optional] Select Project Tag
                             for tag in tags
                                 option(value= tag.id, data-icon= tag.icon) #{tag.name}
-                    p.input-group
-                        span.input-group-addon
-                            i.icon.ion-briefcase
-                        select.selectpicker#projectInitImport(name='projectInitImport', data-width='auto')
-                            option(value='null', selected) [Optional] Select project to import from
-                            for project in projects
-                                option(value= project.dir)= project.name
                 .modal-footer
                     button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal') Discard
                     button.btn.btn-primary.glyphicon.glyphicon-floppy-disk(type='submit') Save

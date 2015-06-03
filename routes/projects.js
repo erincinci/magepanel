@@ -13,7 +13,7 @@ var title = "Projects";
 /**
  * [Backward Compatibility]
  * Refresh old project with adding new info
- * @param projects
+ * @param project
  */
 function fixProject(project) {
     project = Common.dbUtils.cleanResult(project);
@@ -152,7 +152,6 @@ exports.refresh = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -201,7 +200,6 @@ exports.gitRemoteBranches = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -237,7 +235,6 @@ exports.gitSwitchBranch = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -273,7 +270,6 @@ exports.gitIsDirty = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -313,7 +309,6 @@ exports.gitCommitPush = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -357,7 +352,6 @@ exports.gitPull = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -470,9 +464,9 @@ exports.addTaskFile = function(req, res) {
     var templateFile;
 
     if (rollbackAware == "on") {
-        var templateFile = templatePath + "Task-RollbackAware.php";
+        templateFile = templatePath + "Task-RollbackAware.php";
     }else{
-        var templateFile = templatePath + "Task.php";
+        templateFile = templatePath + "Task.php";
     }
 
     Common.projectsDB.get(selectedId, function (err, project) {
@@ -508,7 +502,6 @@ exports.detail = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send("ID not found!");
-        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
@@ -522,10 +515,11 @@ exports.detail = function(req, res) {
             project = Common.dbUtils.cleanResult(project);
             var projectEnvSize = Common._.size(project.envs);
             var projectTaskSize = Common._.size(project.tasks);
+            var reportingStatus;
             if (project.reportingEnabled)
-                var reportingStatus = "<i class='icon ion-checkmark'>";
+                reportingStatus = "<i class='icon ion-checkmark'>";
             else
-                var reportingStatus = "<i class='icon ion-close'>";
+                reportingStatus = "<i class='icon ion-close'>";
 
             //var details = project.toString();
             var details =
@@ -589,7 +583,6 @@ exports.getProject = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send('null');
-        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
@@ -616,7 +609,6 @@ exports.envs = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send("ID not found!");
-        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
