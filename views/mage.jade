@@ -8,6 +8,8 @@ block content
             strong Cygwin directory not found!
                 | Please fix it in
                 a(href='/setup')  Application Setup
+
+    // Button group
     p
         table
             tr
@@ -58,9 +60,15 @@ block content
                         button#mageRollback.btn.btn-default.btn-info.ion-reply-all(type='button', disabled)  Rollback
                         button#mageAddToFlow.btn.btn-default.btn-success.ion-gear-a(type='button', title='Add to workflow', disabled)  Queue
                         button#mageDeploy.btn.btn-default.btn-success.ion-paper-airplane(type='button', title='Deploy project to selected environment', disabled)  Deploy
+
+    // Progress bar
+    .progress
+        #mageProgressBar.progress-bar.progress-bar-striped.active(style="width: 0%;")
+            span.sr-only Action progress
+
     // Console Window
     .bs-callout.bs-callout-info#consoleFrame(Style='height: 65%; overflow: auto;')
-        p#console!= content
+        p(style="font-family: Lucida Console,Lucida Sans Typewriter,monaco,Bitstream Vera Sans Mono,monospace;")#console!= content
     .spacer
         br
 
