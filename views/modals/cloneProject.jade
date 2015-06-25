@@ -17,7 +17,7 @@
                     p.input-group
                         span.input-group-addon
                             i.icon.ion-folder
-                        input.form-control#projectDir(name='projectDir', type='text', placeholder='Enter destination directory (Project named subfolder will be created on clone)')
+                        input.form-control#projectCloneDir(name='projectDir', type='text', placeholder='Enter destination directory (Project named subfolder will be created on clone)')
                     p.input-group
                         span.input-group-addon
                             i.icon.ion-folder
@@ -25,21 +25,21 @@
                     p.input-group
                         span.input-group-addon
                             i.icon.ion-android-information
-                        input.form-control#projectName(name='projectName', type='text', placeholder='Enter project display name')
+                        input.form-control#projectCloneName(name='projectName', type='text', placeholder='Enter project display name')
                     p.input-group
                         span.input-group-addon
                             i.icon.ion-android-mail
-                        input.form-control#projectMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
+                        input.form-control#projectCloneMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
                     p.input-group
                         span.input-group-addon
                             i.icon.ion-speakerphone
-                        select.selectpicker#projectReportingSwitch(name='projectReportingEnabled', data-width='auto')
+                        select.selectpicker#projectCloneReportingSwitch(name='projectReportingEnabled', data-width='auto')
                             option(value='On', selected) Automatic Reporting On
                             option(value='Off') Automatic Reporting Off
                     p.input-group
                         span.input-group-addon
                             i.icon.ion-pricetag
-                        select.selectpicker#projectTagId(name='projectTagId', data-width='auto')
+                        select.selectpicker#projectCloneTagId(name='projectTagId', data-width='auto')
                             option(value='null', selected) [Optional] Select Project Tag
                             for tag in tags
                                 option(value= tag.id, data-icon= tag.icon) #{tag.name}

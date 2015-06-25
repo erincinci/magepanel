@@ -189,11 +189,23 @@ function getSocketIOMessages() {
                 // Error handling
                 toastr.warning(data.message, 'MagePanel GIT');
             } else {
-                // TODO: If GIT Clone is successful, check if we should add or init project in DB
+                // GIT Clone Success
                 toastr.success(data.message, 'MagePanel GIT');
                 $('#projectDir').val(data.path);
-                console.debug($(this).serialize());
-                addProjectToDB($(this).serialize());
+                var cloneFormData = {
+                    projectDir: data.path,
+                    projectName: $("#projectCloneName").val(),
+                    projectMail: $("#projectCloneMail").val(),
+                    projectReportingSwitch: $("#projectCloneReportingSwitch").val(),
+                    projectTagId: $("#projectCloneTagId").val()
+                };
+
+                // TODO: Check if we should add or init project in DB
+                var serialized = '';
+                for(var key in cloneFormData)
+                    serialized += key + '=' + cloneFormData[key] + '&';
+                serialized = serialized.slice(0, serialized.length - 1);
+                addProjectToDB(serialized);
             }
         });
     }

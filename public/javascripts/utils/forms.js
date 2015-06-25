@@ -43,8 +43,7 @@ $('#cloneProjectForm').submit(function(event) {
     }
 
     // Perform GIT Clone via Socket.IO
-    console.debug(remoteUrl, $('#projectDir').val(), $('#projectSubDir').val());
-    ioSocket.emit('gitClone', { remoteUrl: remoteUrl, destDir: $('#projectDir').val(), destFolder: $('#projectSubDir').val() });
+    ioSocket.emit('gitClone', { remoteUrl: remoteUrl, destDir: $('#projectCloneDir').val(), destFolder: $('#projectSubDir').val() });
     showAjaxLoader();
 });
 

@@ -90,6 +90,7 @@ exports.index = function(req, res) {
 exports.add = function(req, res) {
     // Get form data
     var data = req.body;
+    console.debug(data);
 
     // Check if project dir contains .mage directory
     if (! fs.existsSync(data['projectDir']+'/.mage')) {
@@ -350,7 +351,6 @@ exports.gitCommitPush = function(req, res) {
  */
 exports.gitClone = function(req) {
     // Get form data
-    console.debug("Got Socket.IO params for GIT clone: ", req.data);
     var destDir = path.normalize(req.data.destDir);
     var projectFolder = req.data.destFolder;
     var projectDir = path.join(destDir, projectFolder);
@@ -376,7 +376,7 @@ exports.gitClone = function(req) {
             console.error("Error cloning GIT repo " + remoteUrl + " to destination dir " + destDir + ":", err);
             req.io.emit('gitCloneResponse', { err: true, message: "There was an error cloning GIT repository: " + err.message, path: null });
         } else {
-            req.io.emit('gitCloneResponse', { err: false, message: "GIT Clone Success! : " + consoleOutput + err.message, path: projectDir });
+            req.io.emit('gitCloneResponse', { err: false, message: "GIT Clone Success! : " + consoleOutput, path: projectDir });
         }
     });
 };
