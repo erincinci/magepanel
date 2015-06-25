@@ -24,6 +24,13 @@ block content
                 data-target='#initProjectModal',
                 type='button',
                 style='margin-right:10px')
+        button#gitCloneBtn.btn.btn-default.icon.ion-fork-repo(
+                rel='tooltip',
+                data-original-title='GIT clone project',
+                data-toggle='modal',
+                data-target='#cloneProjectModal',
+                type='button',
+                style='margin-right:10px')
         .label.label-default
             | Edit &nbsp;
             i.icon.ion-arrow-right-a
@@ -54,19 +61,19 @@ block content
         | &nbsp;
         button#gitPullProjectBtn.btn.btn-default.btn-success.icon.ion-arrow-down-c(
                 rel='tooltip',
-                data-original-title='GIT Pull',
+                data-original-title='Pull',
                 type='button',
                 style='margin-right:10px',
                 disabled)
         button#gitCommitPushProjectBtn.btn.btn-default.btn-success.icon.ion-arrow-up-c(
                 rel='tooltip',
-                data-original-title='GIT Commit & Push',
+                data-original-title='Commit & Push',
                 type='button',
                 style='margin-right:10px',
                 disabled)
         button#gitSwitchBranchProjectBtn.btn.btn-warning.btn-success.icon.ion-network(
                 rel='tooltip',
-                data-original-title='GIT Switch Branch',
+                data-original-title='Switch Branch',
                 type='button',
                 data-placement='bottom',
                 data-toggle='popover',
@@ -164,6 +171,7 @@ block content
     // Modal Windows
     include modals/initProject
     include modals/addProject
+    include modals/cloneProject
     include modals/editProject
     include modals/addProjectEnv
     include modals/addProjectTask

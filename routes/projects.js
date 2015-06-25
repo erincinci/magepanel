@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 var Common = require('../common');
+var path = require('path');
 var fs = require('fs');
 var tempWrite = require('../util/temp-write');
 var gitTools = require('../util/gitTools');
@@ -340,6 +341,44 @@ exports.gitCommitPush = function(req, res) {
             });
         });
     }
+};
+
+/**
+ * GIT Clone Remote Project
+ * @param req
+ * @param res
+ */
+exports.gitClone = function(req) {
+    // Get form data
+    console.debug("Got Socket.IO params for GIT clone: ", req.data);
+    var destDir = path.normalize(req.data.destDir);
+    var projectFolder = req.data.destFolder;
+    var projectDir = path.join(destDir, projectFolder);
+    var remoteUrl = req.data.remoteUrl;
+
+    // Check if destination directory is available
+    if (! fs.existsSync(destDir)) {
+        console.warn("Destination dir does not exist for GIT cloning: " + destDir);
+        req.io.emit('gitCloneResponse', { err: true, message: "Destination directory does not exist!", path: null });
+        return;
+    }
+
+    // Check if project folder doesn't exist
+    if (fs.existsSync(projectDir)) {
+        console.warn("Project name folder must not exist for GIT cloning: " + projectDir);
+        req.io.emit('gitCloneResponse', { err: true, message: "Project name folder already exists!", path: null });
+        return;
+    }
+
+    // GIT Clone project into destination directory
+    gitTools.clone(destDir, projectFolder, remoteUrl, function(err, consoleOutput) {
+        if (err) {
+            console.error("Error cloning GIT repo " + remoteUrl + " to destination dir " + destDir + ":", err);
+            req.io.emit('gitCloneResponse', { err: true, message: "There was an error cloning GIT repository: " + err.message, path: null });
+        } else {
+            req.io.emit('gitCloneResponse', { err: false, message: "GIT Clone Success! : " + consoleOutput + err.message, path: projectDir });
+        }
+    });
 };
 
 /**

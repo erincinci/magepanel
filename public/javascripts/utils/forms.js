@@ -30,6 +30,25 @@ $('#addProjectForm').submit(function(event) {
 });
 
 /**
+ * Submit GIT clone project form
+ */
+$('#cloneProjectForm').submit(function(event) {
+    event.preventDefault();
+
+    // Check URL validity first
+    var remoteUrl = $('#remoteUrl').val();
+    if (! isGitUrlValid(remoteUrl)) {
+        toastr.warning('Please enter a valid URL for cloning', 'MagePanel Projects');
+        return;
+    }
+
+    // Perform GIT Clone via Socket.IO
+    console.debug(remoteUrl, $('#projectDir').val(), $('#projectSubDir').val());
+    ioSocket.emit('gitClone', { remoteUrl: remoteUrl, destDir: $('#projectDir').val(), destFolder: $('#projectSubDir').val() });
+    showAjaxLoader();
+});
+
+/**
  * Submit edit project form
  */
 $('#editProjectForm').submit(function(event) {

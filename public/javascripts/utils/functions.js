@@ -72,9 +72,9 @@ function appendToConsole() {
  */
 function getSocketIOMessages() {
     // Get live response for Mage Console
-    if ($('#console').length) {
+    var mageConsole = $('#console');
+    if (mageConsole.length) {
         console.debug("Mage Console Socket.IO activated..");
-        var mageConsole = $('#console');
         var mageConsoleFrame = $('#consoleFrame');
         var progressBar = $('#mageProgressBar');
         ioSocket.on('cmdResponse', function(data) {
@@ -118,9 +118,9 @@ function getSocketIOMessages() {
     }
 
     // Get live response for Log tails
-    if ($('#logView').length) {
+    var logView = $('#logView');
+    if (logView.length) {
         console.debug("Log Tail Socket.IO activated..");
-        var logView = $('#logView');
         // Get tail data from socket
         ioSocket.on('logTailContent', function(data) {
             hideAjaxLoader();
@@ -178,6 +178,25 @@ function getSocketIOMessages() {
             $('#updateOk').attr('data-original-title', 'MagePanel ' + data.version);
         }
     });
+
+    // Get live response for GIT clone new project
+    var cloneProjectModal = $('#cloneProjectModal');
+    if (cloneProjectModal.length) {
+        console.debug("GIT clone Socket.IO activated..");
+        ioSocket.on('gitCloneResponse', function(data) {
+            hideAjaxLoader();
+            if (data.err) {
+                // Error handling
+                toastr.warning(data.message, 'MagePanel GIT');
+            } else {
+                // TODO: If GIT Clone is successful, check if we should add or init project in DB
+                toastr.success(data.message, 'MagePanel GIT');
+                $('#projectDir').val(data.path);
+                console.debug($(this).serialize());
+                addProjectToDB($(this).serialize());
+            }
+        });
+    }
 }
 
 /**
@@ -552,6 +571,17 @@ function updateStatsComponents(selectedFrom, selectedTo) {
 
         hideAjaxLoader();
     });
+}
+
+/**
+ * Check if string is a valid GIT URL
+ * @param str
+ * @returns {boolean}
+ * @constructor
+ */
+function isGitUrlValid(str) {
+    var pattern = new RegExp('((git|ssh|http(s)?)|(git@[\\w\\.]+))(:(//)?)([\\w\\.@\\:/\\-~]+)(\\.git)(/)?');
+    return pattern.test(str);
 }
 
 /**

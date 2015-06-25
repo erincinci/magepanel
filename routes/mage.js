@@ -257,7 +257,7 @@ exports.command = function(req) {
                                 project.name,
                                 environment,
                                 releaseId,
-                                Common.username + ' (OS: ' + Common.os + ', IP: ' + Common.ip.address() + ')',
+                                Common.username + ' (Hostname: ' + req.hostname + ', IP: ' + req.ip + ')',
                                 new Date().toLocaleString(),
                                 consoleOutput
                             );
