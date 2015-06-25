@@ -5,6 +5,7 @@
 [![Issues](http://img.shields.io/github/issues/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/issues?q=is%3Aopen)
 [![Issues](http://img.shields.io/badge/license-GNU-red.svg)](https://github.com/erincinci/magepanel/blob/master/LICENSE)
 [![bitHound Score](https://www.bithound.io/github/erincinci/magepanel/badges/score.svg)](https://www.bithound.io/github/erincinci/magepanel)
+[![PayPayl donate button](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SZ4A3B92ZF7LE "Donate once-off to MagePanel project using Paypal")
 
 Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 
@@ -46,11 +47,3 @@ Enjoy!
 
 [![NPM](https://nodei.co/npm/magepanel.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/magepanel/)
 [![NPM](https://nodei.co/npm-dl/magepanel.png?height=3)](https://nodei.co/npm/magepanel/)
-
-## Donation
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="SZ4A3B92ZF7LE">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/tr_TR/i/scr/pixel.gif" width="1" height="1">
-</form>
