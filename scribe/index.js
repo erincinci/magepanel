@@ -310,7 +310,7 @@ self.express.controlPanel = function() {
 
             res.writeHead(200, {
                 'Content-Length': fs.statSync(filepath)["size"],
-                'Content-Type': 'text/plain',
+                'Content-Type': 'text/plain'
             });
 
             stream.pipe(res);
