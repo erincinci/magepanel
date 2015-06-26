@@ -592,7 +592,7 @@ function updateStatsComponents(selectedFrom, selectedTo) {
  * @constructor
  */
 function isGitUrlValid(str) {
-    var pattern = new RegExp('((git|ssh|http(s)?)|(git@[\\w\\.]+))(:(//)?)([\\w\\.@\\:/\\-~]+)(\\.git)(/)?');
+    var pattern = new RegExp('((git|ssh|http(s)?)|(git@[a-z0-9_.\\-\\.]+))(:(//)?)([a-z0-9_.\\-\\.@\\:/\\-~]+)');
     return pattern.test(str);
 }
 
