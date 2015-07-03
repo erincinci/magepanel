@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/erincinci/magepanel.png?label=ready&title=Ready)](https://waffle.io/erincinci/magepanel)
 # ![MagePanel Logo](http://s23.postimg.org/t7m6upgzb/magepanel.png) MagePanel #
 [![wercker status](https://app.wercker.com/status/0e31f751a3c9100051d7624693b68a7d/s "wercker status")](https://app.wercker.com/project/bykey/0e31f751a3c9100051d7624693b68a7d)
 [![Release](http://img.shields.io/github/release/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/releases)
