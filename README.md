@@ -2,8 +2,12 @@
 [![wercker status](https://app.wercker.com/status/0e31f751a3c9100051d7624693b68a7d/s "wercker status")](https://app.wercker.com/project/bykey/0e31f751a3c9100051d7624693b68a7d)
 [![Release](http://img.shields.io/github/release/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/releases)
 [![Issues](http://img.shields.io/github/issues/erincinci/magepanel.svg)](https://github.com/erincinci/magepanel/issues?q=is%3Aopen)
-[![Issues](http://img.shields.io/badge/license-GNU-red.svg)](https://github.com/erincinci/magepanel/blob/master/LICENSE)
+[![Stories in Ready](https://badge.waffle.io/erincinci/magepanel.png?label=ready&title=Ready tasks)](https://waffle.io/erincinci/magepanel)
+[![License](http://img.shields.io/badge/license-GNU-red.svg)](https://github.com/erincinci/magepanel/blob/master/LICENSE)
 [![bitHound Score](https://www.bithound.io/github/erincinci/magepanel/badges/score.svg)](https://www.bithound.io/github/erincinci/magepanel)
+[![PayPayl donate button](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SZ4A3B92ZF7LE "Donate once-off to MagePanel project using Paypal")
+
+[![Join the chat at https://gitter.im/erincinci/magepanel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/erincinci/magepanel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
 

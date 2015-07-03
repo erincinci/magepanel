@@ -128,6 +128,25 @@ exports.checkoutBranch = function checkoutBranch(dir, branchName, cb) {
 };
 
 /**
+ * GIT Clone new project from address to specified directory
+ * @param dir
+ * @param projectName
+ * @param remoteAddress
+ * @param cb
+ */
+exports.clone = function clone(dir, projectName, remoteAddress, cb) {
+    console.debug('cd ' + path.resolve(__dirname, dir) + ' && git clone ' + remoteAddress + ' ' + projectName);
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git clone ' + remoteAddress + ' ' + projectName, function (err, stdout, stderr) {
+        if (err)
+            cb(err);
+        else if (stderr)
+            cb(stderr);
+        else
+            cb(null, stdout.trim());
+    });
+};
+
+/**
  * Run git branch -r command on project dir (Async)
  * @param dir
  * @param cb

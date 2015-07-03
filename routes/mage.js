@@ -251,13 +251,14 @@ exports.command = function(req) {
                             var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
 
                             // Get mail parameters from project
+                            var clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
                             Common.mailUtils.sendSuccessMail(
                                 req.io,
                                 project.mailAddress,
                                 project.name,
                                 environment,
                                 releaseId,
-                                Common.username + ' (OS: ' + Common.os + ', IP: ' + Common.ip.address() + ')',
+                                Common.username + ' (Hostname: ' + request.headers.host + ', IP: ' + clientIp + ')',
                                 new Date().toLocaleString(),
                                 consoleOutput
                             );

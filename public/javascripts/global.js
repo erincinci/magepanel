@@ -7,6 +7,7 @@ var showAjaxLoaderFlag = true;
 var ajaxTimeout = 600;
 var ioSocket = null;
 var cmdQueue;
+var cmdQueueSize = 0;
 var odometers = [];
 
 // DOM Ready =============================================================

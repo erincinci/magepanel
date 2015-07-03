@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 var Common = require('../common');
+var path = require('path');
 var fs = require('fs');
 var tempWrite = require('../util/temp-write');
 var gitTools = require('../util/gitTools');
@@ -13,7 +14,7 @@ var title = "Projects";
 /**
  * [Backward Compatibility]
  * Refresh old project with adding new info
- * @param projects
+ * @param project
  */
 function fixProject(project) {
     project = Common.dbUtils.cleanResult(project);
@@ -89,6 +90,7 @@ exports.index = function(req, res) {
 exports.add = function(req, res) {
     // Get form data
     var data = req.body;
+    console.debug(data);
 
     // Check if project dir contains .mage directory
     if (! fs.existsSync(data['projectDir']+'/.mage')) {
@@ -152,7 +154,6 @@ exports.refresh = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -201,7 +202,6 @@ exports.gitRemoteBranches = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -237,7 +237,6 @@ exports.gitSwitchBranch = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -273,7 +272,6 @@ exports.gitIsDirty = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -313,7 +311,6 @@ exports.gitCommitPush = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -348,6 +345,43 @@ exports.gitCommitPush = function(req, res) {
 };
 
 /**
+ * GIT Clone Remote Project
+ * @param req
+ * @param res
+ */
+exports.gitClone = function(req) {
+    // Get form data
+    var destDir = path.normalize(req.data.destDir);
+    var projectFolder = req.data.destFolder;
+    var projectDir = path.join(destDir, projectFolder);
+    var remoteUrl = req.data.remoteUrl;
+
+    // Check if destination directory is available
+    if (! fs.existsSync(destDir)) {
+        console.warn("Destination dir does not exist for GIT cloning: " + destDir);
+        req.io.emit('gitCloneResponse', { err: true, message: "Destination directory does not exist!", path: null });
+        return;
+    }
+
+    // Check if project folder doesn't exist
+    if (fs.existsSync(projectDir)) {
+        console.warn("Project name folder must not exist for GIT cloning: " + projectDir);
+        req.io.emit('gitCloneResponse', { err: true, message: "Project name folder already exists!", path: null });
+        return;
+    }
+
+    // GIT Clone project into destination directory
+    gitTools.clone(destDir, projectFolder, remoteUrl, function(err, consoleOutput) {
+        if (err) {
+            console.error("Error cloning GIT repo " + remoteUrl + " to destination dir " + destDir + ":", err);
+            req.io.emit('gitCloneResponse', { err: true, message: "There was an error cloning GIT repository: " + err.message, path: null });
+        } else {
+            req.io.emit('gitCloneResponse', { err: false, message: "GIT Clone Success! : " + consoleOutput, path: projectDir });
+        }
+    });
+};
+
+/**
  * GIT Pull Project
  * @param req
  * @param res
@@ -357,7 +391,6 @@ exports.gitPull = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send({"warn": true, "message": "ID not found!"});
-        return;
     } else {
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
@@ -470,9 +503,9 @@ exports.addTaskFile = function(req, res) {
     var templateFile;
 
     if (rollbackAware == "on") {
-        var templateFile = templatePath + "Task-RollbackAware.php";
+        templateFile = templatePath + "Task-RollbackAware.php";
     }else{
-        var templateFile = templatePath + "Task.php";
+        templateFile = templatePath + "Task.php";
     }
 
     Common.projectsDB.get(selectedId, function (err, project) {
@@ -508,7 +541,6 @@ exports.detail = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send("ID not found!");
-        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
@@ -522,10 +554,11 @@ exports.detail = function(req, res) {
             project = Common.dbUtils.cleanResult(project);
             var projectEnvSize = Common._.size(project.envs);
             var projectTaskSize = Common._.size(project.tasks);
+            var reportingStatus;
             if (project.reportingEnabled)
-                var reportingStatus = "<i class='icon ion-checkmark'>";
+                reportingStatus = "<i class='icon ion-checkmark'>";
             else
-                var reportingStatus = "<i class='icon ion-close'>";
+                reportingStatus = "<i class='icon ion-close'>";
 
             //var details = project.toString();
             var details =
@@ -589,7 +622,6 @@ exports.getProject = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send('null');
-        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
@@ -616,7 +648,6 @@ exports.envs = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send("ID not found!");
-        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {

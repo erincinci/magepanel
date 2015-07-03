@@ -44,6 +44,7 @@ function generateDeployPie(divId, data) {
 function generateAvgDeployTimeGraph(divId, data) {
     var avgDeployTimesGraph = AmCharts.makeChart(divId, {
         "type": "serial",
+        "fontFamily": "Lato",
         "theme": "none",
         "marginLeft": 20,
         "pathToImages": "/javascripts/amcharts/images/",
@@ -65,18 +66,15 @@ function generateAvgDeployTimeGraph(divId, data) {
             //"dataDateFormat": "DD-MM-YYYY HH:MM",
             "axisAlpha": 0,
             "minHorizontalGap":25,
-            "gridAlpha": 0.15,
             "tickLength": 0
         },
         
         "graphs": [{
             "balloonText": "[[category]]<br><b><span style='font-size:14px;'>[[value]] ms</span></b>",
-            "bullet": "round",
-            "bulletSize": 9,
-            "lineColor": "#d1655d",
-            "lineThickness": 2,
-            "negativeLineColor": "#637bb6",
-            "type": "smoothedLine",
+            "bullet": "none",
+            "fillAlphas": 0.7,
+            "fillColor": "#f7ffff",
+            "type": "column",
             "valueField": "avg"
         }]
     });

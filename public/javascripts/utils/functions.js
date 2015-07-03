@@ -45,12 +45,26 @@ function appendToConsole() {
     ioSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId });
     showAjaxLoader();
 
+    // Set progress bar to in-progress style
+    var progressBar = $('#mageProgressBar');
+    var progress;
+    progressBar.removeClass("progress-bar-danger").removeClass("progress-bar-success").addClass("progress-bar-striped").addClass("active");
+
     // If it is a workflow, mark the active command that is being executed
     if (currentCmd.multi) {
+        // Adjust progress bar percentage according to number of queue items
+        progress = (100 * currentCmd.queueId) / cmdQueueSize;
+
+        // Blink current command in queue
         if (currentCmd.queueId > 0)
             $('#queueCmd' + (currentCmd.queueId-1)).unblink();
         $('#queueCmd' + currentCmd.queueId).blink({ delay: 100 });
+    } else {
+        // Update progress bar approximately for single deploy commands
+        // TODO: Get number of total tasks/envs and remaining tasks/envs for progress updating
+        progress = 50;
     }
+    progressBar.css('width', progress+'%');
 }
 
 /**
@@ -58,10 +72,11 @@ function appendToConsole() {
  */
 function getSocketIOMessages() {
     // Get live response for Mage Console
-    if ($('#console').length) {
+    var mageConsole = $('#console');
+    if (mageConsole.length) {
         console.debug("Mage Console Socket.IO activated..");
-        var mageConsole = $('#console');
         var mageConsoleFrame = $('#consoleFrame');
+        var progressBar = $('#mageProgressBar');
         ioSocket.on('cmdResponse', function(data) {
             switch(data.status) {
                 case "stdout":
@@ -70,6 +85,9 @@ function getSocketIOMessages() {
                     mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
                     break;
                 case "stderr":
+                    // Paint progress bar to red on error
+                    progressBar.addClass("progress-bar-danger").removeClass("progress-bar-striped").removeClass("active");
+
                     // Show error in MageConsole in different style
                     mageConsole.append(data.result);
                     mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
@@ -86,6 +104,9 @@ function getSocketIOMessages() {
                         mageConsole.append("-------------------------------------------------------------------<br>");
                         appendToConsole();
                     } else {
+                        // Reset workflow panel & Progress bar
+                        progressBar.addClass("progress-bar-success").removeClass("progress-bar-striped").removeClass("active");
+                        progressBar.css('width', '100%');
                         resetWorkflowPanel();
                     }
                     break;
@@ -97,9 +118,9 @@ function getSocketIOMessages() {
     }
 
     // Get live response for Log tails
-    if ($('#logView').length) {
+    var logView = $('#logView');
+    if (logView.length) {
         console.debug("Log Tail Socket.IO activated..");
-        var logView = $('#logView');
         // Get tail data from socket
         ioSocket.on('logTailContent', function(data) {
             hideAjaxLoader();
@@ -157,6 +178,37 @@ function getSocketIOMessages() {
             $('#updateOk').attr('data-original-title', 'MagePanel ' + data.version);
         }
     });
+
+    // Get live response for GIT clone new project
+    var cloneProjectModal = $('#cloneProjectModal');
+    if (cloneProjectModal.length) {
+        console.debug("GIT clone Socket.IO activated..");
+        ioSocket.on('gitCloneResponse', function(data) {
+            hideAjaxLoader();
+            if (data.err) {
+                // Error handling
+                toastr.warning(data.message, 'MagePanel GIT');
+            } else {
+                // GIT Clone Success
+                toastr.success(data.message, 'MagePanel GIT');
+                $('#projectDir').val(data.path);
+                var cloneFormData = {
+                    projectDir: data.path,
+                    projectName: $("#projectCloneName").val(),
+                    projectMail: $("#projectCloneMail").val(),
+                    projectReportingSwitch: $("#projectCloneReportingSwitch").val(),
+                    projectTagId: $("#projectCloneTagId").val()
+                };
+
+                // TODO: Check if we should add or init project in DB
+                var serialized = '';
+                for(var key in cloneFormData)
+                    serialized += key + '=' + cloneFormData[key] + '&';
+                serialized = serialized.slice(0, serialized.length - 1);
+                addProjectToDB(serialized);
+            }
+        });
+    }
 }
 
 /**
@@ -531,6 +583,17 @@ function updateStatsComponents(selectedFrom, selectedTo) {
 
         hideAjaxLoader();
     });
+}
+
+/**
+ * Check if string is a valid GIT URL
+ * @param str
+ * @returns {boolean}
+ * @constructor
+ */
+function isGitUrlValid(str) {
+    var pattern = new RegExp('((git|ssh|http(s)?)|(git@[a-z0-9_.\\-\\.]+))(:(//)?)([a-z0-9_.\\-\\.@\\:/\\-~]+)');
+    return pattern.test(str);
 }
 
 /**

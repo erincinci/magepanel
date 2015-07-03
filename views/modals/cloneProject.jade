@@ -1,0 +1,48 @@
+// GIT Clone Project Modal
+#cloneProjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalLabel', aria-hidden='true')
+    .modal-dialog
+        .modal-content
+            form#cloneProjectForm
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span(aria-hidden='true') ×
+                        span.sr-only Close
+                    h4#modalLabel.modal-title.icon.ion-fork-repo  GIT Clone Project
+                .modal-body
+                    // Clone project form contents
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-social-github
+                        input.form-control#remoteUrl(name='remoteUrl', type='text', placeholder='Enter GIT repository remote URL')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-folder
+                        input.form-control#projectCloneDir(name='projectDir', type='text', placeholder='Enter destination directory (Project named subfolder will be created on clone)')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-folder
+                        input.form-control#projectSubDir(name='projectSubDir', type='text', placeholder='Enter new project folder name (Will be created while cloning)')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-android-information
+                        input.form-control#projectCloneName(name='projectName', type='text', placeholder='Enter project display name')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-android-mail
+                        input.form-control#projectCloneMail(name='projectMail', type='text', placeholder='Enter e-mail for reporting')
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-speakerphone
+                        select.selectpicker#projectCloneReportingSwitch(name='projectReportingEnabled', data-width='auto')
+                            option(value='On', selected) Automatic Reporting On
+                            option(value='Off') Automatic Reporting Off
+                    p.input-group
+                        span.input-group-addon
+                            i.icon.ion-pricetag
+                        select.selectpicker#projectCloneTagId(name='projectTagId', data-width='auto')
+                            option(value='null', selected) [Optional] Select Project Tag
+                            for tag in tags
+                                option(value= tag.id, data-icon= tag.icon) #{tag.name}
+                .modal-footer
+                    button.btn.btn-default.glyphicon.glyphicon-exclamation-sign(type='button', data-dismiss='modal')  Discard
+                    button.btn.btn-primary.glyphicon.glyphicon-cloud-download(type='submit')  Clone

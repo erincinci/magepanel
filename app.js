@@ -90,6 +90,7 @@ app.post('/projects/add', projects.add); // Add new project
 app.post('/projects/addEnvFile', projects.addEnvFile); // Add new project environment file
 app.post('/projects/addTaskFile', projects.addTaskFile); // Add new project task file
 app.post('/projects/refresh', projects.refresh); // Refresh project
+app.io.route('gitClone', projects.gitClone); // GIT Clone remote project with Socket.IO
 app.post('/projects/gitPull', projects.gitPull); // GIT Pull project
 app.post('/projects/gitCommitPush', projects.gitCommitPush); // GIT Commit & Push project
 app.post('/projects/gitIsDirty', projects.gitIsDirty); // GIT Is Dirty?

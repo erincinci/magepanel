@@ -64,6 +64,7 @@ $("#tailLatestLog").click(function() {
  */
 $("#clearConsole").click(function() {
     $('#console').html("<span class='console-pointer'>&gt;&gt; </span><i>Ready..</i><br>");
+    $('#mageProgressBar').css('width', '0%');
 });
 
 /**
@@ -209,6 +210,7 @@ $("#mageAddToFlow").click(function() {
         queueId: cmdQueue.getLength() + 1,
         desc: 'Deploy ' + selectedProjectName + ' to ' + selectedEnv
     });
+    cmdQueueSize = cmdQueue.getLength();
     workflowPanel.content.append(
             "<h4 style='text-align: center;'>" +
                 "<span class='label label-success' id='queueCmd" + cmdQueue.getLength() + "'>" +
