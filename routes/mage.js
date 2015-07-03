@@ -259,7 +259,7 @@ exports.command = function(req) {
                                 project.name,
                                 environment,
                                 releaseId,
-                                Common.username + ' (Hostname: ' + request.headers.host + ', IP: ' + clientIp + ')',
+                                Common.username + ' (IP: ' + clientIp + ')',
                                 new Date().toLocaleString(),
                                 consoleOutput
                             );
