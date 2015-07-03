@@ -6,6 +6,7 @@ var fsExtra = require('fs-extra');
 var Convert = require('ansi-to-html');
 var ansiTrim = require('cli-color/trim');
 var exec = require('child_process').exec;
+var get_ip = require('ipware')().get_ip;
 var convert = new Convert();
 convert.opts.newline = true;
 
@@ -251,7 +252,7 @@ exports.command = function(req) {
                             var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
 
                             // Get mail parameters from project
-                            var clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+                            var clientIp = get_ip(req);
                             Common.mailUtils.sendSuccessMail(
                                 req.io,
                                 project.mailAddress,
