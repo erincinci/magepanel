@@ -252,7 +252,7 @@ exports.command = function(req) {
                             var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
 
                             // Get mail parameters from project
-                            var clientIp = get_ip(req);
+                            var clientIp = get_ip(req).clientIp;
                             Common.mailUtils.sendSuccessMail(
                                 req.io,
                                 project.mailAddress,
