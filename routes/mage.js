@@ -254,7 +254,8 @@ exports.command = function(req) {
                             // Get mail parameters from project
                             //var clientIp = get_ip(req).clientIp;
                             var clientIp = req.socket.manager.handshaken[req.socket.id].address.address;
-                            clientIp = clientIp.replace("::ffff:", '');
+                            if (clientIp)
+                                clientIp = clientIp.replace("::ffff:", '');
                             Common.mailUtils.sendSuccessMail(
                                 req.io,
                                 project.mailAddress,
