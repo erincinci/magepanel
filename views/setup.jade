@@ -5,6 +5,7 @@ block content
         h1.icon.ion-settings  #{title}
 
     form#saveSettingsForm(method='POST', action='/setup/save')
+        // WINDOWS Only
         if winEnv
             .panel.panel-info
                 .panel-heading
@@ -25,6 +26,83 @@ block content
                                 else
                                     option(value= value)= title
 
+        // MAILER
+        .panel.panel-info
+            .panel-heading
+                h3.panel-title Mailer Setup
+            .panel-body
+                .input-group
+                    span.input-group-addon
+                        i.icon.ion-email  Mailer Service
+                    select.selectpicker#mailerServiceSelectPicker(name='mailerService', data-width='auto', onchange='updateMailerOptPanels(this.value);')
+                        for title, value in {'smtp':'SMTP', 'mandrill':'Mandrill', 'sendgrid':'SendGrid', 'ses':'AWS SES', 'sendmail':'sendmail'}
+                            if value == settings.mailerService()
+                                option(value= value, selected)= title
+                            else
+                                option(value= value)= title
+                // MAILER - SMTP
+                | &nbsp;
+                #mailerSmtpOpts.mailerOpts(style="display: none;")
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-monitor  Host
+                        input.form-control(name='mailerSmtpHost', type='text', value=settings.mailerSmtpHost(), placeholder='SMTP Host')
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-log-in  Port
+                        input.form-control(name='mailerSmtpPort', type='number', value=settings.mailerSmtpPort(), placeholder='SMTP Port')
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-locked  Is Secure?
+                        select.selectpicker#mailerSmtpSecure(name='mailerSmtpSecure', data-width='auto')
+                            option(value='false', selected) Non-secure
+                            option(value='true') Secure with SSL
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-person  User
+                        input.form-control(name='mailerSmtpUser', type='text', value=settings.mailerSmtpUser(), placeholder='SMTP User')
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-key  Password
+                        input.form-control(name='mailerSmtpPass', type='password', value=settings.mailerSmtpPass())
+
+                // MAILER - Mandrill
+                | &nbsp;
+                #mailerMandrillOpts.mailerOpts(style="display: none;")
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-key  Mandrill API Key
+                        input.form-control(name='mailerMandrillApiKey', type='text', value=settings.mailerMandrillApiKey())
+
+                // MAILER - SendGrid
+                | &nbsp;
+                #mailerSendgridOpts.mailerOpts(style="display: none;")
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-key  SendGrid API Key
+                        input.form-control(name='mailerSendgridApiKey', type='text', value=settings.mailerSendgridApiKey())
+
+                // MAILER - AWS SES
+                | &nbsp;
+                #mailerSesOpts.mailerOpts(style="display: none;")
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-person  AWS Access Key
+                        input.form-control(name='mailerSesAccessKeyId', type='text', value=settings.mailerSesAccessKeyId())
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-key  AWS Access Secret
+                        input.form-control(name='mailerSesSecretAccessKey', type='password', value=settings.mailerSesSecretAccessKey())
+
+                // MAILER - sendmail
+                | &nbsp;
+                #mailerSendmailOpts.mailerOpts(style="display: none;")
+                    .input-group
+                        span.input-group-addon
+                            i.icon.ion-folder  sendmail path
+                        input.form-control(name='mailerSendmailPath', type='text', value=settings.mailerSendmailPath())
+
+        // MAGALLANES
         .panel.panel-info
             .panel-heading
                 h3.panel-title Magallanes Setup

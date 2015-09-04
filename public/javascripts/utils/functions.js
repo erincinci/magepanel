@@ -586,6 +586,35 @@ function updateStatsComponents(selectedFrom, selectedTo) {
 }
 
 /**
+ * Update Mailer Settings Panels
+ * Show/Hide divs according to the selected mailer
+ * @param selectPickerVal
+ */
+function updateMailerOptPanels(selectPickerVal) {
+    // Hide all first
+    $(".mailerOpts").hide();
+
+    // Then show the selected one only
+    switch(selectPickerVal) {
+        case 'smtp':
+            $("#mailerSmtpOpts").toggle();
+            break;
+        case 'mandrill':
+            $("#mailerMandrillOpts").toggle();
+            break;
+        case 'sendgrid':
+            $("#mailerSendgridOpts").toggle();
+            break;
+        case 'ses':
+            $("#mailerSesOpts").toggle();
+            break;
+        case 'sendmail':
+            $("#mailerSendmailOpts").toggle();
+            break;
+    }
+}
+
+/**
  * Check if string is a valid GIT URL
  * @param str
  * @returns {boolean}

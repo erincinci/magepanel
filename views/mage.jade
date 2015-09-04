@@ -8,6 +8,12 @@ block content
             strong Cygwin directory not found!
                 | Please fix it in
                 a(href='/setup')  Application Setup
+    if mailerWarning
+        .alert.alert-warning#mailerNotSetWarning(role='alert')
+            .small.close.pull-right(style="vertical-align: text-top ", onclick="$('#mailerNotSetWarning').hide();") x
+            strong Mailer Options not set!
+                | Please fix it in
+                a(href='/setup')  Application Setup
 
     // Button group
     p

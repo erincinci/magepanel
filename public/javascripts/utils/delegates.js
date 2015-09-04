@@ -62,3 +62,13 @@ $(document).delegate('#projectsListLogs .list-group-item', 'click', function(e) 
         $('#projectLogs').html(output);
     });
 });
+
+/**
+ * Settings Page
+ */
+setTimeout(function() {
+    var mailerServicePicker = $("#mailerServiceSelectPicker");
+    if (mailerServicePicker.length) {
+        updateMailerOptPanels(mailerServicePicker.val());
+    }
+}, 120);

@@ -22,6 +22,19 @@ exports.index = function(req, res) {
     if(typeof(settings.mageDeployStrategy()) === 'undefined')
         settings.mageDeployStrategy(Common.config.setup.defaultMageDeployStrategy);
 
+    // Mailer settings
+    settings.mailerService(Common.settings.get("mailerService"));
+    settings.mailerSmtpHost(Common.settings.get("mailerSmtpHost"));
+    settings.mailerSmtpPort(Common.settings.get("mailerSmtpPort"));
+    settings.mailerSmtpSecure(Common.settings.get("mailerSmtpSecure"));
+    settings.mailerSmtpUser(Common.settings.get("mailerSmtpUser"));
+    settings.mailerSmtpPass(Common.settings.get("mailerSmtpPass"));
+    settings.mailerMandrillApiKey(Common.settings.get("mailerMandrillApiKey"));
+    settings.mailerSendgridApiKey(Common.settings.get("mailerSendgridApiKey"));
+    settings.mailerSesAccessKeyId(Common.settings.get("mailerSesAccessKeyId"));
+    settings.mailerSesSecretAccessKey(Common.settings.get("mailerSesSecretAccessKey"));
+    settings.mailerSendmailPath(Common.settings.get("mailerSendmailPath"));
+
     res.render('setup', {
         username: Common.username,
         menu: 'setup',

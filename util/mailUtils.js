@@ -8,12 +8,14 @@ var jade = require('jade');
 
 /**
  * Send Mail Using Default SMTP Server - Internal Function
+ * @param reqIo
  * @param toAddresses
  * @param subject
  * @param txtContent
  * @param htmlContent
  */
 function sendMail(reqIo, toAddresses, subject, txtContent, htmlContent) {
+    // TODO: Create transport based on mailer type (Common.settings.get("mailerService"))
     // Create transport
     var transporter = nodemailer.createTransport({
         service: config.mailer.service,
@@ -50,6 +52,7 @@ function sendMail(reqIo, toAddresses, subject, txtContent, htmlContent) {
 
 /**
  * Send Successful Deploy Report Mail
+ * @param reqIo
  * @param toAddresses
  * @param project
  * @param environment
@@ -72,4 +75,4 @@ exports.sendSuccessMail = function(reqIo, toAddresses, project, environment, rel
 
     // Send report mail
     return sendMail(reqIo, toAddresses, "MagePanel Deploy Report", '', htmlContent);
-}
+};

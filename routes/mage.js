@@ -37,6 +37,13 @@ exports.index = function(req, res) {
             }
         }
 
+        // Check if mailer options are set
+        var mailerWarning = false;
+        if (! Common.settings.get("mailerService")) {
+            mailerWarning = true;
+            console.warn("Mailer options are not set!");
+        }
+
         // Get all tags from DB
         Common.tagsDB.all(function(err, tags) {
             if (err)
@@ -48,6 +55,7 @@ exports.index = function(req, res) {
                 title: title,
                 setupCompleted: Common.setupCompleted,
                 pathWarning: pathWarning,
+                mailerWarning: mailerWarning,
                 content: Common.config.html.consolePointer + "Operating System: <b>" + Common.os + "</b><br>",
                 projects: Common.dbUtils.cleanResults(projects),
                 tags: Common.dbUtils.cleanResults(tags)
