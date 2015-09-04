@@ -89,13 +89,17 @@ function getSocketIOMessages() {
                     progressBar.addClass("progress-bar-danger").removeClass("progress-bar-striped").removeClass("active");
 
                     // Show error in MageConsole in different style
-                    mageConsole.append(data.result);
+                    mageConsole.append('<span style="color: red;"><b>' + data.result + '</b></span>');
                     mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
                     hideAjaxLoader();
                     break;
                 case "warning":
-                    // Show warning toast to user
-                    toastr.warning(data.result, 'MagePanel Console');
+                    // Paint progress bar to yellow on warning
+                    progressBar.addClass("progress-bar-warning").removeClass("progress-bar-striped").removeClass("active");
+
+                    // Append results to console tag
+                    mageConsole.append('<span style="color: yellow;"><b>' + data.result + '</b></span>');
+                    mageConsoleFrame.scrollTop(mageConsoleFrame[0].scrollHeight);
                     break;
                 case "exit":
                     hideAjaxLoader();

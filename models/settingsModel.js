@@ -30,9 +30,4 @@ module.exports = SettingsModel = model("SettingsModel")
 SettingsModel.init = function(instance) {
     instance.setupCompleted(false);
     instance.sshPageantSupport(true);
-    instance.mailerService('smtp');
-    instance.mailerSmtpHost('localhost');
-    instance.mailerSmtpPort(25);
-    instance.mailerSmtpSecure(false);
-    instance.mailerSendmailPath('/usr/sbin/sendmail');
 };

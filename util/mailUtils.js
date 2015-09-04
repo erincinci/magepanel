@@ -3,8 +3,13 @@
  */
 var config = require('../config');
 var Common = require('../common');
-var nodemailer = require('nodemailer');
 var jade = require('jade');
+var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
+var mandrillTransport = require('nodemailer-mandrill-transport');
+var sendgridTransport = require('nodemailer-sendgrid-transport');
+var sesTransport = require('nodemailer-ses-transport');
+var sendmailTransport = require('nodemailer-sendmail-transport');
 
 /**
  * Send Mail Using Default SMTP Server - Internal Function
@@ -15,39 +20,36 @@ var jade = require('jade');
  * @param htmlContent
  */
 function sendMail(reqIo, toAddresses, subject, txtContent, htmlContent) {
-    // TODO: Create transport based on mailer type (Common.settings.get("mailerService"))
-    // Create transport
-    var transporter = nodemailer.createTransport({
-        service: config.mailer.service,
-        auth: {
-            host: config.mailer.host,
-            port: config.mailer.port,
-            secure: config.mailer.secure,
-            user: config.mailer.authUser,
-            pass: config.mailer.authPass
-        }
-    });
+    // Init mailer transporter
+    var userSettings = require('user-settings').file(config.setup.file);
+    var transporterSet = initMailerTransporter(userSettings.get("mailerService"), userSettings);
 
-    // setup e-mail data with unicode symbols
-    var mailOptions = {
-        from: config.mailer.fromAddress, // sender address
-        to: toAddresses, // list of receivers
-        subject: subject, // Subject line
-        text: txtContent, // plaintext body
-        html: htmlContent // html body
-    };
+    // Check if there's any errors
+    if (transporterSet.err == null && transporterSet.transporter) {
+        // Setup e-mail data with unicode symbols
+        var mailOptions = {
+            from: config.mailer.fromAddress, // sender address
+            to: toAddresses, // list of receivers
+            subject: subject, // Subject line
+            text: txtContent, // plaintext body
+            html: htmlContent // html body
+        };
 
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error) {
-            console.error(error);
-            reqIo.emit('cmdResponse', { result: error, status: 'stderr' });
-        } else {
-            var msg = 'Report mail successfully sent to ' + toAddresses + ' : ' + info.response;
-            console.log(msg);
-            reqIo.emit('cmdResponse', { result: msg, status: 'stdout' });
-        }
-    });
+        // Send mail with defined transport object
+        transporterSet.transporter.sendMail(mailOptions, function(error, info){
+            if(error) {
+                console.error(error);
+                reqIo.emit('cmdResponse', { result: error, status: 'warning' });
+            } else {
+                var msg = 'Report mail successfully sent to ' + JSON.stringify(toAddresses);
+                console.log(msg + " : " + JSON.stringify(info));
+                reqIo.emit('cmdResponse', { result: msg, status: 'stdout' });
+            }
+        });
+    } else {
+        console.error("Error sending mail: " + transporterSet.err.message);
+        reqIo.emit('cmdResponse', { result: transporterSet.err.message, status: 'warning' });
+    }
 }
 
 /**
@@ -76,3 +78,79 @@ exports.sendSuccessMail = function(reqIo, toAddresses, project, environment, rel
     // Send report mail
     return sendMail(reqIo, toAddresses, "MagePanel Deploy Report", '', htmlContent);
 };
+
+/**
+ * Initialize Mailer Transporter
+ * @param mailerService
+ * @param opt
+ * @returns {{err, transporter}}
+ */
+function initMailerTransporter(mailerService, opt) {
+    var transporter;
+    var mailErr = null;
+
+    // Create transporter according to mailer service
+    switch (mailerService) {
+        case 'smtp':
+            // SMTP - Check options & Create transporter
+            if (opt.get("mailerSmtpHost") && opt.get("mailerSmtpPort"))
+                transporter = nodemailer.createTransport(smtpTransport({
+                    host: opt.get("mailerSmtpHost"),
+                    port: opt.get("mailerSmtpPort"),
+                    secure: opt.get("mailerSmtpSecure"),
+                    auth: {
+                        user: opt.get("mailerSmtpUser") || '',
+                        pass: opt.get("mailerSmtpPass") || ''
+                    }
+                }));
+            else
+                mailErr = new Error("Some SMTP mailer settings are missing!");
+            break;
+        case 'mandrill':
+            // Mandrill - Check options & Create transporter
+            if (opt.get("mailerMandrillApiKey"))
+                transporter = nodemailer.createTransport(mandrillTransport({
+                    auth: {
+                        apiKey: opt.get("mailerMandrillApiKey")
+                    }
+                }));
+            else
+                mailErr = new Error("Error sending mail: Mandrill API key is missing!");
+            break;
+        case 'sendgrid':
+            // SendGrid - Check options & Create transporter
+            if (opt.get("mailerSendgridApiKey"))
+                transporter = nodemailer.createTransport(sendgridTransport({
+                    auth: {
+                        api_key: opt.get("mailerSendgridApiKey")
+                    }
+                }));
+            else
+                mailErr = new Error("Error sending mail: SendGrid API key is missing!");
+            break;
+        case 'ses':
+            // AWS SES - Check options & Create transporter
+            if (opt.get("mailerSesAccessKeyId") && opt.get("mailerSesSecretAccessKey"))
+                transporter = nodemailer.createTransport(sesTransport({
+                    accessKeyId: opt.get("mailerSesAccessKeyId"),
+                    secretAccessKey: opt.get("mailerSesSecretAccessKey")
+                }));
+            else
+                mailErr = new Error("AWS SES mailer options are missing!");
+            break;
+        case 'sendmail':
+            // Sendmail - Check options & Create transporter
+            if (opt.get("mailerSendmailPath"))
+                transporter = nodemailer.createTransport(sendmailTransport({
+                    path: opt.get("mailerSendmailPath")
+                }));
+            else
+                mailErr = new Error("Error sending mail: Sendmail path is missing!");
+            break;
+        default:
+            mailErr = new Error("Mailer option not set, canceling send mail operation..");
+            break;
+    }
+
+    return {err: mailErr, transporter: transporter};
+}
