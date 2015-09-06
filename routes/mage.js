@@ -251,16 +251,16 @@ exports.command = function(req) {
                     if(project.reportingEnabled == true) {
                         console.debug("Project Auto-Reporting is ENABLED");
 
-                        // If e-mail address is VALID
-                        if (Common.validator.isEmail(project.mailAddress)) {
-                            console.debug("E-Mail address is valid, sending report mail..");
+                        // If e-mail addresses are VALID
+                        var emailError = Common.mailUtils.validateMailAddresses(project.mailAddress);
+                        if (emailError == null) {
+                            console.debug("E-Mail addresses are valid, sending report mail(s)..");
 
                             // Parse project info from console output
                             var releaseId = Common.S(consoleOutput.match(/Release ID: *.*/g)).replaceAll('Release ID: ', '').s;
                             var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
 
                             // Get mail parameters from project
-                            //var clientIp = get_ip(req).clientIp;
                             var clientIp = req.socket.manager.handshaken[req.socket.id].address.address;
                             if (clientIp)
                                 clientIp = clientIp.replace("::ffff:", '');
@@ -277,8 +277,8 @@ exports.command = function(req) {
                             Common.stats.incMailsSent();
                         } else {
                             // E-mail address is not valid, show warning..
-                            console.warn("Project's e-mail address is invalid!");
-                            req.io.emit('cmdResponse', { result: "Failed sending report mail, project's e-mail address is invalid..", status: Common.eCmdStatus.warning });
+                            console.warn("Project's e-mail addresses are invalid!");
+                            req.io.emit('cmdResponse', { result: "Failed sending report mail(s), " + emailError, status: Common.eCmdStatus.warning });
                         }
                     }
                 } else {

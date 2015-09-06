@@ -3,6 +3,7 @@
  */
 var config = require('../config');
 var Common = require('../common');
+var validator = require('validator')
 var jade = require('jade');
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
@@ -10,6 +11,33 @@ var mandrillTransport = require('nodemailer-mandrill-transport');
 var sendgridTransport = require('nodemailer-sendgrid-transport');
 var sesTransport = require('nodemailer-ses-transport');
 var sendmailTransport = require('nodemailer-sendmail-transport');
+
+/**
+ * Validate list of email addresses (Comma seperated)
+ * @param emailsStr
+ * @returns {string}
+ */
+exports.validateMailAddresses = function(emailsStr) {
+    var mailValidationError = null;
+
+    // Seperate emails string
+    var emailsList = emailsStr.split(',');
+
+    // Check if there's any email defined
+    if (emailsList.length == 0)
+        mailValidationError = "No emails defined for reporting!";
+    else {
+        // Validate each email in list
+        emailsList.forEach(function(email) {
+            if (! validator.isEmail(email.trim())) {
+                mailValidationError = "Email address is not valid: " + email;
+                console.warn(mailValidationError);
+            }
+        });
+    }
+
+    return mailValidationError;
+};
 
 /**
  * Send Mail Using Default SMTP Server - Internal Function
@@ -41,7 +69,7 @@ function sendMail(reqIo, toAddresses, subject, txtContent, htmlContent) {
                 console.error(error);
                 reqIo.emit('cmdResponse', { result: error, status: 'warning' });
             } else {
-                var msg = 'Report mail successfully sent to ' + JSON.stringify(toAddresses);
+                var msg = 'Report mail(s) successfully sent to ' + JSON.stringify(toAddresses);
                 console.log(msg + " : " + JSON.stringify(info));
                 reqIo.emit('cmdResponse', { result: msg, status: 'stdout' });
             }
