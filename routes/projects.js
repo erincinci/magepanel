@@ -564,7 +564,7 @@ exports.detail = function(req, res) {
             var details =
                 "<i class='icon ion-android-information' /> <b>Name: </b>" + project.name +
                 "<br><i class='icon ion-folder' /> <b>Dir: </b>" + project.dir +
-                "<br><i class='icon ion-android-mail' /> <b>Reporting E-Mail: </b>" + project.mailAddress +
+                "<br><i class='icon ion-android-mail' /> <b>Reporting E-Mails: </b>" + project.mailAddress +
                 "<br><i class='icon ion-speakerphone' /> <b>Automatic Reporting: </b>" + reportingStatus +
                 "<br><i class='icon ion-cloud' /> <b>Environments</b> <span class='badge'>" + projectEnvSize + "</span>"
                     + " <a href='#' data-toggle='modal' data-target='#addProjectEnvModal' rel='tooltip' class='glyphicon glyphicon-plus' data-original-title='Add new environment' style='text-decoration: none;'></a>"

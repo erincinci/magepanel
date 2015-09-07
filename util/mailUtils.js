@@ -65,9 +65,9 @@ function sendMail(reqIo, toAddresses, subject, txtContent, htmlContent) {
 
         // Send mail with defined transport object
         transporterSet.transporter.sendMail(mailOptions, function(error, info){
-            if(error) {
+            if (error) {
                 console.error(error);
-                reqIo.emit('cmdResponse', { result: error, status: 'warning' });
+                reqIo.emit('cmdResponse', { result: "Error sending report email(s): " + error.message, status: 'warning' });
             } else {
                 var msg = 'Report mail(s) successfully sent to ' + JSON.stringify(toAddresses);
                 console.log(msg + " : " + JSON.stringify(info));
