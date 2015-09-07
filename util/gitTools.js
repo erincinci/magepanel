@@ -260,3 +260,23 @@ exports.push = function performPush(dir, cb) {
         cb(null, output);
     });
 };
+
+/**
+ * Perform GIT TAG command on project dir
+ * @param dir
+ * @param tagName
+ * @param cb
+ */
+exports.tag = function performTag(dir, tagName, cb) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git tag ' + tagName + ' && git push --tags', function (err, stdout, stderr) {
+        if (err) return cb(err);
+
+        // Get output (TODO: Somehow comes as stderr!)
+        var output;
+        if (stderr)
+            output = stderr.trim();
+        else
+            output = stdout.trim();
+        return cb(null, output);
+    });
+};

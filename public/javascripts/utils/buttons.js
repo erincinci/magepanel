@@ -60,6 +60,36 @@ $("#tailLatestLog").click(function() {
 });
 
 /**
+ * Tag Project On-Deploy
+ */
+$('#tagProject').on('switchChange.bootstrapSwitch', function(event, state) {
+    // If is in ON state
+    if (state) {
+        var content =
+            '<div class="form-group" style="width:230px">' +
+                '<div class="col-sm-8">' +
+                    '<input class="form-control" id="projectTagName" name="projectTagName" placeholder="v1.8">' +
+                '</div><div class="col-sm-4">' +
+                    '<button class="btn btn-primary" id="projectTagNameBtn" type="button" onclick="setGitTagProjectValue($(\'#projectTagName\').val());">' +
+                        'Enter &raquo;' +
+                    '</button>' +
+                '</div>' +
+            '</div>';
+
+        //el.unbind('click').popover({
+        $("#tagSwitchWrapper").unbind('click').popover({
+            content: content,
+            title: 'Tag on-deploy',
+            placement: 'bottom',
+            html: true,
+            delay: {show: 400, hide: 100}
+        }).popover('show');
+    } else {
+        $("#tagSwitchWrapper").popover('toggle');
+    }
+});
+
+/**
  * Clear console button
  */
 $("#clearConsole").click(function() {
@@ -108,14 +138,23 @@ $("#mageDeploy").click(function() {
     var selectedEnv = $('#activeEnvironment').val();
 
     if(confirm("Do you really want to deploy to " + selectedEnv + " ?")) {
+        // Prepare GIT tag if ON
+        var gitTagName = null;
+        if ($('#tagProject').bootstrapSwitch('state')) {
+            gitTagName = $('#tagProjectValue').val();
+            console.debug("GIT Tagging is ON: " + gitTagName);
+        }
+
         // Add deploy command to queue
         var cmd = 'deploy to:' + selectedEnv;
         cmdQueue.enqueue({
             projectId: selectedId,
             cmd: cmd,
+            tag: gitTagName,
             multi: false,
             desc: 'Deploy ' + selectedProjectName + ' to ' + selectedEnv
         });
+        resetGitTagSwitch();
         appendToConsole();
     }
 });
@@ -161,7 +200,7 @@ $("#mageAddToFlow").click(function() {
 
         // Create jsPanel
         workflowPanel = $.jsPanel({
-            size:           { width: 280, height: 300 },
+            size:           { width: 320, height: 300 },
             position:       "bottom right",
             title:          "Workflow",
             selector:       "#mainContainer",
@@ -197,6 +236,14 @@ $("#mageAddToFlow").click(function() {
         });
     }
 
+    // Prepare GIT tag if ON
+    var gitTagName = null;
+    var gitTagUI = "";
+    if ($('#tagProject').bootstrapSwitch('state')) {
+        gitTagName = $('#tagProjectValue').val();
+        gitTagUI = ' <i class="small" style="color: #f5f5f5">(tag: <b>' + gitTagName + '</b>)</h6>';
+    }
+
     // Add command to existing workflow
     var selectedProjectId = $('#activeProject').find(":selected").val();
     var selectedProjectName = $('#activeProject').find(":selected").text();
@@ -206,6 +253,7 @@ $("#mageAddToFlow").click(function() {
     cmdQueue.enqueue({
         projectId: selectedProjectId,
         cmd: deployCmd,
+        tag: gitTagName,
         multi: true,
         queueId: cmdQueue.getLength() + 1,
         desc: 'Deploy ' + selectedProjectName + ' to ' + selectedEnv
@@ -216,10 +264,12 @@ $("#mageAddToFlow").click(function() {
                 "<span class='label label-success' id='queueCmd" + cmdQueue.getLength() + "'>" +
                     selectedProjectName +
                     "&nbsp;&nbsp;<span class='ion-arrow-right-c'></span>&nbsp;&nbsp;" +
-                    selectedEnv +
+                    selectedEnv + gitTagUI +
                 "</span>" +
             "</h4>"
     );
+
+    resetGitTagSwitch();
 });
 
 // Projects Page - Button onClick Events =============================================================

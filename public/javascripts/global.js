@@ -36,6 +36,11 @@ $(document).ready(function() {
     });
 
     /**
+     * Render Switches
+     */
+    $('.switches').bootstrapSwitch();
+
+    /**
      * Ajax Loading Panel
      */
     var loadingTimeout;

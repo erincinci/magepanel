@@ -42,7 +42,9 @@ function appendToConsole() {
     // Use Socket.IO for getting live command response
     var currentCmd = cmdQueue.dequeue();
     $('#console').append("<span class='console-pointer'>&gt;&gt; </span><b>" + currentCmd.desc + "</b><br>");
-    ioSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId });
+    if (currentCmd.tag)
+        $('#console').append("<span class='console-pointer'>&gt;&gt; </span>GIT tagging is ON with tag: <b>" + currentCmd.tag + "</b><br>");
+    ioSocket.emit('mageCommand', { cmd: currentCmd.cmd, id: currentCmd.projectId, tag: currentCmd.tag });
     showAjaxLoader();
 
     // Set progress bar to in-progress style
@@ -228,22 +230,32 @@ function resetWorkflowPanel() {
 }
 
 /**
+ * Reset state of GIT Tag switch
+ */
+function resetGitTagSwitch() {
+    $("#tagProject").bootstrapSwitch('state', false, false);
+    $('#tagProjectValue').val("");
+}
+
+/**
  * Activate command buttons
  */
 function activateCommandButtons () {
     var selectedItem = $("#activeEnvironment").val();
     if (selectedItem != 'null') {
-        $("#mageReleases").prop("disabled",false);
-        $("#mageDeploy").prop("disabled",false);
-        $("#mageAddToFlow").prop("disabled",false);
-        $("#activeRelease").prop("disabled",false);
-    }else{
-        $("#mageReleases").prop("disabled",true);
-        $("#mageDeploy").prop("disabled",true);
-        $("#mageAddToFlow").prop("disabled",true);
+        $("#tagProject").bootstrapSwitch('readonly', false);
+        $("#mageReleases").prop("disabled", false);
+        $("#mageDeploy").prop("disabled", false);
+        $("#mageAddToFlow").prop("disabled", false);
+        $("#activeRelease").prop("disabled", false);
+    } else {
+        $("#tagProject").bootstrapSwitch('readonly', true);
+        $("#mageReleases").prop("disabled", true);
+        $("#mageDeploy").prop("disabled", true);
+        $("#mageAddToFlow").prop("disabled", true);
         $("#activeRelease").val("null");
-        $("#activeRelease").prop("disabled",true);
-        $("#mageRollback").prop("disabled",true);
+        $("#activeRelease").prop("disabled", true);
+        $("#mageRollback").prop("disabled", true);
 
     }
     $('#activeRelease').selectpicker('refresh');
@@ -616,6 +628,15 @@ function updateMailerOptPanels(selectPickerVal) {
             $("#mailerSendmailOpts").toggle();
             break;
     }
+}
+
+/**
+ * Set GIT Tag Project name to hidden field (for later use)
+ * @param tagName
+ */
+function setGitTagProjectValue(tagName) {
+    $('#tagProjectValue').val(tagName);
+    $("#tagSwitchWrapper").popover('toggle');
 }
 
 /**

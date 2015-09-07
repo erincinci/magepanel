@@ -29,7 +29,7 @@ block content
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-briefcase
-                        select#activeProject.selectpicker(name='activeProject', onchange='loadEnvs()', data-size="10")
+                        select#activeProject.selectpicker.show-tick(name='activeProject', onchange='loadEnvs()', data-size="10", data-width='100px')
                             option(value='null', selected) Select Project
                             for tag in tags
                                 optgroup(label= tag.name, data-icon= tag.icon)
@@ -45,19 +45,31 @@ block content
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
                             i.icon.ion-cloud
-                        select#activeEnvironment.selectpicker(name='activeEnvironment', onchange='activateCommandButtons()', width='120px', disabled)
-                            option(value='null', selected) Select Environment
+                        select#activeEnvironment.selectpicker.show-tick(name='activeEnvironment', onchange='activateCommandButtons()', data-width='100px', disabled)
+                            option(value='null', selected) Select Env
                 td
                     // Release selection
                     .input-group(style='margin-right:10px')
                         span.input-group-addon
-                            i.icon.ion-android-promotion
-                        select#activeRelease.selectpicker(name='activeRelease' ,title='Rollback to selected release',onchange='activateRollbackButton()', width='120px', disabled)
-                            option(value='null', selected) Select Release
+                            i.icon.ion-flag
+                        select#activeRelease.selectpicker.show-tick(name='activeRelease' ,title='Rollback to selected release',onchange='activateRollbackButton()', data-width='100px', disabled)
+                            option(value='null', selected) Release
                             option(value='0') Current
                             option(value='-1') Previous
                 td
                     .btn-toolbar
+                        span#tagSwitchWrapper
+                            input.switches#tagProject(
+                                type="checkbox",
+                                name="tagProjectSwitch",
+                                data-on-color="success",
+                                data-label-text="<span class='ion-pricetag'></span>"
+                                data-label-width="1px"
+                                data-on-text="GIT Tag",
+                                data-off-text="Off",
+                                readonly=true
+                            )
+                            input#tagProjectValue(type="hidden", name="tagProjectValue")
                         // Console related buttons
                         button#clearConsole.btn.btn-default.btn-warning.ion-ios7-trash-outline(type='button', rel='tooltip', data-original-title='Clear Console')
                         //button#mageinfo.btn.btn-default.btn-warning.ion-help(type='button', rel='tooltip', data-original-title='Show Info')

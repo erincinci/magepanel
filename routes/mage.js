@@ -5,6 +5,7 @@ var Common = require('../common');
 var fsExtra = require('fs-extra');
 var Convert = require('ansi-to-html');
 var ansiTrim = require('cli-color/trim');
+var gitTools = require('../util/gitTools');
 var exec = require('child_process').exec;
 //var get_ip = require('ipware')().get_ip;
 var convert = new Convert();
@@ -246,6 +247,18 @@ exports.command = function(req) {
                 if (code == 0) {
                     console.debug("Deploy command was SUCCESS");
                     Common.stats.incDeploysSuccess();
+
+                    // If GIT Tagging is ON
+                    if (req.data.tag) {
+                        gitTools.tag(project.dir, req.data.tag, function(gitTagErr, gitTagOutput) {
+                            if (gitTagErr)
+                                req.io.emit('cmdResponse', { result: "Failed tagging GIT repo, " + gitTagErr.message, status: Common.eCmdStatus.warning });
+                            else {
+                                req.io.emit('cmdResponse', { result: "GIT repository successfully tagged! (" + req.data.tag + ")", status: Common.eCmdStatus.success });
+                                console.debug("GIT Tag command output: " + gitTagOutput);
+                            }
+                        });
+                    }
 
                     // If auto-reporting is ENABLED
                     if(project.reportingEnabled == true) {
