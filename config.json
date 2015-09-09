@@ -31,5 +31,10 @@
 
     "mailer": {
         "fromAddress": "robot@magepanel.com"
+    },
+
+    "rollbar": {
+        "serverKey": "4bcf818b4e654548a40ec1425d6ac6d8",
+        "clientKey": "a7a1a549e65346b38966d031c0c83789"
     }
 }

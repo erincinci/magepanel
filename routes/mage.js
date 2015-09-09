@@ -11,6 +11,10 @@ var exec = require('child_process').exec;
 var convert = new Convert();
 convert.opts.newline = true;
 
+// Monitoring
+var rollbar = require('rollbar');
+rollbar.init(Common.config.rollbar.serverKey, { codeVersion: Common.config.version });
+
 // Vars
 var settings = Common.SettingsModel.create();
 var title = "Console";
@@ -167,6 +171,9 @@ function prepareConsoleMsg(status, msg) {
  */
 exports.command = function(req) {
     var selectedId = req.data.id;
+
+    // Report new deploy to Rollbar Monitoring
+    rollbar.reportMessageWithPayloadData("New mage command", {level: 'info', custom: req.data, environment: Common.env}, req);
 
     // Get project from DB
     Common.projectsDB.get(selectedId, function (err, project) {

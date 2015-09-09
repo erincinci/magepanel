@@ -3,6 +3,7 @@
  */
 var Common = require('./common');
 var express = require('express.io');
+var rollbar = require('rollbar');
 var routes = require('./routes');
 var projects = require('./routes/projects');
 var mage = require('./routes/mage');
@@ -122,6 +123,15 @@ app.get('/tags', tags.index); // Project Tags
 app.get('/tags/get', tags.getTag); // Get tag from DB with ID
 app.post('/tags/add', tags.add); // Add new tag
 app.post('/tags/delete', tags.delete); // Delete tag
+
+/**
+ * Rollbar Exception Monitoring
+ */
+Common.env = app.get('env') || Common.env;
+app.use(rollbar.errorHandler(Common.config.rollbar.serverKey, {
+    environment: app.get('env'),
+    codeVersion: Common.config.version
+}));
 
 /**
  * Start Server
