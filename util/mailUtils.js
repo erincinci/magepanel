@@ -12,6 +12,10 @@ var sendgridTransport = require('nodemailer-sendgrid-transport');
 var sesTransport = require('nodemailer-ses-transport');
 var sendmailTransport = require('nodemailer-sendmail-transport');
 
+// Monitoring
+var rollbar = require('rollbar');
+rollbar.init(config.rollbar.serverKey, { codeVersion: config.version });
+
 /**
  * Validate list of email addresses (Comma seperated)
  * @param emailsStr
@@ -66,6 +70,9 @@ function sendMail(reqIo, toAddresses, subject, txtContent, htmlContent) {
         // Send mail with defined transport object
         transporterSet.transporter.sendMail(mailOptions, function(error, info){
             if (error) {
+                // Log as a warning to rollbar
+                rollbar.handleErrorWithPayloadData(error, {level: 'warning', custom: mailOptions, environment: Common.env});
+
                 console.error(error);
                 reqIo.emit('cmdResponse', { result: "Error sending report email(s): " + error.message, status: 'warning' });
             } else {

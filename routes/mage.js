@@ -235,6 +235,9 @@ exports.command = function(req) {
             req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: Common.eCmdStatus.success });
         });
         mageCmd.stderr.on('data', function (data) {
+            // Send warning to rollbar
+            rollbar.reportMessageWithPayloadData("Mage command error emitted: " + data.toString(), {level: 'warning', custom: req.data, environment: Common.env}, req);
+
             console.error(data.toString());
             req.io.emit('cmdResponse', { result: convert.toHtml(data.toString()), status: Common.eCmdStatus.error });
         });
