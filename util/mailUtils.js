@@ -74,11 +74,13 @@ function sendMail(reqIo, toAddresses, subject, txtContent, htmlContent) {
                 rollbar.handleErrorWithPayloadData(error, {level: 'warning', custom: mailOptions, environment: Common.env});
 
                 console.error(error);
-                reqIo.emit('cmdResponse', { result: "Error sending report email(s): " + error.message, status: 'warning' });
+                var mailerErrMsg = config.html.consolePointerWarn + "Error sending report email(s): " + error.message + "<br>";
+                reqIo.emit('cmdResponse', { result: mailerErrMsg, status: 'warning' });
             } else {
                 var msg = 'Report mail(s) successfully sent to ' + JSON.stringify(toAddresses);
                 console.log(msg + " : " + JSON.stringify(info));
-                reqIo.emit('cmdResponse', { result: msg, status: 'stdout' });
+                var mailerSucMsg = config.html.consolePointer + msg + "<br>";
+                reqIo.emit('cmdResponse', { result: mailerSucMsg, status: 'stdout' });
             }
         });
     } else {

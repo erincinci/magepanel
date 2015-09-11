@@ -261,10 +261,12 @@ exports.command = function(req) {
                     // If GIT Tagging is ON
                     if (req.data.tag) {
                         gitTools.tag(project.dir, req.data.tag, function(gitTagErr, gitTagOutput) {
-                            if (gitTagErr)
-                                req.io.emit('cmdResponse', { result: "Failed tagging GIT repo, " + gitTagErr.message, status: Common.eCmdStatus.warning });
-                            else {
-                                req.io.emit('cmdResponse', { result: "GIT repository successfully tagged! (" + req.data.tag + ")", status: Common.eCmdStatus.success });
+                            if (gitTagErr) {
+                                var tagMsgErr = Common.config.html.consolePointerWarn + "Failed tagging GIT repo, " + gitTagErr.message + "<br>";
+                                req.io.emit('cmdResponse', { result: tagMsgErr, status: Common.eCmdStatus.warning });
+                            } else {
+                                var tagMsgSuc = Common.config.html.consolePointer + "GIT repository successfully tagged! (" + req.data.tag + ")<br>";
+                                req.io.emit('cmdResponse', { result: tagMsgSuc, status: Common.eCmdStatus.success });
                                 console.debug("GIT Tag command output: " + gitTagOutput);
                             }
                         });
@@ -301,7 +303,8 @@ exports.command = function(req) {
                         } else {
                             // E-mail address is not valid, show warning..
                             console.warn("Project's e-mail addresses are invalid!");
-                            req.io.emit('cmdResponse', { result: "Failed sending report mail(s), " + emailError, status: Common.eCmdStatus.warning });
+                            var mailerErrMsg = Common.config.html.consolePointerWarn + "Failed sending report mail(s), " + emailError + "<br>";
+                            req.io.emit('cmdResponse', { result: mailerErrMsg, status: Common.eCmdStatus.warning });
                         }
                     }
                 } else {
