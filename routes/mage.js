@@ -260,7 +260,8 @@ exports.command = function(req) {
 
                     // If GIT Tagging is ON
                     if (req.data.tag) {
-                        gitTools.tag(project.dir, req.data.tag, function(gitTagErr, gitTagOutput) {
+                        var tagReleaseMsg = Common.S(consoleOutput.match(/Release ID: *.*/g)).replaceAll('Release ID: ', '').s;
+                        gitTools.tag(project.dir, req.data.tag, tagReleaseMsg, function(gitTagErr, gitTagOutput) {
                             if (gitTagErr) {
                                 var tagMsgErr = Common.config.html.consolePointerWarn + "Failed tagging GIT repo, " + gitTagErr.message + "<br>";
                                 req.io.emit('cmdResponse', { result: tagMsgErr, status: Common.eCmdStatus.warning });
