@@ -56,12 +56,14 @@
     "path": "~0.4.9",
     "rimraf": "~2.2.8",
     "rollbar": "^0.5.6",
+    "scribe-js": "^2.0.4",
     "string": "~1.9.1",
     "stylus": "*",
     "underscore": "~1.6.0",
     "user-settings": "*",
     "username": "0.1.1",
-    "validator": "~3.22.1"
+    "validator": "~3.22.1",
+    "winston": "^1.0.2"
   },
   "devDependencies": {
     "colors.css": "1.0.0",

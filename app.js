@@ -3,6 +3,8 @@
  */
 var Common = require('./common');
 var express = require('express.io');
+var winston = require('winston');
+var WinstonScribe = require('./util/winstonScribe');
 var rollbar = require('rollbar');
 var routes = require('./routes');
 var projects = require('./routes/projects');
@@ -19,21 +21,20 @@ var app = express().http().io();
 /**
  * Logger Configuration
  */
-Common.scribe.configure(function(){
-    Common.scribe.set('app', Common.config.server.name);
-    Common.scribe.set('logPath', Common.config.logger.directory);
-    Common.scribe.set('defaultTag', Common.config.logger.defaultTag);
-    Common.scribe.set('divider', Common.config.logger.divider);
-    Common.scribe.set('identation', 5);
-    Common.scribe.set('maxTagLength', 30);
-    Common.scribe.set('mainUser', Common.username);
+var scribeTransport = new WinstonScribe();
+var logger = new winston.Logger({
+    transports: [
+        scribeTransport,                    // Winston Scribe.JS Transport
+        new winston.transports.Console({    // Winston Console Transport
+            level: 'debug',
+            colorize: true,
+            prettyPrint: true,
+            humanReadableUnhandledException: true
+        })
+    ]
 });
-// Create loggers (name, save to file, print to console, tag color)
-Common.scribe.addLogger('debug', true , true, 'grey');
-Common.scribe.addLogger('log', true , true, 'white');
-Common.scribe.addLogger('info', true , true, 'green');
-Common.scribe.addLogger('error', true , true, 'red');
-Common.scribe.addLogger('warn', true , true, 'yellow');
+logger.extend(console);
+app.use('/log', scribeTransport.webPanel()); // Scribe.JS Logger Web Panel
 
 /**
  * Express Server Configuration
@@ -71,7 +72,14 @@ if (app.get('env') == 'development') {
  * Routes
  */
 app.get('/', routes.index); // Index
-app.get('/log', Common.scribe.express.controlPanel()); // Log control panel
+app.get('/logs', function(req, res) {
+    res.render('logs', {
+        username: Common.username,
+        menu: 'none',
+        title: 'System Logs',
+        setupCompleted: true
+    });
+});
 
 // Stats
 app.io.route('getStats', stats.getStats); // Get stats with Socket.IO
@@ -137,7 +145,7 @@ app.use(rollbar.errorHandler(Common.config.rollbar.serverKey, {
  * Start Server
  */
 app.listen(app.get('port'), function(){
-  console.t().info('MagePanel started on port ' + app.get('port'));
+    console.info('MagePanel started on port ' + app.get('port'));
 
     // Collect Statistics every X minutes
     Common.stats.cron(Common.config.stats.updateRate);

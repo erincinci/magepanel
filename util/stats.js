@@ -45,7 +45,7 @@ Stats.prototype.dumpToDB = function() {
     // Update static stats
     self.calculateStaticStats(function(err) {
         if (err)
-            console.t("Stats").error("Error calculating static stats: " + JSON.stringify(err.message));
+            console.error("Error calculating static stats: " + JSON.stringify(err.message));
 
         // Set timestamp
         self.curStats.timestamp = (Date.now() / 1000).toFixed(0);
@@ -53,10 +53,10 @@ Stats.prototype.dumpToDB = function() {
         // Dump to DB
         self.statsDB.save(self.curStats.timestamp, self.curStats, function(err) {
             if (err)
-                console.t("Stats").error("Error saving stats to DB: " + JSON.stringify(err.message));
+                console.error("Error saving stats to DB: " + JSON.stringify(err.message));
 
             // Clear stats object
-            console.t("Stats").debug("Statistics dumped to DB: " + JSON.stringify(self.curStats));
+            console.debug("Statistics dumped to DB: " + JSON.stringify(self.curStats));
             self.curStats = self.initStatsObject();
         });
     });

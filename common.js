@@ -10,7 +10,6 @@ var statsDBPointer = nStore.new('dbs/stats.db');
 Common = {
     // Locals
     config: require('./config'),
-    scribe: require('./scribe'),
     settings: require('user-settings').file(appConfig.setup.file),
     setupCompleted: appSettings.get(appConfig.setup.completed),
     env: "production",

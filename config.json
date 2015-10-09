@@ -2,7 +2,7 @@
     "version": "v1.7.0",
 
     "logger": {
-        "directory": "./logs",
+        "directory": "logs",
         "divider": ":::",
         "defaultTag": "MagePanel"
     },
