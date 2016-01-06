@@ -197,7 +197,6 @@ Source: ".\models\*"; DestDir: "{app}\models"; Flags: ignoreversion recursesubdi
 Source: ".\node_modules\*"; DestDir: "{app}\node_modules"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\public\*"; DestDir: "{app}\public"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\routes\*"; DestDir: "{app}\routes"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: ".\scribe\*"; DestDir: "{app}\scribe"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\util\*"; DestDir: "{app}\util"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\views\*"; DestDir: "{app}\views"; Flags: ignoreversion recursesubdirs createallsubdirs
 
