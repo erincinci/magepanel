@@ -286,12 +286,12 @@ exports.gitIsDirty = function(req, res) {
 
             // Check if project GIT directory is dirty
             console.debug("GIT isDirty on dir " + project.dir);
-            gitTools.isDirty(project.dir, function (err, isDirty) {
+            gitTools.isDirty(project.dir, function (err, isDirty, cmdOutput) {
                 if (err) {
                     res.send({ "warn": true, "message": err });
                 } else {
                     if (isDirty)
-                        res.send({ "warn": false, "message": "ok" });
+                        res.send({ "warn": false, "message": cmdOutput });
                     else
                         res.send({ "warn": true, "message": "No changes to commit & push!" });
                 }

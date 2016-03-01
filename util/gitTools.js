@@ -88,9 +88,9 @@ exports.isDirty = function isDirty(dir, cb) {
 
         // If there's any output, repo is assumed to be dirty
         if (output)
-            cb(null, true);
+            cb(null, true, output);
         else
-            cb(null, false);
+            cb(null, false, output);
     });
 };
 

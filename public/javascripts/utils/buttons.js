@@ -398,7 +398,8 @@ $('#gitCommitPushProjectBtn').on('click', function() {
             toastr.warning(result["message"], 'MagePanel Projects');
         } else {
             // Get user commit message
-            var commitMsg = prompt("Please enter a commit message", "");
+            var shortMsg = (result["message"].length > 100) ? result["message"].substring(0, 100) + "..." : result["message"];
+            var commitMsg = prompt("--> Changes:\n" + shortMsg + "\n\n--> Please enter a commit message:", "");
 
             // Continue with valid message
             if (commitMsg) {
