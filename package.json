@@ -48,7 +48,7 @@
     "nodemailer-sendmail-transport": "1.0.0",
     "nodemailer-ses-transport": "1.3.0",
     "nodemailer-smtp-transport": "2.4.1",
-    "nodemon": "1.9.1",
+    "nodemon": "1.3.5",
     "nstore": "0.5.2",
     "path": "0.12.7",
     "rimraf": "2.5.2",
