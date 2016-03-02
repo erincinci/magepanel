@@ -15,7 +15,7 @@ exports.branchUpToDate = function branchUpToDate(dir, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git fetch && git status -b -s', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
 
-        // Get output (TODO: Somehow comes as stderr!)
+        // Get output (TODO: Somehow comes as stderr! - Same error exists in all commands!)
         var output;
         if (stderr)
             output = stderr.trim();
@@ -39,7 +39,7 @@ exports.revisionVersion = function revisionVersion(dir, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git describe', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
 
-        // Get output (TODO: Somehow comes as stderr!)
+        // Get output
         var output;
         if (stderr)
             output = stderr.trim();
@@ -59,7 +59,7 @@ exports.latestCommitMsg = function latestCommitMsg(dir, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git log -1 --pretty=%B', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
 
-        // Get output (TODO: Somehow comes as stderr!)
+        // Get output
         var output;
         if (stderr)
             output = stderr.trim();
@@ -79,7 +79,7 @@ exports.isDirty = function isDirty(dir, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git status -s', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
 
-        // Get output (TODO: Somehow comes as stderr!)
+        // Get output
         var output;
         if (stderr)
             output = stderr.trim();
@@ -207,12 +207,12 @@ exports.pull = function performPull(dir, cb) {
 };
 
 /**
- * Perform NPM Install command on directory
+ * Perform NPM Update command on directory
  * @param dir
  * @param cb
  */
 exports.npmInstall = function npmInstall(dir, cb) {
-    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && npm install', function (err, stdout, stderr) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && npm update', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
         if (stderr) return cb(stderr);
 
@@ -232,7 +232,7 @@ exports.commit = function performCommit(dir, msg, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git add . && git commit -m "' + msg + '"', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
 
-        // Get output (TODO: Somehow comes as stderr!)
+        // Get output
         var output;
         if (stderr)
             output = stderr.trim();
@@ -251,7 +251,7 @@ exports.push = function performPush(dir, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git push', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
 
-        // Get output (TODO: Somehow comes as stderr!)
+        // Get output
         var output;
         if (stderr)
             output = stderr.trim();
@@ -272,7 +272,7 @@ exports.tag = function performTag(dir, tagName, tagMsg, cb) {
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git tag -a ' + tagName + ' -m \'' + tagMsg + '\' && git push --tags', function (err, stdout, stderr) {
         if (err) return cb(err);
 
-        // Get output (TODO: Somehow comes as stderr!)
+        // Get output
         var output;
         if (stderr)
             output = stderr.trim();

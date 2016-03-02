@@ -43,11 +43,11 @@ $("#tailLatestLog").click(function() {
     if (selectedId != null) {
         $.get( '/mageLogs/projectLatestLog?id=' + selectedId, function(logJson) {
             if (logJson != 'null') {
-                if (logJson["status"] == "success") {
+                if (logJson['status'] == "success") {
                     $('#viewFileModal').modal('show');
                     tailLogFile(logJson.logFile, logJson.logDate, logJson.logTime);
                 }else{
-                    toastr.warning(logJson["message"], 'MagePanel Logs');
+                    toastr.warning(logJson['message'], 'MagePanel Logs');
                 }
             } else {
                 toastr.error('There was a problem getting latest log file', 'MagePanel Logs');
@@ -285,10 +285,10 @@ $("#applyFileBtn").click(function() {
 
     $.post( '/projects/applyFile', formData, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -312,13 +312,13 @@ $('#delProjectBtn').on('click', function() {
         // jQuery AJAX call for project deletion
         $.post( '/projects/delete?id=' + selectedItem.id, function(result) {
             // Check if we have warning
-            if(result["warn"]) {
-                toastr.warning(result["message"], 'MagePanel Projects');
+            if(result['warn']) {
+                toastr.warning(result['message'], 'MagePanel Projects');
             } else {
                 $('#projectsList').load(document.URL +  ' #projectsList');
                 $('#projectDetail').html("Select a project..");
                 toggleProjectsPageButtons('off', null); // disable buttons
-                toastr.success(result["message"], 'MagePanel Projects');
+                toastr.success(result['message'], 'MagePanel Projects');
             }
         }).error(function() {
             toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -341,11 +341,11 @@ $('#refreshProjectBtn').on('click', function() {
     // jQuery AJAX call for project refresh
     $.post( '/projects/refresh?id=' + selectedItem.id, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             $('#'+selectedItem.id).trigger("click");
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -367,12 +367,12 @@ $('#gitPullProjectBtn').on('click', function() {
     // jQuery AJAX call for project refresh
     $.post( '/projects/gitPull?id=' + selectedItem.id, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             $('#'+selectedItem.id).trigger("click");
             $('#refreshProjectBtn').trigger("click");
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -394,11 +394,11 @@ $('#gitCommitPushProjectBtn').on('click', function() {
     // jQuery AJAX call for project refresh
     $.post( '/projects/gitIsDirty?id=' + selectedItem.id, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             // Get user commit message
-            var shortMsg = (result["message"].length > 100) ? result["message"].substring(0, 100) + "..." : result["message"];
+            var shortMsg = (result['message'].length > 100) ? result['message'].substring(0, 100) + "..." : result['message'];
             var commitMsg = prompt("--> Changes:\n" + shortMsg + "\n\n--> Please enter a commit message:", "");
 
             // Continue with valid message
@@ -407,10 +407,10 @@ $('#gitCommitPushProjectBtn').on('click', function() {
                 showAjaxLoader();
                 $.post( '/projects/gitCommitPush?id=' + selectedItem.id + '&commitMsg=' + commitMsg, function(result) {
                     // Check if we have warning
-                    if(result["warn"]) {
-                        toastr.warning(result["message"], 'MagePanel Projects');
+                    if(result['warn']) {
+                        toastr.warning(result['message'], 'MagePanel Projects');
                     } else {
-                        toastr.success(result["message"], 'MagePanel Projects');
+                        toastr.success(result['message'], 'MagePanel Projects');
                     }
                     hideAjaxLoader();
                 }).error(function() {
@@ -436,7 +436,7 @@ $('#gitSwitchBranchProjectBtn').on('click', function() {
         var content_footer = '</select> <button class="btn btn-primary" id="switchToSelectedBranchBtn" type="button" onclick="switchGitBranch(switchBranchPicker.value);">Switch &raquo;</button>' +
             '</div></form><script type="text/javascript">$(\'#switchBranchPicker\').selectpicker(\'refresh\');</script>';
         var options = '';
-        var branches = result["message"];
+        var branches = result['message'];
         $.each(branches, function(i, val) {
             options += '<option data-icon="ion-fork-repo">' + val + '</option>';
         });
@@ -471,12 +471,12 @@ $('#delTagBtn').on('click', function() {
         // jQuery AJAX call for tag deletion
         $.post( '/tags/delete?id=' + selectedItem.id, function(result) {
             // Check if we have warning
-            if(result["warn"]) {
-                toastr.warning(result["message"], 'MagePanel Tags');
+            if(result['warn']) {
+                toastr.warning(result['message'], 'MagePanel Tags');
             } else {
                 $('#tagsList').load(document.URL +  ' #tagsList');
                 toggleTagsPageButtons('off'); // disable buttons
-                toastr.success(result["message"], 'MagePanel Tags');
+                toastr.success(result['message'], 'MagePanel Tags');
             }
         }).error(function() {
             toastr.error('Something went wrong ', 'MagePanel Tags');

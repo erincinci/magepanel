@@ -5,7 +5,7 @@ var _ = require('underscore');
 
 /**
  * Clean DB Results Array
- * @param dirtyArray
+ * @param results
  */
 exports.cleanResults = function(results) {
     var dirtyArray = _.values(results);
@@ -18,7 +18,7 @@ exports.cleanResults = function(results) {
     });
 
     return cleanArray;
-}
+};
 
 /**
  * Clean DB Result Object
@@ -30,7 +30,7 @@ exports.cleanResult = function(result) {
         return result.attrs;
     else
         return result;
-}
+};
 
 /**
  * Clear DB contents
@@ -54,4 +54,4 @@ exports.clearDB = function(db, callback) {
 
         callback(null);
     });
-}
+};

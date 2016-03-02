@@ -416,14 +416,14 @@ function tailLogFile(orgFile, logDate, logTime) {
 function addProjectToDB(formData) {
     $.post( '/projects/add', formData, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             $('.modal').modal('hide');
             $('#projectListContainer').load(document.URL +  ' #projectsPanel');
             $('#projectDetail').html("Select a project..");
             toggleProjectsPageButtons('off', null); // disable buttons
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -437,13 +437,13 @@ function addProjectToDB(formData) {
 function addTagToDB(formData) {
     $.post( '/tags/add', formData, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Tags');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Tags');
         } else {
             $('.modal').modal('hide');
             $('#tagsListContainer').load(document.URL +  ' #tagsList');
             toggleTagsPageButtons('off'); //disable buttons
-            toastr.success(result["message"], 'MagePanel Tags');
+            toastr.success(result['message'], 'MagePanel Tags');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Tags');
@@ -458,12 +458,12 @@ function deleteProjectFile(fileToDel) {
     // jQuery AJAX call for project file deletion
     $.post( '/projects/deleteFile?file=' + fileToDel, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             // Refresh project on success
             $('#refreshProjectBtn').click();
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -480,18 +480,18 @@ function switchGitBranch(branchName) {
     // jQuery AJAX call for project refresh
     $.post( '/projects/gitSwitchBranch?id=' + selectedProject.id + "&branch=" + branchName, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             $('#'+selectedProject.id).text($('#'+selectedProject.id).text().replace(/\[.*\]/g, "[" + branchName + "]"));
             $('#refreshProjectBtn').click();
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
     });
     $('#gitSwitchBranchProjectBtn').popover('hide');
-};
+}
 
 /**
  * Toggle disabled/enabled states for Projects Page Buttons
@@ -522,7 +522,7 @@ function toggleProjectsPageButtons(mode, isGit) {
         $("#gitCommitPushProjectBtn").prop('disabled', true);
         $("#gitSwitchBranchProjectBtn").prop('disabled', true);
     }
-};
+}
 
 /**
  * Toggle disabled/enabled states for Tags Page Buttons
@@ -538,7 +538,7 @@ function toggleTagsPageButtons(mode) {
         $("#editTagBtn").prop('disabled', true);
         $("#delTagBtn").prop('disabled', true);
     }
-};
+}
 
 /**
  * Check for Application updates
@@ -660,7 +660,7 @@ function isGitUrlValid(str) {
     $.fn.blink = function(options)
     {
         var defaults = { delay:500 };
-        var options = $.extend(defaults, options);
+        options = $.extend(defaults, options);
 
         return this.each(function()
         {
@@ -679,11 +679,11 @@ function isGitUrlValid(str) {
             }, options.delay);
             obj.attr("timerid", timerid);
         });
-    }
+    };
     $.fn.unblink = function(options)
     {
         var defaults = { visible:true };
-        var options = $.extend(defaults, options);
+        options = $.extend(defaults, options);
 
         return this.each(function()
         {
@@ -695,5 +695,5 @@ function isGitUrlValid(str) {
                 obj.css('visibility', options.visible?'visible':'hidden');
             }
         });
-    }
-}(jQuery))
+    };
+}(jQuery));

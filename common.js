@@ -19,7 +19,6 @@ Common = {
     username: require('username').sync(),
     os: require('os').platform(),
     uuid: require('node-uuid'),
-    ip: require('ip'),
     path: require('path'),
     validator: require('validator'),
     _: require('underscore'),

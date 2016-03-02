@@ -58,8 +58,8 @@ $('#editProjectForm').submit(function(event) {
     // First delete old project
     $.post( '/projects/delete?id=' + projectId, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             // No error deleting, then add edited project as new
             addProjectToDB(formData);
@@ -79,11 +79,11 @@ $('#initProjectForm').submit(function(event) {
     // Init mage stuff in dir first
     $.post( '/mage/init', formData, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             $('#initProjectModal').modal('hide');
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
 
             // After successful initialization, add created mage project to DB
             addProjectToDB(formData);
@@ -102,13 +102,13 @@ $('#addProjectEnvForm').submit(function(event) {
 
     $.post( '/projects/addEnvFile', formData, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             // Refresh project on success
             $('#addProjectEnvModal').modal('hide');
             $('#refreshProjectBtn').click();
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -124,13 +124,13 @@ $('#addProjectTaskForm').submit(function(event) {
 
     $.post( '/projects/addTaskFile', formData, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             // Refresh project on success
             $('#addProjectTaskModal').modal('hide');
             $('#refreshProjectBtn').click();
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -149,12 +149,12 @@ $('#editFileForm').submit(function(event) {
 
     $.post( '/projects/saveFile', formData, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Projects');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
         } else {
             $('#editFileModal').modal('hide');
             $('#'+selectedItem.id).trigger("click");
-            toastr.success(result["message"], 'MagePanel Projects');
+            toastr.success(result['message'], 'MagePanel Projects');
         }
     }).error(function() {
         toastr.error('Something went wrong ', 'MagePanel Projects');
@@ -183,8 +183,8 @@ $('#editTagForm').submit(function(event) {
     // First delete old tag
     $.post( '/tags/delete?id=' + tagId, function(result) {
         // Check if we have warning
-        if(result["warn"]) {
-            toastr.warning(result["message"], 'MagePanel Tags');
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Tags');
         } else {
             // No error deleting, then add edited tag as new
             addTagToDB(formData);

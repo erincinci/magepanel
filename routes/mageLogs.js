@@ -41,7 +41,6 @@ exports.projectLatestLog = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send("ID not found!");
-        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
@@ -67,7 +66,7 @@ exports.projectLatestLog = function(req, res) {
                     "logFile": project.dir + '/.mage/logs/' + latestLog,
                     "logDate": logDateTime.substr(0, 4) + "/" + logDateTime.substr(4, 2) + "/" + logDateTime.substr(6, 2),
                     "logTime": logDateTime.substr(9, 2) + ":" + logDateTime.substr(11, 2) + ":" + logDateTime.substr(13, 2)
-                }
+                };
                 res.json(latestLogJson);
             }else{
                 res.json({"status" : "warning","message":"No log file found"});
@@ -76,7 +75,7 @@ exports.projectLatestLog = function(req, res) {
 
         });
     }
-}
+};
 
 /**
  * Get project logs
@@ -88,7 +87,6 @@ exports.projectLogs = function(req, res) {
 
     if(selectedId === 'undefined') {
         res.send("ID not found!");
-        return;
     } else {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
@@ -117,12 +115,11 @@ exports.projectLogs = function(req, res) {
             Common._.each(logSet, function(dateLogFiles, groupDate) {
                 // Prepare date panel
                 var groupId = Common.S(groupDate).replaceAll("/", "");
-                projectLogsHTML
-                    += '<div class="panel panel-default">'
-                    + '<a class="list-group-item" data-toggle="collapse" href="#collapse' + groupId + '">'
-                    + '<span class="badge">' + Common._.size(dateLogFiles) + '</span>'
-                    + '<i class="glyphicon glyphicon-calendar" /> ' + groupDate + '</a>'
-                    + '<div class="panel-collapse collapse" id="collapse' + groupId + '"><div class="panel-body">';
+                projectLogsHTML += '<div class="panel panel-default">' +
+                    '<a class="list-group-item" data-toggle="collapse" href="#collapse' + groupId + '">' +
+                    '<span class="badge">' + Common._.size(dateLogFiles) + '</span>' +
+                    '<i class="glyphicon glyphicon-calendar" /> ' + groupDate + '</a>' +
+                    '<div class="panel-collapse collapse" id="collapse' + groupId + '"><div class="panel-body">';
 
                 // Add times for date group
                 Common._.each(dateLogFiles, function(logFile) {
@@ -134,10 +131,9 @@ exports.projectLogs = function(req, res) {
                     var onClickHTML = "tailLogFile('"+orgFile+"', '"+logDate+"', '"+logTime+"');";
 
                     // Append log file to HTML
-                    projectLogsHTML
-                        += '<a href="#" onclick="'+onClickHTML+'" data-toggle="modal" data-target="#viewFileModal" '
-                        + 'class="list-group-item glyphicon glyphicon-time">'
-                        + logTime + '</a>';
+                    projectLogsHTML += '<a href="#" onclick="'+onClickHTML+'" data-toggle="modal" data-target="#viewFileModal" ' +
+                        'class="list-group-item glyphicon glyphicon-time">' +
+                        logTime + '</a>';
                 });
 
                 // Finalize date group
@@ -184,7 +180,7 @@ exports.tailLog = function(req) {
     tailProcess.on('exit', function (code) {
         console.log('Mage tail command exited with code ' + code);
     });
-}
+};
 
 /**
  * Exit Tail Log File
@@ -205,7 +201,7 @@ exports.exitTail = function(req) {
         tailProcess.kill();
     }
     req.io.emit('logTailContent', { line: "Tail process closed", status: 'closed' });
-}
+};
 
 /**
  * Pause Tail Log File
@@ -214,7 +210,7 @@ exports.exitTail = function(req) {
 exports.pauseTail = function(req) {
     tailProcess.stdout.pause();
     req.io.emit('logTailContent', { line: "Tail process paused..", status: 'paused' });
-}
+};
 
 /**
  * Resume Tail Log File
@@ -223,7 +219,7 @@ exports.pauseTail = function(req) {
 exports.resumeTail = function(req) {
     tailProcess.stdout.resume();
     req.io.emit('logTailContent', { line: "Tail process resumed", err: true, status: 'resumed' });
-}
+};
 
 /**
  * Get Project Logs from a dir as an array

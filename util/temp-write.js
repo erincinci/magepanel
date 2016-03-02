@@ -1,4 +1,5 @@
 'use strict';
+//var Common = require('../common');
 var path = require('path');
 var tmpdir = 'public/tmp';
 var fs = require('graceful-fs');
@@ -20,10 +21,14 @@ module.exports = function (str, filepath, cb) {
 
 	var fullpath = tempfile(filepath);
 
-	mkdirp(path.dirname(fullpath), function (err) {
-		fs.writeFile(fullpath, str, function (err) {
-			cb(err, fullpath);
-		});
+	mkdirp(path.dirname(fullpath), function (mkdirErr) {
+        if (mkdirErr)
+            cb(mkdirErr, fullpath);
+        else {
+            fs.writeFile(fullpath, str, function (writeErr) {
+                cb(writeErr, fullpath);
+            });
+        }
 	});
 };
 
@@ -37,9 +42,14 @@ module.exports.sync = function (str, filepath) {
 };
 
 module.exports.cleanTmp = function() {
-    try { var files = fs.readdirSync(tmpdir); }
-    catch(e) { return; }
-    if (files.length > 0)
+    var files;
+    try {
+        files = fs.readdirSync(tmpdir);
+    } catch(e) {
+        return;
+
+    }
+    if (files.length > 0) {
         for (var i = 0; i < files.length; i++) {
             // If file is gitignore continue
             if (files[i] == '.gitignore')
@@ -51,4 +61,5 @@ module.exports.cleanTmp = function() {
             else
                 rimraf.sync(filePath);
         }
+    }
 };

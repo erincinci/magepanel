@@ -46,7 +46,6 @@ exports.getStats = function(req) {
             }
         });
 
-        // TODO: Fix finding a cumulative moving average
         // Find average of average deploy time within give time range
         if (avgCounter > 0)
             statsData.avgDeployTime = parseFloat(statsData.avgDeployTime / avgCounter);

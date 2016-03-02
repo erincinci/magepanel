@@ -7,7 +7,6 @@ var Convert = require('ansi-to-html');
 var ansiTrim = require('cli-color/trim');
 var gitTools = require('../util/gitTools');
 var exec = require('child_process').exec;
-//var get_ip = require('ipware')().get_ip;
 var convert = new Convert();
 convert.opts.newline = true;
 
@@ -100,7 +99,7 @@ exports.init = function(req, res) {
     }
 
     // Prepare init command
-    var cdCommand = "cd " + projectDir + "; "
+    var cdCommand = "cd " + projectDir + "; ";
     var mageInitCommand = cdCommand + mageBin + " Init --name=\"" + projectName + "\" --email=\"" + projectMail + "\"";
     if (Common.os == 'win32')
         mageInitCommand = cygwin_pre + mageInitCommand + cygwin_post;
@@ -123,7 +122,7 @@ exports.init = function(req, res) {
         }
 
     });
-}
+};
 
 /**
  * Import project to new created one
@@ -184,11 +183,12 @@ exports.command = function(req) {
         }
 
         // Init variables
+        var cygwin_pre;
         console.debug("SSH-Pageant support: " + settings.sshPageantSupport());
         if (settings.sshPageantSupport() == 'true')
-            var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c 'eval $(/usr/bin/ssh-pageant -ra /tmp/.ssh-pageant); keychain -q -Q; . ~/.keychain/`hostname`-sh; ";
+            cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c 'eval $(/usr/bin/ssh-pageant -ra /tmp/.ssh-pageant); keychain -q -Q; . ~/.keychain/`hostname`-sh; ";
         else
-            var cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
+            cygwin_pre = "chdir " + settings.cygwinBin() + " & bash --login -c '";
         var cygwin_post = "'";
         project = Common.dbUtils.cleanResult(project);
         var projectDir = project.dir;
@@ -206,7 +206,7 @@ exports.command = function(req) {
         }
 
         // Prepare command
-        var cdCommand = "cd " + projectDir + "; "
+        var cdCommand = "cd " + projectDir + "; ";
         var mageCommand = cdCommand + mageBin + " " + req.data.cmd;
         if (Common.os == 'win32')
             mageCommand = cygwin_pre + mageCommand + cygwin_post;
@@ -221,10 +221,11 @@ exports.command = function(req) {
             Common.timerUtil.startTimer();
 
         // Spawn command
+        var mageCmd;
         if (Common.os == 'win32') {
-            var mageCmd = spawn('cmd', ['/c', mageCommand]);
+            mageCmd = spawn('cmd', ['/c', mageCommand]);
         } else {
-            var mageCmd = spawn('bash', []);
+            mageCmd = spawn('bash', []);
         }
 
         // Get realtime output
@@ -287,7 +288,9 @@ exports.command = function(req) {
                             var environment = Common.S(consoleOutput.match(/Environment: *.*/g)).replaceAll('Environment: ', '').s;
 
                             // Get mail parameters from project
-                            var clientIp = req.socket.manager.handshaken[req.socket.id].address.address;
+                            var clientIp;
+                            if (req.socket && req.socket.id && req.socket.manager && req.socket.manager.handshaken && req.socket.manager.handshaken[req.socket.id] && req.socket.manager.handshaken[req.socket.id].address)
+                                clientIp = req.socket.manager.handshaken[req.socket.id].address.address;
                             if (clientIp)
                                 clientIp = clientIp.replace("::ffff:", '');
                             Common.mailUtils.sendSuccessMail(

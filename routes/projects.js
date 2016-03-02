@@ -113,21 +113,6 @@ exports.add = function(req, res) {
     else
         project.reportingEnabled(false);
 
-    // TODO: Check if projects already exists in DB
-    /*Common.projectsDB.find({dir: project.dir()}, function(err, result) {
-        if (err) {
-            console.error(err);
-            res.send({"warn": true, "message": "Internal error while adding project!"});
-            return;
-        }
-
-        if (Object.keys(result).length > 0) {
-            console.warn("Project already in DB");
-            res.send({"warn": true, "message": "Project exists in DB"});
-            return;
-        }
-    });*/
-
     // Get project environments & tasks
     project.envs(getProjectEnvs(project.dir()));
     project.tasks(getProjectTasks(project.dir()));
@@ -407,7 +392,7 @@ exports.gitPull = function(req, res) {
             console.debug("GIT pull on dir " + project.dir);
             gitTools.pull(project.dir, function (err, consoleOutput) {
                 if (err) {
-                    res.send({ "warn": false, "message": err }); // TODO: GIT success result outputs as error?
+                    res.send({ "warn": false, "message": err });
                 } else {
                     res.send({ "warn": false, "message": "GIT Pull Success! : " + consoleOutput });
                 }
@@ -447,7 +432,7 @@ exports.deleteFile = function(req, res) {
 
     // Delete project file
     if (fs.existsSync(fileToDel)) {
-        // TODO: Node process blocks deleted file until process exit on Windows!
+        // NOFIX: Node process blocks deleted file until process exit on Windows!
         fs.unlinkSync(fileToDel);
         res.send({ "warn": false, "message": "Successfully deleted project file" });
     } else {
@@ -545,7 +530,7 @@ exports.detail = function(req, res) {
         // Get project from DB
         Common.projectsDB.get(selectedId, function (err, project) {
             if (err) {
-                console.error(err);
+                console.trace(err);
                 res.send("There was an error getting project details!");
                 return;
             }

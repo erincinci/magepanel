@@ -44,7 +44,10 @@
     "**/extjs/resources/**",
     "**/extjs/src/**",
     "**/extjs/welcome/**",
-    "bower_components/**"
+    "bower_components/**",
+    "public/javascripts/*.js",
+    "public/javascripts/iconset/*.js",
+    "public/javascripts/amcharts/*.js"
   ],
   "test": [
     "**/test/**",

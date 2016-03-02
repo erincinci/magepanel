@@ -14,8 +14,9 @@ var _ = require('underscore');
 exports.envArrayToList = function(envArray, projectDir) {
     var arrayValues = _.values(envArray);
 
+    var result;
     if (_.size(envArray) > 0) {
-        var result = "<ul>";
+        result = "<ul>";
     } else {
         return "<br />";
     }
@@ -24,9 +25,10 @@ exports.envArrayToList = function(envArray, projectDir) {
     _.each(arrayValues, function(value) {
 
         // Read YML file content
+        var ymlData;
         var ymlFile = projectDir + "/.mage/config/environment/" + value + ".yml";
         if (fs.existsSync(ymlFile))
-            var ymlData = fs.readFileSync(ymlFile, 'utf8');
+            ymlData = fs.readFileSync(ymlFile, 'utf8');
         else
             console.warn("Project file not found, maybe modified outside MagePanel?: " + ymlFile);
 
@@ -61,8 +63,9 @@ exports.envArrayToList = function(envArray, projectDir) {
 exports.taskArrayToList = function(taskArray, projectDir) {
     var arrayValues = _.values(taskArray);
 
+    var result;
     if (_.size(taskArray) > 0) {
-        var result = "<ul>";
+        result = "<ul>";
     } else {
         return "<br /";
     }
@@ -72,8 +75,9 @@ exports.taskArrayToList = function(taskArray, projectDir) {
 
         // Read PHP file content
         var phpFile = projectDir + "/.mage/tasks/" + value + ".php";
+        var phpData;
         if (fs.existsSync(phpFile))
-            var phpData = fs.readFileSync(phpFile, 'utf8');
+            phpData = fs.readFileSync(phpFile, 'utf8');
         else
             console.warn("Project file not found, maybe modified outside MagePanel?: " + phpFile);
 

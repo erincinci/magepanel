@@ -3,7 +3,7 @@
  */
 var config = require('../config');
 var Common = require('../common');
-var validator = require('validator')
+var validator = require('validator');
 var jade = require('jade');
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
