@@ -9,6 +9,7 @@ module.exports = SettingsModel = model("SettingsModel")
     .attr('cygwinBin')
     .attr('sshPageantSupport')
     .attr('mageDeployStrategy')
+    .attr('defaultProjectDestDir')
     .attr('mailerService')
     // Mailer - SMTP
     .attr('mailerSmtpHost')

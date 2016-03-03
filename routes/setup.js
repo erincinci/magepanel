@@ -16,6 +16,7 @@ exports.index = function(req, res) {
 
     settings.sshPageantSupport(Common.settings.get("sshPageantSupport"));
     settings.cygwinBin(Common.settings.get("cygwinBin"));
+    settings.defaultProjectDestDir(Common.settings.get("defaultProjectDestDir"));
     if(typeof(settings.cygwinBin()) === 'undefined')
         settings.cygwinBin(Common.config.setup.defaultCygwinBin);
     settings.mageDeployStrategy(Common.settings.get("mageDeployStrategy"));

@@ -102,6 +102,16 @@ block content
                             i.icon.ion-folder  sendmail path
                         input.form-control(name='mailerSendmailPath', type='text', value=settings.mailerSendmailPath())
 
+        // DIRECTORY
+        .panel.panel-info
+            .panel-heading
+                h3.panel-title Directory Setup
+            .panel-body
+                .input-group
+                    span.input-group-addon
+                        i.icon.ion-folder  Default Local Project Destination Dir
+                    input.form-control(name='defaultProjectDestDir', type='text', value=settings.defaultProjectDestDir())
+
         // MAGALLANES
         .panel.panel-info
             .panel-heading
