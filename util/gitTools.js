@@ -135,7 +135,7 @@ exports.checkoutBranch = function checkoutBranch(dir, branchName, cb) {
  * @param cb
  */
 exports.clone = function clone(dir, projectName, remoteAddress, cb) {
-    console.debug('cd ' + path.resolve(__dirname, dir) + ' && git clone ' + remoteAddress + ' ' + projectName);
+    console.debug('cd ' + path.resolve(__dirname, dir) + ' && git clone --recursive ' + remoteAddress + ' ' + projectName);
     require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git clone ' + remoteAddress + ' ' + projectName, function (err, stdout, stderr) {
         if (err)
             cb(err);
@@ -198,7 +198,7 @@ exports.currentBranchSync = function resolveGitBranchSync(dir) {
  * @param cb
  */
 exports.pull = function performPull(dir, cb) {
-    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git pull', function (err, stdout, stderr) {
+    require('child_process').exec('cd ' + path.resolve(__dirname, dir) + ' && git pull --recurse-submodules', function (err, stdout, stderr) {
         if (err) return cb(err.stack);
         if (stderr) return cb(stderr);
 
