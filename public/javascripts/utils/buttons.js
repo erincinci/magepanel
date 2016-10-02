@@ -28,6 +28,33 @@ $("#clearStatsBtn").click(function() {
 
 // Mage Console Page - Button onClick Events =============================================================
 /**
+ * GIT Pull project before deploying
+ */
+$("#gitPullProject").click(function() {
+    // Check if any project is selected
+    var selectedId = $('#activeProject').val();
+    if (selectedId == 'null') {
+        toastr.warning("Please select an active project first", 'MagePanel Console');
+        return;
+    }
+
+    // jQuery AJAX call for project GIT pull
+    showAjaxLoader();
+    $.post( '/projects/gitPull?id=' + selectedId, function(result) {
+        // Check if we have warning
+        if(result['warn']) {
+            toastr.warning(result['message'], 'MagePanel Projects');
+        } else {
+            toastr.success(result['message'], 'MagePanel Projects');
+        }
+        hideAjaxLoader();
+    }).error(function() {
+        toastr.error('Something went wrong ', 'MagePanel Projects');
+        hideAjaxLoader();
+    });
+});
+
+/**
  * Tail latest log button
  */
 $("#tailLatestLog").click(function() {
