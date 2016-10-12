@@ -6,6 +6,7 @@
 [![bitHound Score](https://www.bithound.io/github/erincinci/magepanel/badges/score.svg)](https://www.bithound.io/github/erincinci/magepanel)
 [![PayPayl donate button](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SZ4A3B92ZF7LE "Donate once-off to MagePanel project using Paypal")
 
+[![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](http://stackshare.io/erincinci/magepanel)
 [![Join the chat at https://gitter.im/erincinci/magepanel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/erincinci/magepanel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Web-based user interface for [Magallanes Deployment Tool](http://magephp.com/).
