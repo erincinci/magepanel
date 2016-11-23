@@ -3,7 +3,7 @@ var path = require('path');
 var tmpdir = 'public/tmp';
 var fs = require('graceful-fs');
 var mkdirp = require('mkdirp');
-var uuid = require('node-uuid');
+var uuid = require('uuid');
 var rimraf = require('rimraf');
 
 function tempfile(filepath) {
