@@ -8,3 +8,4 @@ npm-debug.log
 .fseventsd
 Icon?
 .vscode/
+package-lock.json
