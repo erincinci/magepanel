@@ -44,7 +44,7 @@
     "ipware": "0.0.5",
     "jade": "*",
     "mkdirp": "0.5.0",
-    "moment": "2.7.0",
+    "moment": "2.11.2",
     "node-uuid": "~1.4.1",
     "nodejs-model": "~0.1.6",
     "nodemailer": "^1.4.0",
